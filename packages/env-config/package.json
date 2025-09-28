@@ -1,0 +1,20 @@
+{
+  "name": "@repo/env-config",
+  "version": "1.0.0",
+  "type": "module",
+  "private": "true",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "zod": "^4.1.11"
+  },
+  "exports": {
+    "./env": "./src/env.ts"
+  }
+}

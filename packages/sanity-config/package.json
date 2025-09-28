@@ -1,0 +1,25 @@
+{
+  "name": "@repo/sanity-config",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@repo/env-config": "workspace:*",
+    "@sanity/image-url": "^1.2.0",
+    "dotenv": "^17.2.2",
+    "next-sanity": "^11.4.2",
+    "sanity": "^4.10.1"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^20"
+  },
+  "exports": {
+    "./client": "./src/lib/client.ts",
+    "./image": "./src/lib/image.ts",
+    "./env": "./src/lib/env.ts"
+  }
+}
