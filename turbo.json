@@ -5,7 +5,12 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "env": [
+        "SANITY_STUDIO_SANITY_PROJECT_ID",
+        "SANITY_STUDIO_SANITY_DATASET",
+        "SANITY_STUDIO_API_VERSION"
+      ]
     },
     "lint": {
       "dependsOn": ["^lint"]
