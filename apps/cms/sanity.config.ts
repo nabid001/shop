@@ -7,8 +7,8 @@ export default defineConfig({
   name: 'default',
   title: 'e-commerce',
 
-  projectId: sanityEnv.projectId,
-  dataset: sanityEnv.dataset,
+  projectId: sanityEnv.projectId!,
+  dataset: sanityEnv.dataset!,
 
   plugins: [
     structureTool(),
