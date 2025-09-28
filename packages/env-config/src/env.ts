@@ -29,19 +29,17 @@ const loadEnvFiles = () => {
 
 loadEnvFiles();
 
-const envSchema = z.object({
-  // Sanity
-  SANITY_STUDIO_API_VERSION: z.string(),
-  SANITY_STUDIO_SANITY_DATASET: z.string(),
-  SANITY_STUDIO_SANITY_PROJECT_ID: z.string(),
-});
+// const envSchema = z.object({
+//   // Sanity
+//   SANITY_STUDIO_API_VERSION: z.string(),
+//   SANITY_STUDIO_SANITY_DATASET: z.string(),
+//   SANITY_STUDIO_SANITY_PROJECT_ID: z.string(),
+// });
 
-export const env = envSchema.parse(process.env);
+const env = process.env;
 
 export const sanityEnv = {
   apiVersion: env.SANITY_STUDIO_API_VERSION,
   projectId: env.SANITY_STUDIO_SANITY_PROJECT_ID,
   dataset: env.SANITY_STUDIO_SANITY_DATASET,
 };
-
-// export * from "./env.js";
