@@ -5,7 +5,7 @@
   "private": "true",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint"
+    "check-types": "tsc --noEmit"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*"
