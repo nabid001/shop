@@ -3,14 +3,15 @@ import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
 
-import {sanityEnv} from '@repo/env-config/env'
+const projectId = process.env.SANITY_STUDIO_SANITY_PROJECT_ID
+const dataset = process.env.SANITY_STUDIO_SANITY_DATASET
 
 export default defineConfig({
   name: 'default',
   title: 'e-commerce',
 
-  projectId: sanityEnv.projectId as string,
-  dataset: sanityEnv.dataset as string,
+  projectId: projectId as string,
+  dataset: dataset as string,
 
   plugins: [
     structureTool(),

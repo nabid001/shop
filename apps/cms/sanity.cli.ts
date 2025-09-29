@@ -1,12 +1,11 @@
 import {defineCliConfig} from 'sanity/cli'
-import {sanityEnv} from '@repo/env-config/env'
+
+const projectId = process.env.SANITY_STUDIO_SANITY_PROJECT_ID
+const dataset = process.env.SANITY_STUDIO_SANITY_DATASET
 
 export default defineCliConfig({
   api: {
-    projectId: sanityEnv.projectId,
-    dataset: sanityEnv.dataset,
-  },
-  deployment: {
-    autoUpdates: true,
+    projectId: projectId,
+    dataset: dataset,
   },
 })
