@@ -7,9 +7,9 @@ const Home = async () => {
   const products = await client.fetch(query);
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center justify-center h-screen flex-col gap-10">
       <h1 className="text-4xl font-bold">Hello World</h1>
-      <pre>{JSON.stringify(products, null, 2)}</pre>
+      <h3 className="font-bold text-2xl text-sky-100">{products[0].name}</h3>
     </div>
   );
 };
