@@ -1,8 +1,10 @@
 import {defineType, defineField} from 'sanity'
+import {ProjectsIcon} from '@sanity/icons'
 
 export const productSchema = defineType({
   title: 'Product',
   name: 'product',
+  icon: ProjectsIcon,
   type: 'document',
   fields: [
     defineField({
@@ -37,39 +39,7 @@ export const productSchema = defineType({
       of: [{type: 'block'}],
       validation: (Rule) => Rule.required(),
     }),
-    defineField({
-      name: 'mainImage',
-      title: 'Main Image',
-      type: 'image',
-      options: {
-        hotspot: true,
-      },
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'multiImages',
-      title: 'Gallery Images',
-      type: 'array',
-      of: [{type: 'image'}],
-    }),
-    defineField({
-      name: 'price',
-      title: 'Price',
-      type: 'number',
-      validation: (Rule) => Rule.required().min(1),
-    }),
-    defineField({
-      name: 'salePrice',
-      title: 'Sale Price',
-      type: 'number',
-      validation: (Rule) => Rule.required().min(1),
-    }),
-    defineField({
-      name: 'stock',
-      title: 'Stock Quantity',
-      type: 'number',
-      validation: (Rule) => Rule.required().min(1),
-    }),
+
     defineField({
       name: 'status',
       title: 'Status',
@@ -81,6 +51,7 @@ export const productSchema = defineType({
         ],
       },
       initialValue: 'private',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'flag',
@@ -93,43 +64,109 @@ export const productSchema = defineType({
         ],
       },
       initialValue: 'none',
+      validation: (Rule) => Rule.required(),
     }),
+
+    defineField({
+      title: 'Category',
+      name: 'category',
+      type: 'reference',
+      to: [{type: 'category'}],
+    }),
+
+    {
+      type: 'array',
+      name: 'variants',
+      title: 'Variant',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({
+              title: 'Variant Name',
+              name: 'variantName',
+              type: 'string',
+            }),
+            defineField({
+              name: 'size',
+              title: 'Sizes',
+              type: 'array',
+              of: [
+                {
+                  type: 'string',
+                  options: {
+                    list: ['SM', 'M', 'L', 'XL', 'XXL'],
+                  },
+                },
+              ],
+            }),
+            defineField({
+              title: 'Color',
+              name: 'color',
+              type: 'reference',
+              to: [{type: 'color'}],
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              title: 'Price',
+              name: 'price',
+              type: 'number',
+              validation: (Rule) => Rule.required().min(1),
+            }),
+            defineField({
+              title: 'Sale Price',
+              name: 'salePrice',
+              type: 'number',
+              validation: (Rule) => Rule.required().min(1),
+            }),
+            defineField({
+              title: 'Stock Quantity',
+              name: 'stock',
+              type: 'number',
+              initialValue: 0,
+              validation: (Rule) => Rule.required().min(1),
+            }),
+            defineField({
+              title: 'Image',
+              name: 'image',
+              type: 'reference',
+              to: [{type: 'media'}],
+
+              validation: (Rule) => Rule.required(),
+            }),
+          ],
+        },
+      ],
+      validation: (Rule) => Rule.required(),
+    },
+
+    defineField({
+      title: 'Author',
+      name: 'author',
+      type: 'reference',
+      to: [{type: 'user'}],
+      validation: (Rule) => Rule.required(),
+    }),
+
     defineField({
       name: 'totalOrdered',
       title: 'Total Ordered',
       type: 'number',
       initialValue: 0,
     }),
+
     defineField({
-      title: 'Colors',
-      name: 'colors',
-      type: 'array',
-      of: [{type: 'reference', to: [{type: 'colors'}]}],
+      type: 'number',
+      name: 'totalViews',
+      title: 'Total Views',
+      initialValue: 0,
     }),
-    defineField({
-      name: 'size',
-      title: 'Sizes',
-      type: 'array',
-      of: [
-        {
-          type: 'string',
-          options: {
-            list: ['SM', 'M', 'L', 'XL', 'XXL'],
-          },
-        },
-      ],
-    }),
-    defineField({
-      name: 'author',
-      title: 'Author',
-      type: 'reference',
-      to: [{type: 'user'}],
-    }),
-    defineField({
-      name: 'categories',
-      title: 'Categories',
-      type: 'array',
-      of: [{type: 'reference', to: [{type: 'category'}]}],
-    }),
+
+    // defineField({
+    //   name: 'multiImages',
+    //   title: 'Gallery Images',
+    //   type: 'array',
+    //   of: [{type: 'reference', to: [{type: 'media'}]}],
+    // }),
   ],
 })

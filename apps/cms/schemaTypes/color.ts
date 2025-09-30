@@ -1,8 +1,10 @@
 import {defineField, defineType} from 'sanity'
+import {ColorWheelIcon} from '@sanity/icons'
 
 export const colorSchema = defineType({
-  name: 'colors',
-  title: 'Colors',
+  title: 'Color',
+  name: 'color',
+  icon: ColorWheelIcon,
   type: 'document',
   fields: [
     defineField({
