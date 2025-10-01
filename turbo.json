@@ -1,6 +1,5 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "globalDependencies": [".env"],
   "ui": "tui",
   "tasks": {
     "build": {
@@ -10,7 +9,15 @@
       "env": [
         "SANITY_STUDIO_SANITY_PROJECT_ID",
         "SANITY_STUDIO_SANITY_DATASET",
-        "SANITY_STUDIO_API_VERSION"
+        "SANITY_STUDIO_API_VERSION",
+        "NEXT_PUBLIC_CLERK_SIGN_IN_URL",
+        "NEXT_PUBLIC_CLERK_SIGN_UP_URL",
+        "NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL",
+        "NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL",
+        "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY",
+        "CLERK_SECRET_KEY",
+        "SIGNING_SECRET",
+        "DATABASE_URL"
       ]
     },
     "lint": {
