@@ -25,19 +25,12 @@ import {
 } from "../../ui/dropdown-menu";
 import { Suspense } from "react";
 import { getCartLength } from "../actions/cart";
-import { db } from "@/drizzle/db";
-import { UserTable } from "@/drizzle/schema";
-import { eq } from "drizzle-orm";
-const Header = async () => {
-  const { user, clerkUserId } = await getCurrentUser({
-    allData: true,
-  });
-  const isAdmin: boolean = user?.role === "admin" && user?.role === "admin";
 
-  const res = await db.query.UserTable.findFirst({
-    where: eq(UserTable.clerkId, clerkUserId!),
-  });
-  console.log({ res, isAdmin });
+const Header = async () => {
+  const { user, clerkUserId } = await getCurrentUser({ allData: true });
+  const isAdmin: boolean = user?.role === "admin" && user?.role === "admin";
+  console.log({ clerkUserId, user });
+
   return (
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

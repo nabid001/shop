@@ -1,5 +1,3 @@
-"use server";
-
 import { db } from "@/drizzle/db";
 import { UserTable } from "@/drizzle/schema";
 import { auth } from "@clerk/nextjs/server";
@@ -20,7 +18,7 @@ const getCurrentUserCached = cache(
   ) => {
     "use cache";
     const { userId, sessionClaims, redirectToSignIn } = authData;
-    cacheTag(`user-id:${userId}`);
+    cacheTag(`user-${userId}`);
 
     if (userId != null && sessionClaims.metadata == null) {
       redirect("/sign-in");
