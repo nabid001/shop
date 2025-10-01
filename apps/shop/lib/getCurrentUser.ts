@@ -18,7 +18,9 @@ const getCurrentUserCached = cache(
     authData: Awaited<ReturnType<typeof auth>>,
     allData: boolean = false
   ) => {
+    "use cache";
     const { userId, sessionClaims, redirectToSignIn } = authData;
+    cacheTag(`user-id:${userId}`);
 
     if (userId != null && sessionClaims.metadata == null) {
       redirect("/sign-in");

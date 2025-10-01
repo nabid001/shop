@@ -8,8 +8,6 @@ import {
 } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 import { X, Check, Clock, Info } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
 
 export default function ShoppingCart() {
   const inStock = true;

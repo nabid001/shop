@@ -43,7 +43,3 @@ export const sanityEnv = {
   projectId: env.SANITY_STUDIO_SANITY_PROJECT_ID,
   dataset: env.SANITY_STUDIO_SANITY_DATASET,
 };
-
-export const drizzleEnv = {
-  databaseUrl: env.DATABASE_URL,
-};

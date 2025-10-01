@@ -1,4 +1,4 @@
-import { getCartItems } from "@/drizzle/actions/cart";
+// import { getCartItems } from "@/drizzle/actions/cart";
 import { getCurrentUser } from "@/lib/getCurrentUser";
 import NotLoggedIn from "@/features/cart/components/NotLoggedIn";
 import CartContent from "@/features/cart/components/CartContent";

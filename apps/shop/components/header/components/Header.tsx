@@ -25,10 +25,6 @@ import {
 } from "../../ui/dropdown-menu";
 import { Suspense } from "react";
 import { getCartLength } from "../actions/cart";
-import { db } from "@/drizzle/db";
-import { eq } from "drizzle-orm";
-import { UserTable } from "@/drizzle/schema";
-
 const Header = async () => {
   const { user } = await getCurrentUser({
     allData: true,
