@@ -29,7 +29,6 @@ import { getCartLength } from "../actions/cart";
 const Header = async () => {
   const { user, clerkUserId } = await getCurrentUser({ allData: true });
   const isAdmin: boolean = user?.role === "admin" && user?.role === "admin";
-  console.log({ clerkUserId, user });
 
   return (
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
