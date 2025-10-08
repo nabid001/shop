@@ -1,56 +1,36 @@
-import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
+// import { revalidatePath } from "next/cache";
+import { parseBody } from "next-sanity/webhook";
 
+type WebhookPayload = {
+  _type: string;
+};
 export async function POST(req: NextRequest) {
   try {
-    const secret = req.nextUrl.searchParams.get("secret");
-    if (secret !== process.env.SANITY_STUDIO_WEBHOOK_SECRET!) {
-      return NextResponse.json({ message: "Invalid secret" }, { status: 401 });
-    }
-
-    const body = await req.json();
-    const docType = body?._type;
-    const slug = body?.slug?.current;
-    const isDeleted = body?._deleted;
-
-    if (!docType) {
-      return NextResponse.json(
-        { message: "Missing document type" },
-        { status: 400 }
+    if (!process.env.SANITY_STUDIO_WEBHOOK_SECRET) {
+      return new Response(
+        "Missing environment variable SANITY_REVALIDATE_SECRET",
+        { status: 500 }
       );
     }
 
-    console.log(body);
+    const { isValidSignature, body } = await parseBody<WebhookPayload>(
+      req,
+      process.env.SANITY_STUDIO_WEBHOOK_SECRET
+    );
 
-    // 🧩 Handle based on type
-    switch (docType) {
-      case "product":
-        if (!isDeleted && slug) {
-          //   revalidatePath(`/products/${slug}`);
-          console.log("Product webhook triggered");
-        }
-        // revalidatePath("/products");
-        break;
-
-      case "banner":
-        if (!isDeleted && slug) {
-          //   revalidatePath(`/blog/${slug}`);
-          console.log("Banner webhook triggered");
-        }
-        // revalidatePath("/blog");
-        break;
-
-      default:
-        console.log(`Unhandled Sanity type: ${docType}`);
-        break;
+    if (!isValidSignature) {
+      const message = "Invalid signature";
+      return new Response(JSON.stringify({ message, isValidSignature, body }), {
+        status: 401,
+      });
+    } else if (!body?._type) {
+      const message = "Bad Request";
+      return new Response(JSON.stringify({ message, body }), { status: 400 });
     }
 
-    return NextResponse.json({
-      message: "Revalidation triggered",
-      type: docType,
-      slug: slug || null,
-      deleted: isDeleted || false,
-    });
+    console.log("Success revalidate");
+    return new Response("Success revalidate", { status: 200 });
   } catch (error) {
     console.error("Webhook error:", error);
     return NextResponse.json(

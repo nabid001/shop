@@ -2,6 +2,7 @@ import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
+import {webhooks} from 'sanity-plugin-webhooks'
 
 const projectId = process.env.SANITY_STUDIO_SANITY_PROJECT_ID
 const dataset = process.env.SANITY_STUDIO_SANITY_DATASET
@@ -14,5 +15,5 @@ export default defineConfig({
   schema: {
     types: schemaTypes,
   },
-  plugins: [structureTool(), visionTool()],
+  plugins: [structureTool(), visionTool(), webhooks()],
 })
