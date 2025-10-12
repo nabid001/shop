@@ -9,38 +9,17 @@ import {
   CarouselNext,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import { use } from "react";
+import { THeroBanner } from "@/sanity/actions/actions";
+import Link from "next/link";
 
-const heroSlides = [
-  {
-    title: "Premium Fashion",
-    subtitle: "Meets Timeless Style",
-    description:
-      "Discover our curated collection of high-quality shirts, t-shirts, and pants designed for the modern wardrobe.",
-    primaryButton: "Shop Collection",
-    secondaryButton: "View Lookbook",
-    image: "/images/hero.png",
-  },
-  {
-    title: "Comfort Redefined",
-    subtitle: "Quality You Can Feel",
-    description:
-      "Experience the perfect blend of comfort and style with our carefully crafted clothing essentials.",
-    primaryButton: "Explore Comfort",
-    secondaryButton: "Size Guide",
-    image: "/images/up-to.png",
-  },
-  {
-    title: "Sustainable Fashion",
-    subtitle: "Conscious Choices",
-    description:
-      "Join the movement towards sustainable fashion with our eco-friendly materials and ethical production.",
-    primaryButton: "Shop Sustainable",
-    secondaryButton: "Learn More",
-    image: "/images/test-hero.png",
-  },
-];
+const HeroCarousel = ({
+  heroBannerPromise,
+}: {
+  heroBannerPromise: Promise<THeroBanner | THeroBanner>;
+}) => {
+  const res = use(heroBannerPromise);
 
-const HeroCarousel = () => {
   return (
     <section className="relative">
       <Carousel
@@ -56,7 +35,7 @@ const HeroCarousel = () => {
         ]}
       >
         <CarouselContent>
-          {heroSlides.map((slide, index) => (
+          {res.map((slide, index) => (
             <CarouselItem
               key={index}
               className="relative h-[70vh] min-h-[500px] overflow-hidden"
@@ -87,12 +66,18 @@ const HeroCarousel = () => {
                     {slide.description}
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <button className="bg-white text-black px-8 py-3 rounded-lg hover:bg-white/90 transition-colors font-medium">
-                      {slide.primaryButton}
-                    </button>
-                    <button className="border border-white/30 text-white px-8 py-3 rounded-lg hover:bg-white/10 transition-colors font-medium backdrop-blur-sm">
-                      {slide.secondaryButton}
-                    </button>
+                    <Link
+                      href={slide.primaryButton.url}
+                      className="bg-white text-black px-8 py-3 rounded-lg hover:bg-white/90 transition-colors font-medium"
+                    >
+                      {slide.primaryButton.name}
+                    </Link>
+                    <Link
+                      href={slide.secondaryButton.url}
+                      className="border border-white/30 text-white px-8 py-3 rounded-lg hover:bg-white/10 transition-colors font-medium backdrop-blur-sm"
+                    >
+                      {slide.secondaryButton.name}
+                    </Link>
                   </div>
                 </div>
               </div>

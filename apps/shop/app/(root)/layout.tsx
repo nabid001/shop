@@ -1,5 +1,5 @@
 import Footer from "@/components/footer/Footer";
-import Header from "@/components/header/components/Header";
+import Header from "@/components/header/Header";
 
 const ConsumerLayout = async ({ children }: { children: React.ReactNode }) => {
   return (

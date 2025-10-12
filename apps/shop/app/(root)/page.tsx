@@ -3,22 +3,25 @@ import CategoryGrid from "@/features/home/components/CategoryGrid";
 import Featured from "@/features/home/components/Featured";
 import NewArrival from "@/features/home/components/NewArrival";
 import HeroCarousel from "@/features/home/components/HeroCarousel";
-import { db } from "@/drizzle/db";
-import { UserTable } from "@/drizzle/schema";
-import console from "console";
-import { auth } from "@clerk/nextjs/server";
-import { useId } from "react";
+import { getFeatured, getHeroBanner } from "@/sanity/actions/actions";
+import { Suspense } from "react";
+
+export const experimental_ppr = true;
 
 const Home = () => {
+  const bannerPromise = getHeroBanner();
+  const featuredPromise = getFeatured();
   return (
     <main className="">
-      <HeroCarousel />
+      <Suspense fallback={<h3>Loading Banner...</h3>}>
+        <HeroCarousel heroBannerPromise={bannerPromise} />
+      </Suspense>
 
       <CategoryGrid />
 
       <NewArrival />
 
-      <Featured />
+      <Featured featuredPromise={featuredPromise} />
 
       <BestSeller />
     </main>
