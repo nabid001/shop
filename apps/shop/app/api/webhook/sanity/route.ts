@@ -29,6 +29,9 @@ export async function POST(req: NextRequest) {
     }
 
     console.log("Success revalidate");
+    return new Response(JSON.stringify({ message: "Success revalidate" }), {
+      status: 200,
+    });
   } catch (error) {
     console.error("Webhook error:", error);
     return Response.json(
