@@ -1,9 +1,10 @@
 "use server";
 
 import { eq } from "drizzle-orm";
-import { db } from "../db";
-import { UserTable } from "../schema";
+import { db } from "../../db";
+import { UserTable } from "../../schema";
 import { unstable_cacheTag as cacheTag } from "next/cache";
+import { revalidateUserCache } from "@/drizzle/actions/users/cache";
 
 // export const name = async () => {
 //   try {
@@ -57,6 +58,7 @@ export const createUser = async ({
       throw new Error("Failed to create user");
     }
 
+    revalidateUserCache(newUser.id);
     return newUser;
   } catch (error) {
     console.log(error);
@@ -78,6 +80,8 @@ export const updateUser = async ({
 
     if (updatedUser === null) throw new Error("Failed to update user");
 
+    revalidateUserCache(updatedUser.id);
+
     return updatedUser;
   } catch (error) {
     console.log(error);
@@ -93,40 +97,9 @@ export const deleteUser = async (clerkId: string) => {
 
     if (deletedUser === null) throw new Error("Failed to update user");
 
+    revalidateUserCache(deletedUser.id);
     return deletedUser;
   } catch (error) {
     console.log(error);
-  }
-};
-
-export const getUserRole = async (clerkId: string) => {
-  try {
-    if (!clerkId) {
-      return {
-        success: false,
-        message: "Clerk id is required!",
-        status: 404,
-      };
-    }
-
-    const [user] = await db
-      .select({ role: UserTable.role, id: UserTable.id })
-      .from(UserTable)
-      .where(eq(UserTable.clerkId, clerkId));
-
-    cacheTag(`user-id:${user.id}`);
-    return {
-      success: true,
-      message: "Success",
-      status: 200,
-      id: user.id,
-      role: user.role,
-    };
-  } catch (error) {
-    console.log(
-      "Failed to get user role. something might have done wrong",
-      error
-    );
-    throw new Error("Failed to get user role. something might have done wrong");
   }
 };

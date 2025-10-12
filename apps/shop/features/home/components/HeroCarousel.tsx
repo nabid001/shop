@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { use } from "react";
-import { THeroBanner } from "@/sanity/actions/actions";
 import Link from "next/link";
+import { THeroBanner } from "@/types";
 
 const HeroCarousel = ({
   heroBannerPromise,

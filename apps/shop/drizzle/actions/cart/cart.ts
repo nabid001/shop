@@ -1,8 +1,10 @@
 // "use server";
 
-// import { eq, and } from "drizzle-orm";
-// import { db } from "../db";
-// import { CartTable } from "../schema";
+import { db } from "@/drizzle/db";
+import { getCartUserIdTag } from "./cache";
+import { eq } from "drizzle-orm";
+import { CartTable } from "@/drizzle/schema";
+
 // import { revalidatePath } from "next/cache";
 // import z from "zod";
 
@@ -123,3 +125,21 @@
 //     throw new Error("Failed to remove from cart");
 //   }
 // };
+
+export const getCartLength = async ({
+  userId,
+}: {
+  userId: string;
+}): Promise<number> => {
+  "use cache";
+  getCartUserIdTag(userId);
+
+  const items = await db.query.CartTable.findMany({
+    columns: {
+      id: true,
+    },
+    where: eq(CartTable.userId, userId),
+  });
+
+  return items.length;
+};

@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { parseBody } from "next-sanity/webhook";
-import { revalidateContent } from "@/lib/revalidateContent";
+import { revalidate } from "@/sanity/actions/revalidate";
 
 export type WebhookPayload = {
   _type: string;
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
     // });
 
     // Add actual revalidation logic
-    await revalidateContent(body);
+    await revalidate(body);
 
     console.log("Successfully revalidated for:", body._type);
     return new Response(
