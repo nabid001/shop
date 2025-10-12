@@ -10,6 +10,7 @@ import {
 } from "../query";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import { cache } from "react";
+import { nameCacheTag } from "@/lib/cache";
 
 export type THeroBanner = {
   _id: string;
@@ -81,7 +82,7 @@ export const getHeroBanner = cache(async (): Promise<THeroBanner> => {
   try {
     const res: THeroBanner = await client.fetch(HERO_BANNER);
     res.map((val) => {
-      cacheTag(`heroBanner-id:${val._id}`);
+      nameCacheTag("heroBanner", `${val._id}`);
     });
     return res;
   } catch (error) {
@@ -95,7 +96,7 @@ export const getCategory = cache(async (): Promise<TCategory> => {
   try {
     const res: TCategory = await client.fetch(CATEGORY);
     res.map((val) => {
-      cacheTag(`categorySection-id:${val._id}`);
+      nameCacheTag("categorySection", `${val._id}`);
     });
     return res;
   } catch (error) {
@@ -109,7 +110,7 @@ export const getNewArrival = cache(async (): Promise<TNewArrival> => {
   try {
     const res: TNewArrival = await client.fetch(NEW_ARRIVAL);
     res.map((val) => {
-      cacheTag(`newArrival-id:${val._id}`);
+      nameCacheTag("homeProducts", `${val._id}`);
     });
     return res;
   } catch (error) {
@@ -123,7 +124,7 @@ export const getFeatured = cache(async (): Promise<TFeatured> => {
   try {
     const res: TFeatured = await client.fetch(FEATURED);
     res.map((val) => {
-      cacheTag(`featured-id:${val._id}`);
+      nameCacheTag("homeProducts", `${val._id}`);
     });
     return res;
   } catch (error) {
@@ -137,7 +138,7 @@ export const getBestseller = cache(async (): Promise<TBestseller> => {
   try {
     const res: TBestseller = await client.fetch(BESTSELLER);
     res.map((val) => {
-      cacheTag(`bestseller-id:${val._id}`);
+      nameCacheTag("homeProducts", `${val._id}`);
     });
     return res;
   } catch (error) {

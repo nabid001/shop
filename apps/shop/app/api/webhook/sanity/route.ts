@@ -1,37 +1,67 @@
 import { NextRequest } from "next/server";
 import { parseBody } from "next-sanity/webhook";
+import { revalidateContent } from "@/lib/revalidateContent";
 
-type WebhookPayload = {
+export type WebhookPayload = {
   _type: string;
+  _id: string;
+  slug?: { current: string };
+  operation: "create" | "update" | "delete";
 };
+
 export async function POST(req: NextRequest) {
   try {
-    if (!process.env.SANITY_STUDIO_WEBHOOK_SECRET) {
+    const secret = process.env.SANITY_STUDIO_WEBHOOK_SECRET;
+
+    if (!secret) {
+      console.error(
+        "Missing environment variable: SANITY_STUDIO_WEBHOOK_SECRET"
+      );
       return new Response(
-        "Missing environment variable SANITY_REVALIDATE_SECRET",
+        "Missing environment variable SANITY_STUDIO_WEBHOOK_SECRET",
         { status: 500 }
       );
     }
 
     const { isValidSignature, body } = await parseBody<WebhookPayload>(
       req,
-      process.env.SANITY_STUDIO_WEBHOOK_SECRET
+      secret
     );
 
     if (!isValidSignature) {
+      console.error("Invalid signature received");
       const message = "Invalid signature";
       return new Response(JSON.stringify({ message, isValidSignature, body }), {
         status: 401,
       });
-    } else if (!body?._type) {
-      const message = "Bad Request";
+    }
+
+    if (!body?._type) {
+      console.error("Missing _type in body:", body);
+      const message = "Bad Request - Missing _type";
       return new Response(JSON.stringify({ message, body }), { status: 400 });
     }
 
-    console.log("Success revalidate");
-    return new Response(JSON.stringify({ message: "Success revalidate" }), {
-      status: 200,
-    });
+    // console.log("Webhook received:", {
+    //   type: body._type,
+    //   id: body._id,
+    //   operation: body.operation,
+    // });
+
+    // Add actual revalidation logic
+    await revalidateContent(body);
+
+    console.log("Successfully revalidated for:", body._type);
+    return new Response(
+      JSON.stringify({
+        message: "Successfully revalidated",
+        revalidated: true,
+        type: body._type,
+      }),
+      {
+        status: 200,
+      }
+    );
   } catch (error) {
     console.error("Webhook error:", error);
     return Response.json(
