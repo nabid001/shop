@@ -53,19 +53,6 @@ export const productSchema = defineType({
       initialValue: 'private',
       validation: (Rule) => Rule.required(),
     }),
-    defineField({
-      name: 'flag',
-      title: 'Product Flag',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Featured', value: 'featured'},
-          {title: 'None', value: 'none'},
-        ],
-      },
-      initialValue: 'none',
-      validation: (Rule) => Rule.required(),
-    }),
 
     defineField({
       title: 'Category',
@@ -129,9 +116,7 @@ export const productSchema = defineType({
             defineField({
               title: 'Image',
               name: 'image',
-              type: 'reference',
-              to: [{type: 'media'}],
-
+              type: 'image',
               validation: (Rule) => Rule.required(),
             }),
           ],
@@ -141,16 +126,8 @@ export const productSchema = defineType({
     },
 
     defineField({
-      title: 'Author',
-      name: 'author',
-      type: 'reference',
-      to: [{type: 'user'}],
-      validation: (Rule) => Rule.required(),
-    }),
-
-    defineField({
-      name: 'totalOrdered',
-      title: 'Total Ordered',
+      name: 'totalSold',
+      title: 'Total Sold',
       type: 'number',
       initialValue: 0,
     }),
@@ -162,11 +139,18 @@ export const productSchema = defineType({
       initialValue: 0,
     }),
 
-    // defineField({
-    //   name: 'multiImages',
-    //   title: 'Gallery Images',
-    //   type: 'array',
-    //   of: [{type: 'reference', to: [{type: 'media'}]}],
-    // }),
+    defineField({
+      name: 'featured',
+      title: 'Is Featured',
+      type: 'boolean',
+      initialValue: false,
+    }),
+
+    defineField({
+      title: 'New Arrival',
+      name: 'newArrival',
+      type: 'boolean',
+      initialValue: false,
+    }),
   ],
 })

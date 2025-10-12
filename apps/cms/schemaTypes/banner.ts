@@ -21,14 +21,14 @@ export const bannerSchema = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      title: 'Short Text',
-      name: 'shortText',
+      title: 'Subtitle',
+      name: 'subtitle',
       type: 'string',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      title: 'Long Text',
-      name: 'longText',
+      title: 'Description',
+      name: 'description',
       type: 'string',
     }),
     defineField({

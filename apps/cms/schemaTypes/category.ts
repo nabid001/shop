@@ -24,5 +24,35 @@ export const categorySchema = defineType({
       },
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      title: 'Subtitle',
+      name: 'subtitle',
+      type: 'string',
+    }),
+    defineField({
+      title: 'Action Button',
+      name: 'actionButton',
+      type: 'object',
+      fields: [
+        defineField({
+          title: 'Name',
+          name: 'name',
+          type: 'string',
+        }),
+        defineField({
+          title: 'Url',
+          name: 'url',
+          type: 'string',
+        }),
+      ],
+    }),
+    defineField({
+      title: 'Image',
+      name: 'image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+    }),
   ],
 })

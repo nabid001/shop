@@ -2,7 +2,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   experimental: {
-    ppr: true,
     cacheComponents: true,
   },
   eslint: {
@@ -19,6 +18,11 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // logging: {
+  //   fetches: {
+  //     fullUrl: true,
+  //   },
+  // },
 };
 
 export default nextConfig;

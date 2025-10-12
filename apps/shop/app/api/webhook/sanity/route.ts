@@ -1,5 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
-// import { revalidatePath } from "next/cache";
+import { NextRequest } from "next/server";
 import { parseBody } from "next-sanity/webhook";
 
 type WebhookPayload = {
@@ -30,10 +29,9 @@ export async function POST(req: NextRequest) {
     }
 
     console.log("Success revalidate");
-    return new Response("Success revalidate", { status: 200 });
   } catch (error) {
     console.error("Webhook error:", error);
-    return NextResponse.json(
+    return Response.json(
       { message: "Error processing webhook" },
       { status: 500 }
     );

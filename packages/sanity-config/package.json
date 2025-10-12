@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "tsc",
-    "lint": "eslint"
+    "build": "tsc"
   },
   "dependencies": {
     "@repo/env-config": "workspace:*",

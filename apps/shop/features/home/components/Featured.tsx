@@ -2,10 +2,13 @@
 
 import type React from "react";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ChevronLeft, ChevronRight, ShoppingCart, Heart } from "lucide-react";
+import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
+import { TFeatured } from "@/sanity/actions/actions";
+import { blurUrl, imageUrl } from "@/lib/utils";
+import Image from "next/image";
 
 interface Product {
   id: number;
@@ -72,7 +75,11 @@ const products: Product[] = [
   },
 ];
 
-const Featured = () => {
+const Featured = ({
+  featuredPromise,
+}: {
+  featuredPromise: Promise<TFeatured>;
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [touchStart, setTouchStart] = useState(0);
@@ -148,6 +155,8 @@ const Featured = () => {
     setTimeout(() => setIsAutoPlaying(true), 3000);
   };
 
+  const res = use(featuredPromise);
+
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8 bg-background">
       <div className="max-w-7xl mx-auto">
@@ -200,9 +209,9 @@ const Featured = () => {
                 transform: `translateX(-${currentIndex * (100 / visibleProducts)}%)`,
               }}
             >
-              {products.map((product) => (
+              {res.map((product) => (
                 <div
-                  key={product.id}
+                  key={product._id}
                   className="flex-shrink-0 px-3"
                   style={{ width: `${100 / visibleProducts}%` }}
                 >
@@ -210,8 +219,10 @@ const Featured = () => {
                     <div className="relative overflow-hidden rounded-t-lg">
                       {/* Product Image */}
                       <div className="aspect-square bg-muted/30 overflow-hidden">
-                        <img
-                          src={product.image || "/placeholder.svg"}
+                        <Image
+                          src={imageUrl(product.image.url)}
+                          blurDataURL={blurUrl(product.image.url)}
+                          fill
                           alt={product.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
@@ -219,12 +230,12 @@ const Featured = () => {
 
                       {/* Badges */}
                       <div className="absolute top-3 left-3 flex gap-2">
-                        {product.isNew && (
+                        {/* {product.featured && (
                           <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full font-medium">
                             New
                           </span>
-                        )}
-                        {product.isSale && (
+                        )} */}
+                        {product.salePrice < product.price && (
                           <span className="bg-accent text-accent-foreground text-xs px-2 py-1 rounded-full font-medium">
                             Sale
                           </span>
@@ -232,13 +243,13 @@ const Featured = () => {
                       </div>
 
                       {/* Wishlist Button */}
-                      <Button
+                      {/* <Button
                         variant="ghost"
                         size="icon"
                         className="absolute top-3 right-3 bg-card/80 backdrop-blur-sm hover:bg-accent/80 opacity-0 group-hover:opacity-100 transition-all duration-200"
                       >
                         <Heart className="h-4 w-4" />
-                      </Button>
+                      </Button> */}
 
                       {/* Quick Add Button */}
                       <Button className="absolute bottom-3 left-3 right-3 bg-primary/90 hover:bg-primary text-primary-foreground opacity-0 group-hover:opacity-100 transition-all duration-200 backdrop-blur-sm">
@@ -257,11 +268,11 @@ const Featured = () => {
                       </h3>
                       <div className="flex items-center gap-2">
                         <span className="text-lg font-semibold text-foreground">
-                          ${product.price}
+                          ${product.salePrice}
                         </span>
-                        {product.originalPrice && (
+                        {product.price && (
                           <span className="text-sm text-muted-foreground line-through">
-                            ${product.originalPrice}
+                            ${product.price}
                           </span>
                         )}
                       </div>
