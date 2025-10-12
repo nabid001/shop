@@ -1,5 +1,6 @@
 "use server";
 
+import { client } from "@repo/sanity-config/client";
 import {
   BESTSELLER,
   CATEGORY,
@@ -7,85 +8,141 @@ import {
   HERO_BANNER,
   NEW_ARRIVAL,
 } from "../query";
-import {
-  THeroBanner,
-  TCategory,
-  TNewArrival,
-  TFeatured,
-  TBestseller,
-} from "@/types";
-import { client } from "@repo/sanity-config/client";
-import { getIdTag } from "@/lib/cache";
+import { cacheTag } from "next/dist/server/use-cache/cache-tag";
+import { cache } from "react";
+import { nameCacheTag } from "@/lib/cache";
 
-export const getHeroBanner = async (): Promise<THeroBanner> => {
+export type THeroBanner = {
+  _id: string;
+  _type: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  image: string;
+  primaryButton: {
+    name: string;
+    url: string;
+  };
+  secondaryButton: {
+    name: string;
+    url: string;
+  };
+}[];
+
+export type TCategory = {
+  _id: string;
+  name: string;
+  subtitle: string;
+  actionButton: {
+    name: string;
+    url: string;
+  };
+  image: string;
+}[];
+
+export type TNewArrival = {
+  _id: string;
+  _type: string;
+  name: string;
+  price: number;
+  salePrice: number;
+  image: {
+    url: string;
+  };
+  category: string;
+}[];
+
+export type TFeatured = {
+  _id: string;
+  _type: string;
+  name: string;
+  price: number;
+  salePrice: number;
+  image: {
+    url: string;
+  };
+  category: string;
+  featured: boolean;
+}[];
+
+export type TBestseller = {
+  _id: string;
+  _type: string;
+  name: string;
+  price: number;
+  salePrice: number;
+  image: {
+    url: string;
+  };
+  category: string;
+}[];
+
+export const getHeroBanner = cache(async (): Promise<THeroBanner> => {
   "use cache";
   try {
     const res: THeroBanner = await client.fetch(HERO_BANNER);
     res.map((val) => {
-      getIdTag("heroBanner", `${val._id}`);
+      nameCacheTag("heroBanner", `${val._id}`);
     });
     return res;
   } catch (error) {
     console.log("Server error", error);
     return [] as THeroBanner;
   }
-};
+});
 
-export const getCategory = async (): Promise<TCategory> => {
+export const getCategory = cache(async (): Promise<TCategory> => {
   "use cache";
   try {
     const res: TCategory = await client.fetch(CATEGORY);
     res.map((val) => {
-      getIdTag("categorySection", `${val._id}`);
+      nameCacheTag("categorySection", `${val._id}`);
     });
     return res;
   } catch (error) {
     console.log("Server error", error);
     return [] as TCategory;
   }
-};
+});
 
-export const getNewArrival = async (): Promise<TNewArrival> => {
+export const getNewArrival = cache(async (): Promise<TNewArrival> => {
   "use cache";
-
   try {
     const res: TNewArrival = await client.fetch(NEW_ARRIVAL);
     res.map((val) => {
-      getIdTag("products", `${val._id}`);
+      nameCacheTag("homeProducts", `${val._id}`);
     });
     return res;
   } catch (error) {
     console.log("Server error", error);
     return [] as TNewArrival;
   }
-};
+});
 
-export const getFeatured = async (): Promise<TFeatured> => {
+export const getFeatured = cache(async (): Promise<TFeatured> => {
   "use cache";
-
   try {
     const res: TFeatured = await client.fetch(FEATURED);
     res.map((val) => {
-      getIdTag("products", `${val._id}`);
+      nameCacheTag("homeProducts", `${val._id}`);
     });
     return res;
   } catch (error) {
     console.log("Server error", error);
     return [] as TFeatured;
   }
-};
+});
 
-export const getBestseller = async (): Promise<TBestseller> => {
+export const getBestseller = cache(async (): Promise<TBestseller> => {
   "use cache";
-
   try {
     const res: TBestseller = await client.fetch(BESTSELLER);
     res.map((val) => {
-      getIdTag("products", `${val._id}`);
+      nameCacheTag("homeProducts", `${val._id}`);
     });
     return res;
   } catch (error) {
     console.log("Server error", error);
     return [] as TBestseller;
   }
-};
+});

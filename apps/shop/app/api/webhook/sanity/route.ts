@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
     // Add actual revalidation logic
     await revalidate(body);
 
-    console.log("Successfully revalidated for:", body._type);
+    // console.log("Successfully revalidated for:", body._type);
     return new Response(
       JSON.stringify({
         message: "Successfully revalidated",

@@ -28,7 +28,6 @@ import { getCartLength } from "@/drizzle/actions/cart/cart";
 
 const Header = async () => {
   const { user } = await getCurrentUser({ allData: true });
-  console.log(user?.name);
   const isAdmin: boolean = user?.role === "admin" && user?.role === "admin";
 
   return (

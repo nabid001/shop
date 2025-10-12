@@ -37,7 +37,6 @@ const getCurrentUserCached = async (
 const getUser = cache(async (id: string) => {
   "use cache";
   cacheTag(getUserIdTag(id));
-  console.log("Called");
 
   return db.query.UserTable.findFirst({
     where: eq(UserTable.id, id),

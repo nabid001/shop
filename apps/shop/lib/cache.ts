@@ -9,6 +9,10 @@ type CACHE_TAG =
   | "homeProducts"
   | "carts";
 
+export const nameCacheTag = (type: CACHE_TAG, tag: string) => {
+  return cacheTag(`${type}:id-${tag}`);
+};
+
 export const revalidateTags = (type: CACHE_TAG, tag: string) => {
   revalidateTag(`${type}:id-${tag}`);
 };

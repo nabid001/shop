@@ -1,24 +1,25 @@
-import {
-  revalidateBannerCache,
-  revalidateCategoryCache,
-  revalidateProductCache,
-} from "./cache";
 import { WebhookPayload } from "@/app/api/webhook/sanity/route";
+import { revalidatePath } from "next/cache";
+import { revalidateTags } from "../../lib/cache";
 
 export async function revalidate(payload: WebhookPayload) {
-  const { _type, _id } = payload;
+  const { _type, slug, _id } = payload;
 
   try {
     switch (_type) {
       case "product":
-        revalidateProductCache(_id);
+        // if (slug?.current) {
+        //   revalidatePath(`/products/${slug.current}`);
+        // }
+
+        revalidateTags("homeProducts", _id);
         break;
 
       case "category":
-        revalidateCategoryCache(_id);
+        revalidateTags("categorySection", _id);
         break;
       case "banner":
-        revalidateBannerCache(_id);
+        revalidateTags("heroBanner", _id);
         break;
     }
   } catch (error) {
