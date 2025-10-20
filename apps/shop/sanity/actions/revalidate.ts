@@ -1,5 +1,4 @@
 import { WebhookPayload } from "@/app/api/webhook/sanity/route";
-import { revalidatePath } from "next/cache";
 import { revalidateTags } from "../../lib/cache";
 
 export async function revalidate(payload: WebhookPayload) {
@@ -8,10 +7,6 @@ export async function revalidate(payload: WebhookPayload) {
   try {
     switch (_type) {
       case "product":
-        // if (slug?.current) {
-        //   revalidatePath(`/products/${slug.current}`);
-        // }
-
         revalidateTags("homeProducts", _id);
         break;
 

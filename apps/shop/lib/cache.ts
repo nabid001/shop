@@ -1,5 +1,4 @@
-import { revalidateTag } from "next/cache";
-import { cacheTag } from "next/dist/server/use-cache/cache-tag";
+import { revalidateTag, unstable_cacheTag } from "next/cache";
 
 type CACHE_TAG =
   | "products"
@@ -10,7 +9,7 @@ type CACHE_TAG =
   | "carts";
 
 export const nameCacheTag = (type: CACHE_TAG, tag: string) => {
-  return cacheTag(`${type}:id-${tag}`);
+  return unstable_cacheTag(`${type}:id-${tag}`);
 };
 
 export const revalidateTags = (type: CACHE_TAG, tag: string) => {

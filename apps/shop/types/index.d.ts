@@ -178,3 +178,34 @@ export type VerifiedRelatedProductError =
   | "PRODUCT_NOT_FOUND";
 
 export type VerifiedProductByIdError = "SLUG_REQUIRE" | "PRODUCT_NOT_FOUND";
+
+export type VerifiedGetCartError = "USERID_REQUIRE" | "EMPTY_CART";
+export type TCartProduct = {
+  userId: string;
+  id: string;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  productId: string;
+  color: string;
+  size: string;
+  quantity: number;
+  priceAtAdd: number;
+  image: string;
+  name: string;
+  category: string;
+  price: number;
+  salePrice: number;
+}[];
+
+export type TOnlyImage = {
+  _id: string;
+  name: string;
+  category: string;
+  variants: {
+    image: string | null;
+    price: number;
+    salePrice: number;
+  };
+}[];
+
+export type VerifiedRemoveCartError = "USER_ID_REQUIRE" | "PRODUCT_ID_REQUIRE";

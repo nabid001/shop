@@ -1,131 +1,109 @@
-// "use server";
+"use server";
 
 import { db } from "@repo/drizzle-config";
 import { CartTable } from "@repo/drizzle-config/schemas/cart";
 import { getCartUserIdTag } from "./cache";
-import { eq } from "drizzle-orm";
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import { and, eq } from "drizzle-orm";
+import { unstable_cacheTag as cacheTag, revalidateTag } from "next/cache";
+import {
+  Response,
+  TCartProduct,
+  VerifiedGetCartError,
+  TOnlyImage,
+} from "@/types";
+import { client } from "@repo/sanity-config/client";
 
-// import { revalidatePath } from "next/cache";
-// import z from "zod";
+export const getCartProducts = async (
+  userId: string
+): Promise<Response<VerifiedGetCartError, TCartProduct>> => {
+  "use cache";
+  cacheTag(getCartUserIdTag({ id: userId }));
 
-// const t = z.object({
-//   colors: z.array(z.string()).min(1, { message: "Select one color" }),
-//   sizes: z.array(z.string()).min(1, { message: "Select one size" }),
-// });
+  if (!userId)
+    return {
+      success: false,
+      error: "USERID_REQUIRE",
+      message: "User Id is required",
+    };
 
-// export const addToCart = async (
-//   userId: string,
-//   productId: string,
-//   colors: string[],
-//   sizes: string[],
-//   quantity: number
-// ) => {
-//   const parsedData = await t.safeParseAsync({ colors, sizes });
+  const res = await db.query.CartTable.findMany({
+    where: eq(CartTable.userId, userId),
+  });
 
-//   if (!userId) {
-//     throw new Error("User ID is required");
-//   } else if (!productId) {
-//     throw new Error("Product ID is required");
-//   } else if (parsedData.error) {
-//     throw new Error(parsedData.error.message);
-//   }
+  if (!res.length) {
+    return {
+      success: false,
+      error: "EMPTY_CART",
+      message: "Cart Is Empty",
+    };
+  }
 
-//   const isAlreadyInCart = await db.query.CartTable.findFirst({
-//     where: and(
-//       eq(CartTable.userId, userId),
-//       eq(CartTable.productId, productId)
-//     ),
-//   });
+  const productIds = res.map((item) => item.productId);
 
-//   if (isAlreadyInCart) {
-//     return {
-//       success: false,
-//       message: "Product is already in the cart",
-//     };
-//   }
+  const images = await client.fetch<TOnlyImage>(
+    `*[_type == "product" && status == "public" && _id in $productIds]{
+      _id,
+      name,
+      variants[0]{
+        "image": image.asset->url,
+        price,
+        salePrice
+      },
+      "category": category->name,
+    }`,
+    { productIds }
+  );
 
-//   try {
-//     const res = await db
-//       .insert(CartTable)
-//       .values({
-//         productId,
-//         userId,
-//         colors: colors,
-//         sizes: sizes,
-//         quantity,
-//       })
-//       .returning();
+  // Map the extra product data (name, price, salePrice, category) to product ids for easy lookup
+  const productDataById = Object.fromEntries(
+    images.map((p) => [
+      p._id,
+      {
+        image: p.variants?.image ?? "",
+        name: p.name || "",
+        price: p.variants?.price ?? null,
+        salePrice: p.variants?.salePrice ?? null,
+        category: p.category || "",
+      },
+    ])
+  );
 
-//     revalidatePath("/cart");
-//     return {
-//       success: true,
-//       message: "Product added to cart",
-//       data: res,
-//     };
-//   } catch (error) {
-//     console.log("Failed to add to cart", error);
-//     throw new Error("Failed to add to cart");
-//   }
-// };
+  // Attach all available product data (including image and name) to each cart item
+  const cartWithImages = res.map((item) => ({
+    ...item,
+    ...(productDataById[item.productId] || {}),
+  }));
 
-// export const getCartItems = async (userId: string) => {
-//   try {
-//     if (!userId) {
-//       throw new Error("User ID is required");
-//     }
+  return { success: true, message: "Ok", data: cartWithImages };
+};
 
-//     const res = await db.query.CartTable.findMany({
-//       where: and(eq(CartTable.userId, userId)),
-//       with: {
-//         productId: {
-//           columns: {
-//             id: true,
-//             name: true,
-//             author: true,
-//             price: true,
-//             stock: true,
-//             mainImage: true,
-//             salePrice: true,
-//           },
-//         },
-//       },
-//     });
-//     return res;
-//   } catch (error) {
-//     console.log("Failed to get cart items", error);
-//     throw new Error("Failed to get cart items");
-//   }
-// };
+export const removeFromCart = async ({
+  userId,
+  productId,
+}: {
+  userId: string;
+  productId: string;
+}) => {
+  try {
+    if (!userId) {
+      throw new Error("User ID is required");
+    } else if (!productId) {
+      throw new Error("Product ID is required");
+    }
 
-// export const removeFromCart = async ({
-//   userId,
-//   productId,
-// }: {
-//   userId: string;
-//   productId: string;
-// }) => {
-//   try {
-//     if (!userId) {
-//       throw new Error("User ID is required");
-//     } else if (!productId) {
-//       throw new Error("Product ID is required");
-//     }
+    await db
+      .delete(CartTable)
+      .where(and(eq(CartTable.userId, userId), eq(CartTable.id, productId)))
+      .returning();
 
-//     const res = await db
-//       .delete(CartTable)
-//       .where(
-//         and(eq(CartTable.userId, userId), eq(CartTable.productId, productId))
-//       )
-//       .returning();
+    revalidateTag(getCartUserIdTag({ id: userId }));
 
-//     revalidatePath("/");
-//     return { res, success: true };
-//   } catch (error) {
-//     console.log("Failed to remove from cart", error);
-//     throw new Error("Failed to remove from cart");
-//   }
-// };
+    return { success: true };
+  } catch (error) {
+    console.log("Failed to remove from cart", error);
+    throw new Error("Failed to remove from cart");
+  }
+};
 
 export const getCartLength = async ({
   userId,
