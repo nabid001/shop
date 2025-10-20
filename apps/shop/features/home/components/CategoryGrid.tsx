@@ -1,8 +1,7 @@
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { getCategory } from "@/sanity/actions/actions";
+import { getCategory } from "@/features/home/db/actions";
 import { Suspense } from "react";
-import Link from "next/link";
+import { SetQueryData } from "@/lib/setQueryData";
 
 const CategoryGrid = () => {
   return (
@@ -62,15 +61,14 @@ const CategoriesGrid = async () => {
                 </p>
                 {/* <p className="text-xs opacity-75 mt-1">{category.itemCount}</p> */}
               </div>
-              <Button
-                variant="secondary"
-                className="bg-white/90 text-black hover:bg-white transition-colors w-fit"
-                asChild
-              >
-                <Link href={`/categories${category.actionButton.url}`}>
-                  Shop {category.actionButton.name}
-                </Link>
-              </Button>
+              <>
+                <SetQueryData
+                  linkUrl={"/products"}
+                  linkName={category.actionButton.name}
+                  stateName={category._type}
+                  stateValue={category.slug.current}
+                />
+              </>
             </div>
           </div>
         </Card>

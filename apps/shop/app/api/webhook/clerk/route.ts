@@ -1,11 +1,7 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { clerkClient, WebhookEvent } from "@clerk/nextjs/server";
-import {
-  createUser,
-  deleteUser,
-  updateUser,
-} from "@/drizzle/actions/users/user";
+import { createUser, deleteUser, updateUser } from "@/features/users/db/user";
 
 const client = await clerkClient();
 

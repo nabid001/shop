@@ -3,14 +3,13 @@ import CategoryGrid from "@/features/home/components/CategoryGrid";
 import Featured from "@/features/home/components/Featured";
 import NewArrival from "@/features/home/components/NewArrival";
 import HeroCarousel from "@/features/home/components/HeroCarousel";
-import { getFeatured, getHeroBanner } from "@/sanity/actions/actions";
 import { Suspense } from "react";
+import { getFeatured, getHeroBanner } from "@/features/home/db/actions";
 
-export const experimental_ppr = true;
-
-const Home = () => {
+const Home = async () => {
   const bannerPromise = getHeroBanner();
   const featuredPromise = getFeatured();
+
   return (
     <main className="">
       <Suspense fallback={<h3>Loading Banner...</h3>}>

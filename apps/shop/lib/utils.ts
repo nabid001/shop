@@ -11,5 +11,17 @@ export const Toaster = (message: string) => {
   return toast(message);
 };
 
-export const imageUrl = (val: string) => urlFor(val).url();
+export const imgUrl = (val: string) => urlFor(val).url();
 export const blurUrl = (val: string) => urlFor(val).blur(1000).url();
+
+export const calculateDiscount = (
+  originalPrice: number,
+  salePrice: number
+): number => {
+  if (originalPrice <= 0 || salePrice < 0) {
+    throw new Error("Invalid price values");
+  }
+
+  const discount = ((originalPrice - salePrice) / originalPrice) * 100;
+  return Math.round(discount);
+};

@@ -111,7 +111,7 @@ export const productSchema = defineType({
               name: 'stock',
               type: 'number',
               initialValue: 0,
-              validation: (Rule) => Rule.required().min(1),
+              validation: (Rule) => Rule.required().min(0),
             }),
             defineField({
               title: 'Image',
