@@ -4,16 +4,12 @@ import path from "path";
 
 const loadEnvFiles = () => {
   const paths = [
-    ".env",
     ".env.local",
 
-    "../../apps/cms/.env",
     "../../apps/cms/.env.local",
 
-    "../../apps/dashboard/.env",
     "../../apps/dashboard/.env.local",
 
-    "../../apps/shop/.env",
     "../../apps/shop/.env.local",
   ];
 
@@ -29,17 +25,23 @@ const loadEnvFiles = () => {
 
 loadEnvFiles();
 
-// const envSchema = z.object({
-//   // Sanity
-//   SANITY_STUDIO_API_VERSION: z.string(),
-//   SANITY_STUDIO_SANITY_DATASET: z.string(),
-//   SANITY_STUDIO_SANITY_PROJECT_ID: z.string(),
-// });
+const envSchema = z.object({
+  // Sanity
+  SANITY_STUDIO_API_VERSION: z.string(),
+  SANITY_STUDIO_SANITY_DATASET: z.string(),
+  SANITY_STUDIO_SANITY_PROJECT_ID: z.string(),
+
+  // Drizzle
+  DATABASE_URL: z.string(),
+});
 
 const env = process.env;
+// const env = envSchema.parse(process.env);
 
 export const sanityEnv = {
-  apiVersion: env.SANITY_STUDIO_API_VERSION,
   projectId: env.SANITY_STUDIO_SANITY_PROJECT_ID,
   dataset: env.SANITY_STUDIO_SANITY_DATASET,
+  apiVersion: env.SANITY_STUDIO_API_VERSION,
 };
+
+export const databaseUrl = env.DATABASE_URL;

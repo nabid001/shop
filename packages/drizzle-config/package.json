@@ -1,0 +1,26 @@
+{
+  "name": "@repo/drizzle-config",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "check-types": "tsc --noEmit",
+    "db:both": "pnpm drizzle-kit generate && npx drizzle-kit migrate",
+    "db:studio": "pnpm drizzle-kit studio"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@repo/env-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "drizzle-kit": "^0.31.5"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
+    "drizzle-orm": "^0.44.5"
+  },
+  "exports": {
+    ".": "./src/db.ts",
+    "./db": "./src/db.ts",
+    "./schemas/*": "./src/schemas/*.ts"
+  }
+}

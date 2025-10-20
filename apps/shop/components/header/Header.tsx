@@ -24,7 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Suspense } from "react";
-import { getCartLength } from "@/drizzle/actions/cart/cart";
+import { getCartLength } from "@/features/cart/db/cart";
 
 const Header = async () => {
   const { user } = await getCurrentUser({ allData: true });
@@ -41,7 +41,7 @@ const Header = async () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/product" className="nav-link">
+            <Link href="/products" className="nav-link">
               Products
             </Link>
             <Link href="/collections" className="nav-link">
