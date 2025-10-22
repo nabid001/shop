@@ -6,13 +6,14 @@ import { CarouselImage } from "./CarouselImage";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus } from "lucide-react";
-import { calculateDiscount, imgUrl } from "@/lib/utils";
+import { calculateDiscount } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
 import { addToCart } from "../db/cart";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import { PortableText } from "@portabletext/react";
 import { PortableTextComponent } from "./PortableComponent";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 
 type Props = {
   product: Awaited<TProductById>;
@@ -192,22 +193,31 @@ const ProductDetailsClient = ({ product, userId }: Props) => {
 
           {/* Add to Cart */}
           <div className="mt-auto">
-            <Button
-              onClick={() => {
-                handleAddToCart();
-              }}
-              variant={`${singleVariant.stock <= 0 ? "destructive" : "default"}`}
-              disabled={singleVariant.stock <= 0 || isSubmitting}
-            >
-              {isSubmitting ? (
-                <>
-                  <Spinner />
-                  Adding
-                </>
-              ) : (
-                <>{singleVariant.stock > 0 ? "Add To Cart" : "Out Of Stock"}</>
-              )}
-            </Button>
+            <SignedIn>
+              <Button
+                onClick={() => {
+                  handleAddToCart();
+                }}
+                variant={`${singleVariant.stock <= 0 ? "destructive" : "default"}`}
+                disabled={singleVariant.stock <= 0 || isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Spinner />
+                    Adding
+                  </>
+                ) : (
+                  <>
+                    {singleVariant.stock > 0 ? "Add To Cart" : "Out Of Stock"}
+                  </>
+                )}
+              </Button>
+            </SignedIn>
+            <SignedOut>
+              <Button asChild>
+                <SignInButton mode="redirect">Add To Cart</SignInButton>
+              </Button>
+            </SignedOut>
           </div>
         </div>
       </section>

@@ -1,11 +1,11 @@
 import ProductCard from "@/components/card/ProductCard";
 import ProductDetailsClient from "@/features/products/components/ProductDetailsClient";
+import Image from "next/image";
+import { getCurrentUser } from "@/lib/getCurrentUser";
 import {
   getProductById,
   getRelatedProducts,
 } from "@/features/products/db/product";
-import { getCurrentUser } from "@/lib/getCurrentUser";
-import Image from "next/image";
 
 const ProductDetails = async ({
   params,

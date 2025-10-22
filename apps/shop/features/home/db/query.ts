@@ -9,7 +9,7 @@ export const HERO_BANNER = `*[_type == "banner" && status == "public"]{
     secondaryButton,
 }`;
 
-export const CATEGORY = `*[_type == "category"]{
+export const CATEGORY = `*[_type == "category"][0..2]{
     _id,
     _type,
     name,

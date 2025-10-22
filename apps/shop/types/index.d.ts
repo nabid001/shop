@@ -181,8 +181,9 @@ export type VerifiedProductByIdError = "SLUG_REQUIRE" | "PRODUCT_NOT_FOUND";
 
 export type VerifiedGetCartError = "USERID_REQUIRE" | "EMPTY_CART";
 export type TCartProduct = {
-  userId: string;
   id: string;
+  name: string;
+  userId: string;
   createdAt: Date | null;
   updatedAt: Date | null;
   productId: string;
@@ -191,15 +192,16 @@ export type TCartProduct = {
   quantity: number;
   priceAtAdd: number;
   image: string;
-  name: string;
   category: string;
   price: number;
   salePrice: number;
+  slug: string;
 }[];
 
 export type TOnlyImage = {
   _id: string;
   name: string;
+  slug: { _type: string; current: string };
   category: string;
   variants: {
     image: string | null;
@@ -209,3 +211,37 @@ export type TOnlyImage = {
 }[];
 
 export type VerifiedRemoveCartError = "USER_ID_REQUIRE" | "PRODUCT_ID_REQUIRE";
+
+export type TGetCategory = {
+  _id: string;
+  name: string;
+  slug: { _type: string; current: string };
+}[];
+
+export type TProducts = {
+  search: string | undefined;
+  sorting: string | undefined;
+  category: string[] | undefined;
+};
+
+export type TProductsResult = {
+  _id: string;
+  name: string;
+  slug: {
+    _type: string;
+    current: string;
+  };
+  category: {
+    name: string;
+    slug: string;
+  };
+  featured: boolean;
+  newArrival: boolean;
+  variant: {
+    price: number;
+    salePrice: number;
+    image: string;
+  };
+}[];
+
+export type VerifiedProductError = "PRODUCT_NOT_FOUND" | "VALIDATION_ERROR";

@@ -92,14 +92,17 @@ export function CartClient({ cartItem, userId }: Props) {
             <Card key={item.id} className="p-4 sm:p-6">
               <div className="flex gap-4">
                 {/* Product Image */}
-                <div className="relative flex-shrink-0 w-24 h-24 sm:w-32 sm:h-32 bg-muted/30 rounded-lg overflow-hidden">
+                <Link
+                  href={`/products/${item.slug}`}
+                  className="relative flex-shrink-0 w-24 h-24 sm:w-32 sm:h-32 bg-muted/30 rounded-lg overflow-hidden"
+                >
                   <Image
                     src={item.image || "/placeholder.svg"}
                     alt={"image"}
                     fill
                     className="w-full h-full object-cover"
                   />
-                </div>
+                </Link>
 
                 {/* Product Details */}
                 <div className="flex-1 min-w-0">
@@ -113,7 +116,12 @@ export function CartClient({ cartItem, userId }: Props) {
                             toggleSelectOne(item.id, Boolean(v))
                           }
                         />
-                        <Label htmlFor={`select-${item.id}`}>Select</Label>
+                        <Label
+                          htmlFor={`select-${item.id}`}
+                          className="cursor-pointer"
+                        >
+                          Select
+                        </Label>
                       </div>
                       <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
                         {item.category}
@@ -192,11 +200,11 @@ export function CartClient({ cartItem, userId }: Props) {
           ))}
 
           {/* Continue Shopping Button - Mobile */}
-          <Link href="/products" className="block lg:hidden">
+          {/* <Link href="/products" className="block lg:hidden">
             <Button variant="outline" className="w-full bg-transparent">
               Continue Shopping
             </Button>
-          </Link>
+          </Link> */}
         </div>
 
         {/* Order Summary */}

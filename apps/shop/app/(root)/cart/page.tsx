@@ -1,11 +1,10 @@
-import { getCurrentUser } from "@/lib/getCurrentUser";
+import Link from "next/link";
 import NotLoggedIn from "@/features/cart/components/NotLoggedIn";
+import { getCurrentUser } from "@/lib/getCurrentUser";
 import { CartClient } from "@/features/cart/components/CartClient";
 import { getCartProducts } from "@/features/cart/db/cart";
-import { Card } from "@/components/ui/card";
 import { ArrowRight, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 const Cart = async () => {
   const { clerkUserId, userId } = await getCurrentUser();

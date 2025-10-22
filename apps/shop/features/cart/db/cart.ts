@@ -44,6 +44,7 @@ export const getCartProducts = async (
     `*[_type == "product" && status == "public" && _id in $productIds]{
       _id,
       name,
+      slug,
       variants[0]{
         "image": image.asset->url,
         price,
@@ -64,6 +65,7 @@ export const getCartProducts = async (
         price: p.variants?.price ?? null,
         salePrice: p.variants?.salePrice ?? null,
         category: p.category || "",
+        slug: p.slug.current || "",
       },
     ])
   );

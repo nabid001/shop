@@ -42,16 +42,16 @@ export async function POST(req: NextRequest) {
       return new Response(JSON.stringify({ message, body }), { status: 400 });
     }
 
-    // console.log("Webhook received:", {
-    //   type: body._type,
-    //   id: body._id,
-    //   operation: body.operation,
-    // });
+    console.log("Webhook received:", {
+      type: body._type,
+      id: body._id,
+      operation: body.operation,
+    });
 
     // Add actual revalidation logic
     await revalidate(body);
 
-    // console.log("Successfully revalidated for:", body._type);
+    console.log("Successfully revalidated for:", body._type);
     return new Response(
       JSON.stringify({
         message: "Successfully revalidated",

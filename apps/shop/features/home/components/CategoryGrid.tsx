@@ -64,7 +64,7 @@ const CategoriesGrid = async () => {
               <>
                 <SetQueryData
                   linkUrl={"/products"}
-                  linkName={category.actionButton.name}
+                  linkName={category.actionButton?.name}
                   stateName={category._type}
                   stateValue={category.slug.current}
                 />

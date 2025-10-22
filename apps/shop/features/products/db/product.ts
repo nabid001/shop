@@ -1,15 +1,24 @@
 "use server";
 
-import { PRODUCT_BY_ID, RELATED_PRODUCTS } from "@/features/products/db/query";
+import {
+  PRODUCT_BY_ID,
+  PRODUCTS,
+  RELATED_PRODUCTS,
+} from "@/features/products/db/query";
 import {
   Response,
   TProductById,
+  TProducts,
+  TProductsResult,
   TRelatedProduct,
   VerifiedProductByIdError,
+  VerifiedProductError,
   VerifiedRelatedProductError,
 } from "@/types";
 import { client } from "@repo/sanity-config/client";
 import { cache } from "react";
+import { GetProductsSchema } from "../validation";
+import { getProductGlobalTag, getProductIdTag } from "./cache/product";
 
 export const getProductById = cache(
   async (
@@ -42,7 +51,6 @@ export const getRelatedProducts = async ({
   category: string;
   id: string;
 }): Promise<Response<VerifiedRelatedProductError, TRelatedProduct>> => {
-  console.log(category);
   if (!category)
     return {
       success: false,
@@ -68,5 +76,42 @@ export const getRelatedProducts = async ({
     success: true,
     message: "OK",
     data: products,
+  };
+};
+
+export const getProducts = async (
+  values: TProducts
+): Promise<Response<VerifiedProductError, TProductsResult>> => {
+  "use cache";
+  getProductGlobalTag();
+
+  const { error, data } = GetProductsSchema.safeParse(values);
+
+  if (error)
+    return {
+      message: `${error}`,
+      success: false,
+      error: "VALIDATION_ERROR",
+    };
+
+  const res = await client.fetch<TProductsResult>(
+    PRODUCTS({
+      search: data.search,
+      category: data.category,
+      sorting: data.sorting,
+    })
+  );
+
+  if (!res.length)
+    return {
+      success: false,
+      error: "PRODUCT_NOT_FOUND",
+      message: "Product Not Found",
+    };
+
+  return {
+    success: true,
+    message: "Ok",
+    data: res,
   };
 };

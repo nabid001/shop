@@ -127,7 +127,7 @@ const Header = async () => {
                 </SheetHeader>
                 <div className="border-t border-border/50 py-4 px-4">
                   <nav className="flex flex-col space-y-4">
-                    <Link href="/product" className="nav-link">
+                    <Link href="/products" className="nav-link">
                       Products
                     </Link>
                     <Link href="/collections" className="nav-link">

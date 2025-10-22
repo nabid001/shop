@@ -6,7 +6,8 @@ type CACHE_TAG =
   | "heroBanner"
   | "categorySection"
   | "homeProducts"
-  | "carts";
+  | "carts"
+  | "category";
 
 export const nameCacheTag = (type: CACHE_TAG, tag: string) => {
   return unstable_cacheTag(`${type}:id-${tag}`);
