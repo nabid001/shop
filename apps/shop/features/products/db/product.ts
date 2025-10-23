@@ -44,74 +44,78 @@ export const getProductById = cache(
   }
 );
 
-export const getRelatedProducts = async ({
-  category,
-  id,
-}: {
-  category: string;
-  id: string;
-}): Promise<Response<VerifiedRelatedProductError, TRelatedProduct>> => {
-  if (!category)
-    return {
-      success: false,
-      message: "Category Is Required",
-      error: "CATEGORY_REQUIRED",
-    };
+export const getRelatedProducts = cache(
+  async ({
+    category,
+    id,
+  }: {
+    category: string;
+    id: string;
+  }): Promise<Response<VerifiedRelatedProductError, TRelatedProduct>> => {
+    if (!category)
+      return {
+        success: false,
+        message: "Category Is Required",
+        error: "CATEGORY_REQUIRED",
+      };
 
-  const products = await client.fetch<TRelatedProduct>(
-    RELATED_PRODUCTS(category, id)
-  );
+    const products = await client.fetch<TRelatedProduct>(
+      RELATED_PRODUCTS(category, id)
+    );
 
-  if (!products.length) {
+    if (!products.length) {
+      return {
+        success: false,
+        message: "Product Not Found",
+        error: "PRODUCT_NOT_FOUND",
+      };
+    }
+
+    console.log(products);
+
     return {
-      success: false,
-      message: "Product Not Found",
-      error: "PRODUCT_NOT_FOUND",
+      success: true,
+      message: "OK",
+      data: products,
     };
   }
+);
 
-  console.log(products);
+export const getProducts = cache(
+  async (
+    values: TProducts
+  ): Promise<Response<VerifiedProductError, TProductsResult>> => {
+    // "use cache";
+    // getProductGlobalTag();
 
-  return {
-    success: true,
-    message: "OK",
-    data: products,
-  };
-};
+    const { error, data } = GetProductsSchema.safeParse(values);
 
-export const getProducts = async (
-  values: TProducts
-): Promise<Response<VerifiedProductError, TProductsResult>> => {
-  "use cache";
-  getProductGlobalTag();
+    if (error)
+      return {
+        message: `${error}`,
+        success: false,
+        error: "VALIDATION_ERROR",
+      };
 
-  const { error, data } = GetProductsSchema.safeParse(values);
+    const res = await client.fetch<TProductsResult>(
+      PRODUCTS({
+        search: data.search,
+        category: data.category,
+        sorting: data.sorting,
+      })
+    );
 
-  if (error)
+    if (!res.length)
+      return {
+        success: false,
+        error: "PRODUCT_NOT_FOUND",
+        message: "Product Not Found",
+      };
+
     return {
-      message: `${error}`,
-      success: false,
-      error: "VALIDATION_ERROR",
+      success: true,
+      message: "Ok",
+      data: res,
     };
-
-  const res = await client.fetch<TProductsResult>(
-    PRODUCTS({
-      search: data.search,
-      category: data.category,
-      sorting: data.sorting,
-    })
-  );
-
-  if (!res.length)
-    return {
-      success: false,
-      error: "PRODUCT_NOT_FOUND",
-      message: "Product Not Found",
-    };
-
-  return {
-    success: true,
-    message: "Ok",
-    data: res,
-  };
-};
+  }
+);

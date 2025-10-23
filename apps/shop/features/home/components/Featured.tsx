@@ -10,6 +10,7 @@ import { blurUrl, imgUrl } from "@/lib/utils";
 import Image from "next/image";
 import { TFeatured } from "@/types";
 import Link from "next/link";
+import { urlFor } from "@repo/sanity-config/image";
 
 interface Product {
   id: number;
@@ -221,8 +222,7 @@ const Featured = ({
                       {/* Product Image */}
                       <div className="aspect-square bg-muted/30 overflow-hidden">
                         <Image
-                          src={imgUrl(product.image.url)}
-                          blurDataURL={blurUrl(product.image.url)}
+                          src={product.image.url}
                           fill
                           alt={product.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"

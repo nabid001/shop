@@ -10,6 +10,6 @@ export const getCartUserIdTag = ({ id }: { id: string }) => {
 };
 
 export const revalidateCartCache = (id: string) => {
-  revalidateTag(getCartGlobalTag());
-  revalidateTag(getCartUserIdTag({ id }));
+  revalidateTag(getCartGlobalTag(), "max");
+  revalidateTag(getCartUserIdTag({ id }), "max");
 };

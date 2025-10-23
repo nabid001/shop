@@ -3,10 +3,10 @@ import CategoryGrid from "@/features/home/components/CategoryGrid";
 import Featured from "@/features/home/components/Featured";
 import NewArrival from "@/features/home/components/NewArrival";
 import HeroCarousel from "@/features/home/components/HeroCarousel";
-import { Suspense } from "react";
 import { getFeatured, getHeroBanner } from "@/features/home/db/actions";
+import { Suspense } from "react";
 
-const Home = async () => {
+const Home = () => {
   const bannerPromise = getHeroBanner();
   const featuredPromise = getFeatured();
 
@@ -16,13 +16,21 @@ const Home = async () => {
         <HeroCarousel heroBannerPromise={bannerPromise} />
       </Suspense>
 
-      <CategoryGrid />
+      <Suspense fallback={<h3>Loading Categories...</h3>}>
+        <CategoryGrid />
+      </Suspense>
 
-      <NewArrival />
+      <Suspense fallback={<h3>Loading New Arrivals...</h3>}>
+        <NewArrival />
+      </Suspense>
 
-      <Featured featuredPromise={featuredPromise} />
+      <Suspense fallback={<h3>Loading Featured Products...</h3>}>
+        <Featured featuredPromise={featuredPromise} />
+      </Suspense>
 
-      <BestSeller />
+      <Suspense fallback={<h3>Loading Best Sellers...</h3>}>
+        <BestSeller />
+      </Suspense>
     </main>
   );
 };

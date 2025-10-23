@@ -1,11 +1,5 @@
-import {
-  Response,
-  TProducts,
-  TProductsResult,
-  VerifiedProductError,
-} from "@/types";
+import { TProducts } from "@/types";
 import { defineQuery } from "next-sanity";
-import { GetProductsSchema } from "../validation";
 
 export const PRODUCT_BY_ID = (slug: string) =>
   defineQuery(`*[_type == "product" && slug.current == "${slug}" && status == "public"][0]{

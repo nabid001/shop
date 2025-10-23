@@ -19,7 +19,11 @@ const geistMono = Geist_Mono({
 });
 
 const ClerkRapper = ({ children }: { children: React.ReactNode }) => {
-  return <ClerkProvider afterSignOutUrl={"/sign-in"}>{children}</ClerkProvider>;
+  return (
+    <ClerkProvider dynamic afterSignOutUrl={"/sign-in"}>
+      {children}
+    </ClerkProvider>
+  );
 };
 
 export const metadata: Metadata = {

@@ -40,7 +40,7 @@ export const FEATURED = `*[_type == "product" && status == "public" &&  featured
     "price": variants[0].price, 
     "salePrice": variants[0].salePrice,
     "image": variants[0]{
-    "url": image.asset
+    "url": image.asset->url
     },
     "category": category->name,
     "featured": featured
