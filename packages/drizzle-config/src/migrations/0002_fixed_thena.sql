@@ -1,0 +1,1 @@
+ALTER TABLE "addresses" ALTER COLUMN "email" SET NOT NULL;

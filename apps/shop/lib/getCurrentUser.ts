@@ -40,5 +40,6 @@ const getUser = cache(async (id: string) => {
 
   return db.query.UserTable.findFirst({
     where: eq(UserTable.id, id),
+    columns: { id: true, email: true },
   });
 });

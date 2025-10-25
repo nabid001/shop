@@ -4,7 +4,11 @@ import { db } from "@repo/drizzle-config";
 import { CartTable } from "@repo/drizzle-config/schemas/cart";
 import { getCartUserIdTag } from "./cache";
 import { and, eq } from "drizzle-orm";
-import { unstable_cacheTag as cacheTag, revalidateTag } from "next/cache";
+import {
+  unstable_cacheTag as cacheTag,
+  revalidatePath,
+  revalidateTag,
+} from "next/cache";
 import {
   Response,
   TCartProduct,
@@ -96,7 +100,8 @@ export const removeFromCart = cache(
         .where(and(eq(CartTable.userId, userId), eq(CartTable.id, productId)))
         .returning();
 
-      revalidateTag(getCartUserIdTag({ id: userId }), "max");
+      // revalidateTag(getCartUserIdTag({ id: userId }), "max");
+      revalidatePath("/cart");
 
       return { success: true };
     } catch (error) {

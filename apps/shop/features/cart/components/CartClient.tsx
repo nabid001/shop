@@ -11,6 +11,10 @@ import { Label } from "@/components/ui/label";
 import { TCartProduct } from "@/types";
 import Image from "next/image";
 import { removeFromCart } from "../db/cart";
+import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
+import { useRouter } from "next/navigation";
+import { useCheckoutStore } from "@/features/checkout/store";
 
 type Props = {
   cartItem: Awaited<TCartProduct>;
@@ -18,12 +22,13 @@ type Props = {
 };
 
 export function CartClient({ cartItem, userId }: Props) {
-  // Promo code removed for now
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const router = useRouter();
+  const { addToCheckout, clearCheckout } = useCheckoutStore();
 
   useEffect(() => {
-    // Initialize quantities from incoming cart items
     const initial: Record<string, number> = {};
     for (const item of cartItem) {
       initial[item.id] = item.quantity ?? 1;
@@ -72,7 +77,41 @@ export function CartClient({ cartItem, userId }: Props) {
   const total = subtotal + shipping;
 
   const handleRemove = async (productId: string) => {
-    await removeFromCart({ userId, productId });
+    setIsDeleting(true);
+    const res = await removeFromCart({ userId, productId });
+    if (res.success) {
+      toast.success("Item Removed From Cart");
+      setIsDeleting(false);
+    } else {
+      toast.error("Failed to remove item from cart");
+      setIsDeleting(false);
+    }
+  };
+
+  const handleCheckout = () => {
+    if (selectedIds.size === 0) return;
+
+    clearCheckout();
+
+    selectedItems.forEach((item) => {
+      const qty = quantities[item.id] ?? item.quantity ?? 1;
+      const price = item.salePrice ?? item.price ?? 0;
+
+      addToCheckout({
+        _id: item.productId,
+        id: item.id,
+        name: item.name,
+        category: item.category,
+        image: item.image,
+        color: item.color,
+        size: item.size,
+        quantity: qty,
+        price,
+        totalPrice: qty * price,
+      });
+    });
+
+    router.push("/checkout");
   };
 
   return (
@@ -132,6 +171,9 @@ export function CartClient({ cartItem, userId }: Props) {
                       <p className="text-sm text-muted-foreground">
                         Size: {item.size}
                       </p>
+                      <p className="text-sm text-muted-foreground">
+                        Color: {item.color}
+                      </p>
                     </div>
                     <Button
                       variant="ghost"
@@ -139,7 +181,15 @@ export function CartClient({ cartItem, userId }: Props) {
                       onClick={() => handleRemove(item.id)}
                       className="flex-shrink-0 hover:text-destructive"
                     >
-                      <Trash2 className="h-4 w-4" />
+                      {isDeleting ? (
+                        <>
+                          <Spinner />
+                        </>
+                      ) : (
+                        <>
+                          <Trash2 className="h-4 w-4" />
+                        </>
+                      )}
                     </Button>
                   </div>
 
@@ -209,7 +259,7 @@ export function CartClient({ cartItem, userId }: Props) {
 
         {/* Order Summary */}
         <div className="lg:col-span-1">
-          <Card className="p-5 sm:p-6 sticky top-24 space-y-4">
+          <div className="p-5 border rounded-md mt-8 sm:p-6 sticky top-24 space-y-4">
             <h2 className="text-xl font-medium text-foreground mb-6">
               Order Summary
             </h2>
@@ -250,18 +300,12 @@ export function CartClient({ cartItem, userId }: Props) {
             <Button
               className="w-full mb-3"
               disabled={selectedItems.length === 0}
+              onClick={() => handleCheckout()}
+              variant={"outline"}
             >
-              Proceed to Checkout
-              <ArrowRight className="h-4 w-4 ml-2" />
+              Checkout
             </Button>
-
-            {/* Continue Shopping - Desktop */}
-            <Link href="/products" className="hidden lg:block">
-              <Button variant="outline" className="w-full bg-transparent">
-                Continue Shopping
-              </Button>
-            </Link>
-          </Card>
+          </div>
         </div>
       </div>
     </div>

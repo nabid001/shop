@@ -9,17 +9,19 @@ export const userAddressTypeEnum = pgEnum("addressType", userAddressTypes);
 
 export const AddressTable = pgTable("addresses", {
   id,
-  userId: uuid("user_id")
+  userId: uuid("userId")
     .notNull()
     .references(() => UserTable.id, { onDelete: "cascade" }),
-  fullName: text("full_name").notNull(),
-  phone: text("phone").notNull(),
-  region: text("region").notNull(),
-  city: text("city").notNull(),
-  zone: text("zone").notNull(),
-  address: text("address").notNull(),
-  landmark: text("landmark"),
-  addressType: userAddressTypeEnum("addressType").default("home"),
+  firstName: text("First Name").notNull(),
+  lastName: text("Last Name"),
+  phone: text("Phone Number").notNull(),
+  region: text("Region").notNull(),
+  city: text("City").notNull(),
+  zone: text("Zone").notNull(),
+  address: text("Address").notNull(),
+  landmark: text("Landmark"),
+  email: text("Email").notNull(),
+  addressType: userAddressTypeEnum("Address Type").default("home"),
   createdAt,
   updatedAt,
 });

@@ -245,3 +245,20 @@ export type TProductsResult = {
 }[];
 
 export type VerifiedProductError = "PRODUCT_NOT_FOUND" | "VALIDATION_ERROR";
+
+export type AddressType = {
+  id: string;
+  userId: string;
+  firstName: string;
+  lastName: string | null;
+  phone: string;
+  region: string;
+  city: string;
+  email: string;
+  zone: string;
+  address: string;
+  landmark: string | null;
+  addressType: "home" | "office" | null;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+};

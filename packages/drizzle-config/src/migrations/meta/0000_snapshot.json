@@ -1,5 +1,5 @@
 {
-  "id": "0707e3a2-18a1-42fa-9f89-c4ef9438d94f",
+  "id": "b35d7f4b-1e0a-4c64-80ab-43a3acbc9d91",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -17,13 +17,13 @@
         },
         "clerkId": {
           "name": "clerkId",
-          "type": "varchar",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "name": {
           "name": "name",
-          "type": "varchar",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -35,13 +35,13 @@
         },
         "email": {
           "name": "email",
-          "type": "varchar",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "role": {
           "name": "role",
-          "type": "userRole",
+          "type": "role",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
@@ -102,17 +102,23 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "user_id": {
-          "name": "user_id",
+        "userId": {
+          "name": "userId",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
-        "full_name": {
-          "name": "full_name",
+        "fullName": {
+          "name": "fullName",
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "lastName": {
+          "name": "lastName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "phone": {
           "name": "phone",
@@ -175,12 +181,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "addresses_user_id_users_id_fk": {
-          "name": "addresses_user_id_users_id_fk",
+        "addresses_userId_users_id_fk": {
+          "name": "addresses_userId_users_id_fk",
           "tableFrom": "addresses",
           "tableTo": "users",
           "columnsFrom": [
-            "user_id"
+            "userId"
           ],
           "columnsTo": [
             "id"
@@ -195,8 +201,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.order_items": {
-      "name": "order_items",
+    "public.orderItems": {
+      "name": "orderItems",
       "schema": "",
       "columns": {
         "id": {
@@ -272,9 +278,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "order_items_orderId_orders_id_fk": {
-          "name": "order_items_orderId_orders_id_fk",
-          "tableFrom": "order_items",
+        "orderItems_orderId_orders_id_fk": {
+          "name": "orderItems_orderId_orders_id_fk",
+          "tableFrom": "orderItems",
           "tableTo": "orders",
           "columnsFrom": [
             "orderId"
@@ -282,7 +288,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -303,8 +309,8 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "user_id": {
-          "name": "user_id",
+        "userId": {
+          "name": "userId",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -317,14 +323,14 @@
           "notNull": true,
           "default": "'pending'"
         },
-        "total_amount": {
-          "name": "total_amount",
+        "totalAmount": {
+          "name": "totalAmount",
           "type": "double precision",
           "primaryKey": false,
           "notNull": true
         },
-        "shipping_address": {
-          "name": "shipping_address",
+        "shippingAddress": {
+          "name": "shippingAddress",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -346,25 +352,25 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "orders_user_id_users_id_fk": {
-          "name": "orders_user_id_users_id_fk",
+        "orders_userId_users_id_fk": {
+          "name": "orders_userId_users_id_fk",
           "tableFrom": "orders",
           "tableTo": "users",
           "columnsFrom": [
-            "user_id"
+            "userId"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "orders_shipping_address_addresses_id_fk": {
-          "name": "orders_shipping_address_addresses_id_fk",
+        "orders_shippingAddress_addresses_id_fk": {
+          "name": "orders_shippingAddress_addresses_id_fk",
           "tableFrom": "orders",
           "tableTo": "addresses",
           "columnsFrom": [
-            "shipping_address"
+            "shippingAddress"
           ],
           "columnsTo": [
             "id"
@@ -390,32 +396,38 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "product_id": {
-          "name": "product_id",
+        "productId": {
+          "name": "productId",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "user_id": {
-          "name": "user_id",
+        "userId": {
+          "name": "userId",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
-        "colors": {
-          "name": "colors",
-          "type": "text[]",
+        "color": {
+          "name": "color",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "sizes": {
-          "name": "sizes",
-          "type": "text[]",
+        "size": {
+          "name": "size",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "quantity": {
           "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "priceAtAdd": {
+          "name": "priceAtAdd",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -437,12 +449,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "carts_user_id_users_id_fk": {
-          "name": "carts_user_id_users_id_fk",
+        "carts_userId_users_id_fk": {
+          "name": "carts_userId_users_id_fk",
           "tableFrom": "carts",
           "tableTo": "users",
           "columnsFrom": [
-            "user_id"
+            "userId"
           ],
           "columnsTo": [
             "id"
@@ -452,15 +464,26 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "carts_productId_userId_color_size_unique": {
+          "name": "carts_productId_userId_color_size_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "productId",
+            "userId",
+            "color",
+            "size"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
     }
   },
   "enums": {
-    "public.userRole": {
-      "name": "userRole",
+    "public.role": {
+      "name": "role",
       "schema": "public",
       "values": [
         "user",

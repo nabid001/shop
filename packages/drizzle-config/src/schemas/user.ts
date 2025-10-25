@@ -1,19 +1,18 @@
-import { pgEnum, pgTable, text, varchar } from "drizzle-orm/pg-core";
+import { pgEnum, pgTable, text } from "drizzle-orm/pg-core";
 import { createdAt, id, updatedAt } from "../schemaHelpers";
 import { relations } from "drizzle-orm";
 import { AddressTable } from "./address";
 import { CartTable } from "./cart";
 
-export const userRoles = ["user", "admin"] as const;
-export const userRoleEnum = pgEnum("userRole", userRoles);
+export const roleEnum = pgEnum("role", ["user", "admin"]);
 
 export const UserTable = pgTable("users", {
   id,
-  clerkId: varchar("clerkId").notNull().unique(),
-  name: varchar("name").notNull(),
+  clerkId: text("clerkId").notNull().unique(),
+  name: text("name").notNull(),
   username: text("username").notNull(),
-  email: varchar("email").notNull().unique(),
-  role: userRoleEnum().notNull().default("user"),
+  email: text("email").notNull().unique(),
+  role: roleEnum().notNull().default("user"),
   picture: text("picture"),
   createdAt,
   updatedAt,
