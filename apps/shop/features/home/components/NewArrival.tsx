@@ -54,7 +54,7 @@ const ProductsGrid = async () => {
           price={product.price}
           salePrice={product.salePrice}
           category={product.category}
-          imageUrl={product.image.url}
+          imageUrl={product.image}
           isNewArrival={true}
         />
       ))}

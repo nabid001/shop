@@ -1,17 +1,18 @@
 "use server";
 
+import { revalidateCartCache } from "@/features/cart/db/cache";
 import { CheckoutProduct } from "@/features/checkout/store";
 import { Response } from "@/types";
 import { db } from "@repo/drizzle-config";
-import {
-  AddressTable,
-  UserAddressType,
-} from "@repo/drizzle-config/schemas/address";
+import { AddressTable } from "@repo/drizzle-config/schemas/address";
+import { CartTable } from "@repo/drizzle-config/schemas/cart";
 import {
   OrderItemTable,
   OrdersTable,
   PaymentMethod,
 } from "@repo/drizzle-config/schemas/order";
+import { client } from "@repo/sanity-config/client";
+import { and, eq, inArray } from "drizzle-orm";
 
 export type TCreateOrder = {
   totalAmount: number;
@@ -26,7 +27,8 @@ export type TCreateOrder = {
 export type VerifiedCreateOrderError =
   | "FAILED_TO_CREATE_NEW_ADDRESS"
   | "FAILED_TO_CREATE_ORDER"
-  | "FAILED_TO_CREATE_ORDER_ITEM";
+  | "FAILED_TO_CREATE_ORDER_ITEM"
+  | "FAILED_TO_REMOVE_CART";
 
 export const createOrder = async ({
   totalAmount,
@@ -36,7 +38,9 @@ export const createOrder = async ({
   addressValue,
   paymentMethod,
   orderEmail,
-}: TCreateOrder): Promise<Response<VerifiedCreateOrderError>> => {
+}: TCreateOrder): Promise<
+  Response<VerifiedCreateOrderError, { id: string }>
+> => {
   let newAddressId = shippingAddress;
 
   if (!shippingAddress) {
@@ -62,7 +66,7 @@ export const createOrder = async ({
       shippingAddress: newAddressId!,
       totalAmount: totalAmount,
     })
-    .returning();
+    .returning({ id: OrdersTable.id });
 
   if (!orderTable)
     return {
@@ -71,7 +75,7 @@ export const createOrder = async ({
       message: "Failed To Create Order",
     };
 
-  const [orderItems] = await Promise.all(
+  const insertedItems = await Promise.all(
     product.map((item) =>
       db
         .insert(OrderItemTable)
@@ -85,9 +89,15 @@ export const createOrder = async ({
           paymentMethod,
           orderEmail,
         })
-        .returning({ id: OrderItemTable.id })
+        .returning({
+          id: OrderItemTable.id,
+          productId: OrderItemTable.productId,
+        })
     )
   );
+
+  // Flatten nested arrays
+  const orderItems = insertedItems.flat();
 
   if (!orderItems.length)
     return {
@@ -96,5 +106,36 @@ export const createOrder = async ({
       message: "Failed To Create Order Item",
     };
 
-  return { success: true, message: "Ok" };
+  // 🧹 Remove items from cart
+  const removedItem = await db
+    .delete(CartTable)
+    .where(
+      and(
+        inArray(
+          CartTable.id,
+          orderItems.map((item) => item.productId)
+        ),
+        eq(CartTable.userId, userId)
+      )
+    )
+    .returning({ id: CartTable.id });
+
+  if (!removedItem)
+    return {
+      success: false,
+      error: "FAILED_TO_REMOVE_CART",
+      message: "Failed To Remove From Cart",
+    };
+  revalidateCartCache(userId);
+
+  product.forEach(async (item) => {
+    const res = await client
+      .patch(item._id)
+      .dec({ "variants.stock": item.quantity })
+      .commit();
+
+    if (!res) console.log("Failed to dec stock");
+  });
+
+  return { success: true, message: "Ok", data: { id: orderTable.id } };
 };

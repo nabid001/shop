@@ -9,16 +9,16 @@ export async function revalidate(payload: WebhookPayload) {
   try {
     switch (_type) {
       case "product":
-        revalidateTags("homeProducts", _id);
-        revalidateProductCache();
+        // revalidateTags("homeProducts", _id);
+        // revalidateProductCache();
         break;
 
       case "category":
-        revalidateTags("categorySection", _id);
-        revalidateCategoryCache(_id);
+        // revalidateTags("categorySection", _id);
+        // revalidateCategoryCache(_id);
         break;
       case "banner":
-        revalidateTags("heroBanner", _id);
+        // revalidateTags("heroBanner", _id);
         break;
     }
   } catch (error) {

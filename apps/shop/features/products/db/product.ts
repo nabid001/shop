@@ -18,7 +18,6 @@ import {
 import { client } from "@repo/sanity-config/client";
 import { cache } from "react";
 import { GetProductsSchema } from "../validation";
-import { getProductGlobalTag, getProductIdTag } from "./cache/product";
 
 export const getProductById = cache(
   async (
@@ -70,8 +69,6 @@ export const getRelatedProducts = cache(
         error: "PRODUCT_NOT_FOUND",
       };
     }
-
-    console.log(products);
 
     return {
       success: true,

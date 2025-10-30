@@ -9,7 +9,6 @@ import {
   NEW_ARRIVAL,
 } from "./query";
 import { cache } from "react";
-import { nameCacheTag } from "@/lib/cache";
 import {
   THeroBanner,
   TCategory,

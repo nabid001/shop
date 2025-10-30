@@ -62,65 +62,71 @@ export const productSchema = defineType({
     }),
 
     {
-      type: 'array',
+      type: 'object',
       name: 'variants',
       title: 'Variant',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            defineField({
-              title: 'Variant Name',
-              name: 'variantName',
+      fields: [
+        defineField({
+          title: 'Variant Name',
+          name: 'variantName',
+          type: 'string',
+        }),
+        defineField({
+          name: 'size',
+          title: 'Sizes',
+          type: 'array',
+          of: [
+            {
               type: 'string',
-            }),
-            defineField({
-              name: 'size',
-              title: 'Sizes',
-              type: 'array',
-              of: [
-                {
-                  type: 'string',
-                  options: {
-                    list: ['SM', 'M', 'L', 'XL', 'XXL'],
-                  },
-                },
-              ],
-            }),
-            defineField({
-              title: 'Color',
-              name: 'color',
+              options: {
+                list: ['SM', 'M', 'L', 'XL', 'XXL'],
+              },
+            },
+          ],
+        }),
+        defineField({
+          title: 'Color',
+          name: 'color',
+          type: 'array',
+          of: [
+            {
               type: 'reference',
               to: [{type: 'color'}],
-              validation: (Rule) => Rule.required(),
-            }),
-            defineField({
-              title: 'Price',
-              name: 'price',
-              type: 'number',
-              validation: (Rule) => Rule.required().min(1),
-            }),
-            defineField({
-              title: 'Sale Price',
-              name: 'salePrice',
-              type: 'number',
-              validation: (Rule) => Rule.required().min(1),
-            }),
-            defineField({
-              title: 'Stock Quantity',
-              name: 'stock',
-              type: 'number',
-              initialValue: 0,
-              validation: (Rule) => Rule.required().min(0),
-            }),
-            defineField({
-              title: 'Image',
-              name: 'image',
-              type: 'image',
-              validation: (Rule) => Rule.required(),
-            }),
+            },
           ],
-        },
+          validation: (Rule) => Rule.required(),
+        }),
+        defineField({
+          title: 'Price',
+          name: 'price',
+          type: 'number',
+          validation: (Rule) => Rule.required().min(1),
+        }),
+        defineField({
+          title: 'Sale Price',
+          name: 'salePrice',
+          type: 'number',
+          validation: (Rule) => Rule.required().min(1),
+        }),
+        defineField({
+          title: 'Stock Quantity',
+          name: 'stock',
+          type: 'number',
+          initialValue: 0,
+          validation: (Rule) => Rule.required().min(0),
+        }),
+        defineField({
+          title: 'Image',
+          name: 'image',
+          type: 'image',
+          validation: (Rule) => Rule.required(),
+        }),
+        defineField({
+          title: 'Image Gallery',
+          name: 'imageGallery',
+          type: 'array',
+          of: [{type: 'image'}],
+        }),
       ],
       validation: (Rule) => Rule.required(),
     },

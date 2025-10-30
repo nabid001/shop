@@ -24,7 +24,7 @@ const Home = () => {
         <NewArrival />
       </Suspense>
 
-      <Suspense fallback={<h3>Loading Featured Products...</h3>}>
+      <Suspense fallback={<h3>Loading Featured...</h3>}>
         <Featured featuredPromise={featuredPromise} />
       </Suspense>
 

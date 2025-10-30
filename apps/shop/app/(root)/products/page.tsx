@@ -58,10 +58,10 @@ const Products = async ({ searchParams }: Props) => {
                     key={product._id}
                     name={product.name}
                     slug={product.slug.current}
-                    price={product.variant.price}
-                    salePrice={product.variant.salePrice}
+                    price={product.price}
+                    salePrice={product.salePrice}
                     category={product.category.name}
-                    imageUrl={product.variant.image}
+                    imageUrl={product.image}
                     isBestSeller={true}
                   />
                 ))}

@@ -20,7 +20,12 @@ const geistMono = Geist_Mono({
 
 const ClerkRapper = ({ children }: { children: React.ReactNode }) => {
   return (
-    <ClerkProvider dynamic afterSignOutUrl={"/sign-in"}>
+    <ClerkProvider
+      dynamic
+      afterSignOutUrl={"/sign-in"}
+      signInFallbackRedirectUrl={"/sign-in"}
+      signUpFallbackRedirectUrl={"/sign-in"}
+    >
       {children}
     </ClerkProvider>
   );

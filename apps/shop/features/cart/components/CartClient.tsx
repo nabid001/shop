@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
+import { Minus, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -128,7 +128,7 @@ export function CartClient({ cartItem, userId }: Props) {
             <Label htmlFor="select-all">Select all products</Label>
           </div>
           {cartItem.map((item) => (
-            <Card key={item.id} className="p-4 sm:p-6">
+            <Card key={item.id} className="p-4 sm:p-6 bg-primary/3">
               <div className="flex gap-4">
                 {/* Product Image */}
                 <Link
@@ -179,7 +179,8 @@ export function CartClient({ cartItem, userId }: Props) {
                       variant="ghost"
                       size="icon"
                       onClick={() => handleRemove(item.id)}
-                      className="flex-shrink-0 hover:text-destructive"
+                      className={`flex-shrink-0 hover:text-destructive`}
+                      disabled={isDeleting}
                     >
                       {isDeleting ? (
                         <>

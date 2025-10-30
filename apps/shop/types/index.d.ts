@@ -41,9 +41,7 @@ export type TNewArrival = {
   name: string;
   price: number;
   salePrice: number;
-  image: {
-    url: string;
-  };
+  image: string;
   category: string;
 }[];
 
@@ -57,9 +55,7 @@ export type TFeatured = {
   name: string;
   price: number;
   salePrice: number;
-  image: {
-    url: string;
-  };
+  image: string;
   category: string;
   featured: boolean;
 }[];
@@ -74,9 +70,7 @@ export type TBestseller = {
   name: string;
   price: number;
   salePrice: number;
-  image: {
-    url: string;
-  };
+  image: string;
   category: string;
 }[];
 
@@ -121,13 +115,14 @@ export type TProductById = {
     current: string;
   };
   variants: {
-    color: string;
+    color: string[];
     image: string;
     price: number;
     salePrice: number;
     size: string[];
     stock: number;
-  }[];
+    imageGallery: string[];
+  };
 };
 
 export type TAddToCart = {
@@ -237,11 +232,9 @@ export type TProductsResult = {
   };
   featured: boolean;
   newArrival: boolean;
-  variant: {
-    price: number;
-    salePrice: number;
-    image: string;
-  };
+  price: number;
+  salePrice: number;
+  image: string;
 }[];
 
 export type VerifiedProductError = "PRODUCT_NOT_FOUND" | "VALIDATION_ERROR";

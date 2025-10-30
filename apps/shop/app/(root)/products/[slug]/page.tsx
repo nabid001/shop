@@ -6,13 +6,15 @@ import {
   getProductById,
   getRelatedProducts,
 } from "@/features/products/db/product";
+import { auth } from "@clerk/nextjs/server";
 
 const ProductDetails = async ({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) => {
-  const { userId } = await getCurrentUser();
+  const { sessionClaims } = await auth();
+
   const slug = (await params).slug;
   const product = await getProductById(slug);
   const relatedProducts = await getRelatedProducts({
@@ -36,7 +38,10 @@ const ProductDetails = async ({
 
   return (
     <section className="product-container">
-      <ProductDetailsClient product={product.data!} userId={userId!} />
+      <ProductDetailsClient
+        product={product?.data!}
+        userId={sessionClaims?.metadata?.userId!}
+      />
 
       <section className="mt-20">
         <h2 className="product-heading-text mb-7">You May Also Like</h2>
@@ -59,7 +64,7 @@ const ProductDetails = async ({
                   imageUrl={product.variants.images}
                   // isBestSeller={true}
                   isNewArrival={product.newArrival}
-                  // isFeatured={product.featured}
+                  isFeatured={product.featured}
                 />
               );
             })}

@@ -24,11 +24,9 @@ export const NEW_ARRIVAL = `*[_type == "product" && status == "public" &&  newAr
     _type,
     slug,
     name,
-    "price": variants[0].price, 
-    "salePrice": variants[0].salePrice,
-    "image": variants[0]{
-    "url": image.asset
-    },
+    "price": variants.price, 
+    "salePrice": variants.salePrice,
+    "image": variants.image.asset,
     "category": category->name
 }`;
 
@@ -37,11 +35,9 @@ export const FEATURED = `*[_type == "product" && status == "public" &&  featured
     _type,
     slug,
     name,
-    "price": variants[0].price, 
-    "salePrice": variants[0].salePrice,
-    "image": variants[0]{
-    "url": image.asset->url
-    },
+    "price": variants.price, 
+    "salePrice": variants.salePrice,
+    "image": variants.image.asset->url,
     "category": category->name,
     "featured": featured
 }`;
@@ -51,10 +47,8 @@ export const BESTSELLER = `*[_type == "product" && status == "public"] | order(t
     _type,
     slug,
     name,
-    "price": variants[0].price, 
-    "salePrice": variants[0].salePrice,
-    "image": variants[0]{
-    "url": image.asset
-    },
+    "price": variants.price, 
+    "salePrice": variants.salePrice,
+    "image": variants.image.asset->url,
     "category": category->name,
 }`;

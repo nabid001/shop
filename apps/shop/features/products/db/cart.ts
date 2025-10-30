@@ -3,14 +3,14 @@
 import { db } from "@repo/drizzle-config";
 import { CartTable } from "@repo/drizzle-config/schemas/cart";
 import { AddToCartSchema } from "../validation";
-import { revalidateTag } from "next/cache";
-import { getCartUserIdTag } from "@/features/cart/db/cache";
 import { and, eq } from "drizzle-orm";
 import {
   Response,
   TAddToCart,
   VeriFiedError as VerifiedAddToCartError,
 } from "@/types";
+import { updateTag } from "next/cache";
+import { revalidateCartCache } from "@/features/cart/db/cache";
 
 export const addToCart = async (
   data: TAddToCart
@@ -36,28 +36,6 @@ export const addToCart = async (
     },
   });
 
-  // if (existingProduct) {
-  //   const [res] = await db
-  //     .update(CartTable)
-  //     .set({ quantity: existingProduct.quantity + 1 })
-  //     .where(
-  //       and(
-  //         eq(CartTable.userId, safeData.data.userId),
-  //         eq(CartTable.productId, safeData.data.productId),
-  //         eq(CartTable.color, safeData.data.color),
-  //         eq(CartTable.size, safeData.data.size)
-  //       )
-  //     )
-
-  //     .returning({ id: CartTable.id });
-
-  //   if (res.id)
-  //     return {
-  //       success: true,
-  //       message: "Product Added Successfully",
-  //     };
-  // }
-
   if (existingProduct) {
     return {
       success: false,
@@ -75,6 +53,6 @@ export const addToCart = async (
       error: "DRIZZLE_ERROR",
     };
 
-  revalidateTag(getCartUserIdTag({ id: data.userId }));
+  revalidateCartCache(safeData.data.userId);
   return { message: "Product Added Successfully", success: true };
 };

@@ -2,13 +2,9 @@
 
 import { db } from "@repo/drizzle-config";
 import { CartTable } from "@repo/drizzle-config/schemas/cart";
-import { getCartUserIdTag } from "./cache";
+import { getCartUserIdTag, revalidateCartCache } from "./cache";
 import { and, eq } from "drizzle-orm";
-import {
-  unstable_cacheTag as cacheTag,
-  revalidatePath,
-  revalidateTag,
-} from "next/cache";
+import { cacheTag, revalidateTag, updateTag } from "next/cache";
 import {
   Response,
   TCartProduct,
@@ -17,13 +13,14 @@ import {
 } from "@/types";
 import { client } from "@repo/sanity-config/client";
 import { cache } from "react";
+import { revalidateUserCache } from "@/features/users/db/cache";
 
 export const getCartProducts = cache(
   async (
     userId: string
   ): Promise<Response<VerifiedGetCartError, TCartProduct>> => {
-    // "use cache";
-    // cacheTag(getCartUserIdTag({ id: userId }));
+    "use cache";
+    cacheTag(getCartUserIdTag(userId));
 
     if (!userId)
       return {
@@ -51,7 +48,7 @@ export const getCartProducts = cache(
       _id,
       name,
       slug,
-      variants[0]{
+      "variants": variants{
         "image": image.asset->url,
         price,
         salePrice
@@ -97,12 +94,9 @@ export const removeFromCart = cache(
 
       await db
         .delete(CartTable)
-        .where(and(eq(CartTable.userId, userId), eq(CartTable.id, productId)))
-        .returning();
+        .where(and(eq(CartTable.userId, userId), eq(CartTable.id, productId)));
 
-      // revalidateTag(getCartUserIdTag({ id: userId }), "max");
-      revalidatePath("/cart");
-
+      revalidateCartCache(userId);
       return { success: true };
     } catch (error) {
       console.log("Failed to remove from cart", error);
@@ -113,8 +107,8 @@ export const removeFromCart = cache(
 
 export const getCartLength = cache(
   async ({ userId }: { userId: string }): Promise<number> => {
-    // "use cache";
-    // cacheTag(getCartUserIdTag({ id: userId }));
+    "use cache";
+    cacheTag(getCartUserIdTag(userId));
 
     const items = await db.query.CartTable.findMany({
       columns: {

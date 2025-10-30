@@ -1,20 +1,12 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { useCheckoutStore } from "@/features/checkout/store";
-import { redirect, useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { createOrder } from "@/features/checkout/db/order";
-import { use, useEffect, useRef, useState } from "react";
-import { Check, CloudLightning, CreditCard, Truck } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
-import { AddressType, Response } from "@/types";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { VeriFiedGetAddressError } from "../db/address";
-import { PaymentMethod } from "@repo/drizzle-config/schemas/order";
-import { CheckoutFormSchema } from "../validation";
-import z from "zod";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Form,
   FormControl,
@@ -23,38 +15,27 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { useCheckoutStore } from "@/features/checkout/store";
+import { redirect, useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { createOrder } from "@/features/checkout/db/order";
+import { use, useEffect, useState } from "react";
+import { Separator } from "@/components/ui/separator";
+import { AddressType, Response } from "@/types";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { VeriFiedGetAddressError } from "../db/address";
+import { PaymentMethod } from "@repo/drizzle-config/schemas/order";
+import { CheckoutFormSchema } from "../validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from "@/components/ui/select";
 import { useForm } from "react-hook-form";
-
-const steps = [
-  {
-    id: 0,
-    name: "Shipping Address",
-    value: "shipping",
-    icon: <Truck className="size-5" />,
-  },
-  {
-    id: 1,
-    name: "Payment Method",
-    value: "payment",
-    icon: <CreditCard className="size-5" />,
-  },
-  {
-    id: 2,
-    name: "Order Summary",
-    value: "summary",
-    icon: <Check className="size-5" />,
-  },
-] as const;
-type Steps = (typeof steps)[number];
+import { useCheckoutSuccessStore } from "@/features/checkout-success/store";
+import { Spinner } from "@/components/ui/spinner";
+import z from "zod";
+import Image from "next/image";
+import { Card } from "@/components/ui/card";
 
 type Props = {
   userId: string;
@@ -65,13 +46,14 @@ const CheckoutClient = ({ userId, addressPromise }: Props) => {
   const router = useRouter();
   const address = use(addressPromise);
   const { product } = useCheckoutStore();
-  const [currentState, setCurrentState] = useState<number>(0);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [selectedAddress, setSelectedAddress] = useState<string | undefined>(
     undefined
   );
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
     PaymentMethod | undefined
   >(undefined);
+  const { setCheckoutId, clearCheckoutId } = useCheckoutSuccessStore();
 
   const addr = address?.data?.find((item) => item.id === selectedAddress);
 
@@ -90,6 +72,7 @@ const CheckoutClient = ({ userId, addressPromise }: Props) => {
     },
   });
 
+  // Updating address field with preselected address
   useEffect(() => {
     form.setValue("firstName", addr?.firstName || "");
     form.setValue("lastName", addr?.lastName || "");
@@ -102,6 +85,7 @@ const CheckoutClient = ({ userId, addressPromise }: Props) => {
     form.setValue("addressType", addr?.addressType || "home");
   }, [selectedAddress]);
 
+  // Redirect to cart if cart is empty
   useEffect(() => {
     if (product.length === 0) {
       redirect("/cart");
@@ -113,31 +97,60 @@ const CheckoutClient = ({ userId, addressPromise }: Props) => {
   const total = amount + shipping;
 
   const onSubmit = async (values: z.infer<typeof CheckoutFormSchema>) => {
-    const safeValue = CheckoutFormSchema.parse(values);
+    try {
+      setIsSubmitting(true);
 
-    const res = await createOrder({
-      totalAmount: total,
-      product,
-      userId: userId!,
-      shippingAddress: selectedAddress,
-      paymentMethod: safeValue.paymentMethod,
-      orderEmail: safeValue.email,
-      addressValue: {
-        userId: userId,
-        firstName: safeValue.firstName,
-        lastName: safeValue.lastName,
-        email: safeValue.email,
-        phone: safeValue.phoneNumber,
-        region: safeValue.region,
-        city: safeValue.city,
-        zone: safeValue.zone,
-        address: safeValue.address,
-        addressType: safeValue.addressType,
-      },
-    });
-    if (res) {
-      toast.success("Order created successfully!");
-      router.push("/checkout/success");
+      //validation
+      const result = CheckoutFormSchema.safeParse(values);
+      if (!result.success) {
+        toast.error("Invalid form data");
+        return;
+      }
+
+      const safeValue = result.data;
+
+      const orderData = {
+        totalAmount: total,
+        product,
+        userId: userId!,
+        shippingAddress: selectedAddress,
+        paymentMethod: safeValue.paymentMethod,
+        orderEmail: safeValue.email,
+        addressValue: {
+          userId: userId!,
+          firstName: safeValue.firstName,
+          lastName: safeValue.lastName,
+          email: safeValue.email,
+          phone: safeValue.phoneNumber,
+          region: safeValue.region,
+          city: safeValue.city,
+          zone: safeValue.zone,
+          address: safeValue.address,
+          addressType: safeValue.addressType,
+        },
+      };
+
+      const res = await createOrder(orderData);
+
+      if (!res?.success) {
+        toast.error(res?.message || "Order failed");
+        console.error(res?.error);
+        return;
+      }
+
+      if (res.success && res.message === "Ok") {
+        clearCheckoutId();
+        setCheckoutId(res.data?.id!);
+
+        router.push("/checkout/success");
+
+        toast.success("Order Successful 🎉");
+      }
+    } catch (error) {
+      console.error("Order submission error:", error);
+      toast.error("Something went wrong. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -150,7 +163,7 @@ const CheckoutClient = ({ userId, addressPromise }: Props) => {
         <>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-4">
-              <div className="bg-card p-4 shadow rounded-md">
+              <div className="bg-primary/1 p-4 shadow rounded-md">
                 <h1 className="text-2xl">Shipping Address</h1>
                 <div className="space-y-4 mt-8">
                   <div className="space-y-1.5">
@@ -159,35 +172,33 @@ const CheckoutClient = ({ userId, addressPromise }: Props) => {
                       name="shippingAddressId"
                       render={({ field }) => (
                         <FormItem className="col-span-6 col-start-auto flex self-end flex-col gap-2 space-y-0 items-start">
-                          <FormLabel className="flex shrink-0">
-                            Existing Address
-                          </FormLabel>
-
                           {address.success &&
                             address.data?.map((item) => (
-                              <FormControl>
-                                <div
-                                  key={item.id}
-                                  className="flex gap-3 items-center"
-                                >
-                                  <Checkbox
-                                    id={item.id}
-                                    checked={item.id === field.value}
-                                    onCheckedChange={(e) => {
-                                      if (e === false) {
-                                        setSelectedAddress("");
-                                        field.onChange("");
-                                      } else if (e === true) {
-                                        setSelectedAddress(item.id);
-                                        field.onChange(item.id);
-                                      }
-                                    }}
-                                  />
-                                  <Label
-                                    htmlFor={item.id}
-                                  >{`${item.firstName} ${item.lastName}, ${item.region}, ${item.city}, ${item.address}`}</Label>
-                                </div>
-                              </FormControl>
+                              <>
+                                <FormLabel className="flex shrink-0">
+                                  Existing Address
+                                </FormLabel>
+                                <FormControl key={item.id}>
+                                  <div className="flex gap-3 items-center">
+                                    <Checkbox
+                                      id={item.id}
+                                      checked={item.id === field.value}
+                                      onCheckedChange={(e) => {
+                                        if (e === false) {
+                                          setSelectedAddress("");
+                                          field.onChange("");
+                                        } else if (e === true) {
+                                          setSelectedAddress(item.id);
+                                          field.onChange(item.id);
+                                        }
+                                      }}
+                                    />
+                                    <Label
+                                      htmlFor={item.id}
+                                    >{`${item.firstName} ${item.lastName}, ${item.region}, ${item.city}, ${item.address}`}</Label>
+                                  </div>
+                                </FormControl>
+                              </>
                             ))}
 
                           <FormMessage className="text-red-500" />
@@ -460,9 +471,9 @@ const CheckoutClient = ({ userId, addressPromise }: Props) => {
                   </div>
                 </div>
               </div>
-              <div className="bg-card p-4 shadow rounded-md">
+              <div className="bg-card/40 p-4 shadow rounded-md">
                 <h1 className="text-2xl mb-4">Payment Method</h1>
-                <div className="bg-card-foreground w-fit p-3 rounded-md shadow flex gap-2">
+                <div className="bg-background w-fit p-3 rounded-md shadow flex gap-2">
                   <FormField
                     control={form.control}
                     name="paymentMethod"
@@ -470,6 +481,7 @@ const CheckoutClient = ({ userId, addressPromise }: Props) => {
                       <>
                         <Checkbox
                           id="payment-method"
+                          className="bg-background"
                           onCheckedChange={(e) => {
                             if (e === false) {
                               setSelectedPaymentMethod(undefined);
@@ -488,11 +500,50 @@ const CheckoutClient = ({ userId, addressPromise }: Props) => {
                 </div>
               </div>
             </div>
+
+            {/* Order Summary */}
             <div className="lg:col-span-1">
               <div className="p-5 border rounded-md shadow-sm sm:p-6 sticky top-24 space-y-4">
                 <h2 className="text-xl font-medium text-foreground mb-6">
                   Order Summary
                 </h2>
+
+                <div className="space-y-3">
+                  {product.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex gap-3 justify-between items-center"
+                    >
+                      <div className="relative flex gap-3 items-center">
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          width={90}
+                          height={90}
+                          className="object-cover rounded-sm overflow-hidden"
+                        />
+                        <p className="text-mute absolute -top-2 left-21 h-4 w-4 bg-accent rounded-full flex items-center justify-center">
+                          {item.quantity}
+                        </p>
+                        <div>
+                          <h3 className="text-sm text-foreground">
+                            {item.name}
+                          </h3>
+                          <p className="text-mute">
+                            {item.size + " • " + item.color}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-end">
+                        <p>৳{item.totalPrice}</p>
+                        <p className="text-[0.9rem] text-mute">
+                          ৳{item.price} each
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
                 <Separator className="my-4" />
 
                 {/* Price Breakdown */}
@@ -534,8 +585,16 @@ const CheckoutClient = ({ userId, addressPromise }: Props) => {
                   // onClick={handlePlaceOrder}
                   // disabled={!selectedPaymentMethod}
                   type="submit"
+                  disabled={isSubmitting}
                 >
-                  Place Order
+                  {isSubmitting ? (
+                    <div className="flex items-center gap-1">
+                      <Spinner />
+                      Place Order
+                    </div>
+                  ) : (
+                    "Place Order"
+                  )}
                 </Button>
               </div>
             </div>
