@@ -5,12 +5,10 @@ import type React from "react";
 import { useState, useEffect, use } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
-import { blurUrl, imgUrl } from "@/lib/utils";
-import Image from "next/image";
+import { ChevronLeft, ChevronRight, TvIcon } from "lucide-react";
 import { TFeatured } from "@/types";
+import Image from "next/image";
 import Link from "next/link";
-import { urlFor } from "@repo/sanity-config/image";
 
 interface Product {
   id: number;
@@ -197,11 +195,13 @@ const Featured = ({
                       </h3>
                       <div className="flex items-center gap-2">
                         <span className="text-lg font-semibold text-foreground">
-                          ${product.salePrice}
+                          <span className="font-bold">৳</span>
+                          {product.salePrice}
                         </span>
                         {product.price && (
                           <span className="text-sm text-muted-foreground line-through">
-                            ${product.price}
+                            <span className="">৳</span>
+                            {product.price}
                           </span>
                         )}
                       </div>

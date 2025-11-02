@@ -9,7 +9,7 @@ import {
 import { createdAt, id, updatedAt } from "../schemaHelpers";
 import { UserTable } from "./user";
 import { relations } from "drizzle-orm";
-import { AddressTable } from "./address";
+import { AddressTable, userAddressTypeEnum } from "./address";
 
 export const statusEnums = pgEnum("status", [
   "pending",
@@ -40,9 +40,17 @@ export const OrdersTable = pgTable("orders", {
     .references(() => UserTable.id, { onDelete: "cascade" }),
   orderStatus: statusEnums().notNull().default("pending"),
   totalAmount: doublePrecision("totalAmount").notNull(),
-  shippingAddress: uuid("shippingAddress")
-    .notNull()
-    .references(() => AddressTable.id),
+  firstName: text("First Name").notNull(),
+  lastName: text("Last Name"),
+  phone: text("Phone Number").notNull(),
+  region: text("Region").notNull(),
+  city: text("City").notNull(),
+  zone: text("Zone").notNull(),
+  address: text("Address").notNull(),
+  landmark: text("Landmark"),
+  email: text("Email").notNull(),
+  addressType: userAddressTypeEnum("Address Type").default("home"),
+  paymentMethod: paymentMethodEnum("paymentMethod").notNull(),
   createdAt,
   updatedAt,
 });
@@ -57,7 +65,6 @@ export const OrderItemTable = pgTable("orderItems", {
   price: doublePrecision("price").notNull(),
   color: text("color").notNull(),
   size: text("size").notNull(),
-  paymentMethod: paymentMethodEnum("paymentMethod").notNull(),
   orderEmail: text("orderEmail").notNull(),
   createdAt,
   updatedAt,

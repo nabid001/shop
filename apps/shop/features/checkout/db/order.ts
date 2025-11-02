@@ -2,6 +2,8 @@
 
 import { revalidateCartCache } from "@/features/cart/db/cache";
 import { CheckoutProduct } from "@/features/checkout/store";
+import { revalidateAddressCache } from "@/features/profile/db/cache/address-cache";
+import { revalidateOrderCache } from "@/features/profile/db/cache/order-cache";
 import { Response } from "@/types";
 import { db } from "@repo/drizzle-config";
 import { AddressTable } from "@repo/drizzle-config/schemas/address";
@@ -63,8 +65,17 @@ export const createOrder = async ({
     .insert(OrdersTable)
     .values({
       userId: userId,
-      shippingAddress: newAddressId!,
       totalAmount: totalAmount,
+      paymentMethod,
+      firstName: addressValue.firstName,
+      lastName: addressValue.lastName,
+      email: addressValue.email,
+      phone: addressValue.phone,
+      region: addressValue.region,
+      city: addressValue.city,
+      zone: addressValue.zone,
+      address: addressValue.address,
+      addressType: addressValue.addressType,
     })
     .returning({ id: OrdersTable.id });
 
@@ -86,7 +97,6 @@ export const createOrder = async ({
           price: item.price,
           color: item.color,
           size: item.size,
-          paymentMethod,
           orderEmail,
         })
         .returning({
@@ -126,8 +136,13 @@ export const createOrder = async ({
       error: "FAILED_TO_REMOVE_CART",
       message: "Failed To Remove From Cart",
     };
-  revalidateCartCache(userId);
 
+  // Revalidating cache data
+  revalidateOrderCache(userId);
+  revalidateCartCache(userId);
+  revalidateAddressCache(userId);
+
+  // Dec Sanity product stock
   product.forEach(async (item) => {
     const res = await client
       .patch(item._id)

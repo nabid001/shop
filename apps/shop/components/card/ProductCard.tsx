@@ -76,11 +76,11 @@ const ProductCard = ({
 
         <div className="flex items-center gap-2">
           <span className="text-lg font-semibold text-foreground">
-            ${salePrice}
+            ৳{salePrice}
           </span>
           {(isBestSeller || isFeatured) && price && (
             <span className="text-sm text-muted-foreground line-through">
-              ${price}
+              ৳{price}
             </span>
           )}
         </div>

@@ -36,6 +36,7 @@ import { Spinner } from "@/components/ui/spinner";
 import z from "zod";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
+import { ClerkDegraded } from "@clerk/nextjs";
 
 type Props = {
   userId: string;
@@ -153,6 +154,10 @@ const CheckoutClient = ({ userId, addressPromise }: Props) => {
       setIsSubmitting(false);
     }
   };
+
+  // const onSubmit = (values: z.infer<typeof CheckoutFormSchema>) => {
+  //   console.log(values);
+  // };
 
   return (
     <Form {...form}>

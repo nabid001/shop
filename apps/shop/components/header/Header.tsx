@@ -107,11 +107,13 @@ const Header = async () => {
                       </Link>
                     </DropdownMenuItem>
                   )}
-                  <DropdownMenuItem asChild>
-                    <Link href="/profile/my-details" className="nav-link">
-                      Profile
-                    </Link>
-                  </DropdownMenuItem>
+                  <SignedIn>
+                    <DropdownMenuItem asChild>
+                      <Link href="/profile" className="nav-link">
+                        Profile
+                      </Link>
+                    </DropdownMenuItem>
+                  </SignedIn>
                   <DropdownMenuItem
                     variant="destructive"
                     asChild

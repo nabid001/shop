@@ -1,11 +1,10 @@
 import { getUserIdTag } from "@/features/users/db/cache";
-import { auth } from "@clerk/nextjs/server";
-import { db } from "@repo/drizzle-config";
 import { UserTable } from "@repo/drizzle-config/schemas/user";
 import { eq } from "drizzle-orm";
-import { cacheTag, refresh } from "next/cache";
-import { redirect } from "next/navigation";
+import { db } from "@repo/drizzle-config";
+import { cacheTag } from "next/cache";
 import { cache } from "react";
+import { auth } from "@clerk/nextjs/server";
 
 // export async function getCurrentUser({ allData = false } = {}) {
 //   const authData = await auth();
@@ -45,7 +44,7 @@ import { cache } from "react";
 //   });
 // });
 
-export async function getCurrentUser({ allData = false } = {}) {
+export const getCurrentUser = cache(async ({ allData = false } = {}) => {
   const { userId, sessionClaims, redirectToSignIn } = await auth();
 
   if (userId != null && sessionClaims.metadata.userId == null) {
@@ -62,9 +61,9 @@ export async function getCurrentUser({ allData = false } = {}) {
         : undefined,
     redirectToSignIn,
   };
-}
+});
 
-async function getUser(id: string) {
+const getUser = async (id: string) => {
   "use cache";
   cacheTag(getUserIdTag(id));
 
@@ -78,4 +77,4 @@ async function getUser(id: string) {
       picture: true,
     },
   });
-}
+};
