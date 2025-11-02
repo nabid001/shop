@@ -42,6 +42,7 @@ export const sanityEnv = {
   projectId: env.SANITY_STUDIO_SANITY_PROJECT_ID,
   dataset: env.SANITY_STUDIO_SANITY_DATASET,
   apiVersion: env.SANITY_STUDIO_API_VERSION,
+  token: env.SANITY_ACCESS_TOKEN,
 };
 
 export const databaseUrl = env.DATABASE_URL;

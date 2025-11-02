@@ -146,6 +146,9 @@
   .product-container {
     @apply max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8;
   }
+  .checkout-container {
+    @apply max-w-7xl mx-auto py-7 px-4 sm:px-6 lg:px-8;
+  }
 
   .text-mute {
     @apply text-muted-foreground text-sm;

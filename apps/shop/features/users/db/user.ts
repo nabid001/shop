@@ -3,35 +3,8 @@
 import { db } from "@repo/drizzle-config";
 import { UserTable } from "@repo/drizzle-config/schemas/user";
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { revalidateUserCache } from "./cache";
-
-// export const name = async () => {
-//   try {
-
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-export const getUserByClerkId = async (clerkId: string) => {
-  try {
-    const user = await db.query.UserTable.findFirst({
-      where: eq(UserTable.clerkId, clerkId!),
-      columns: {
-        id: true,
-        clerkId: true,
-        email: true,
-      },
-    });
-    if (user === null) {
-      console.log("User not found");
-      throw new Error("User not found");
-    }
-    return user;
-  } catch (error) {
-    console.log(error);
-    throw new Error("Failed to fetch user");
-  }
-};
 
 export const createUser = async ({
   clerkId,
@@ -50,7 +23,7 @@ export const createUser = async ({
         username,
         picture,
       })
-      .returning();
+      .returning({ id: UserTable.id, role: UserTable.role });
 
     if (newUser === null) {
       console.log("Failed to create user");
@@ -75,12 +48,11 @@ export const updateUser = async ({
       .update(UserTable)
       .set({ name, username, picture })
       .where(eq(UserTable.clerkId, clerkId!))
-      .returning();
+      .returning({ id: UserTable.id });
 
     if (updatedUser === null) throw new Error("Failed to update user");
 
     revalidateUserCache(updatedUser.id);
-
     return updatedUser;
   } catch (error) {
     console.log(error);
@@ -92,7 +64,7 @@ export const deleteUser = async (clerkId: string) => {
     const [deletedUser] = await db
       .delete(UserTable)
       .where(eq(UserTable.clerkId, clerkId))
-      .returning();
+      .returning({ id: UserTable.id });
 
     if (deletedUser === null) throw new Error("Failed to update user");
 

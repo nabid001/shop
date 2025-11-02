@@ -1,12 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    cacheComponents: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -18,6 +12,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  cacheComponents: true,
+  reactCompiler: true,
 };
 
 export default nextConfig;

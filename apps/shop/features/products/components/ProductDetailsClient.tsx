@@ -6,13 +6,14 @@ import { CarouselImage } from "./CarouselImage";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus } from "lucide-react";
-import { calculateDiscount, imgUrl } from "@/lib/utils";
+import { calculateDiscount } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
 import { addToCart } from "../db/cart";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import { PortableText } from "@portabletext/react";
 import { PortableTextComponent } from "./PortableComponent";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 
 type Props = {
   product: Awaited<TProductById>;
@@ -32,19 +33,19 @@ const ProductDetailsClient = ({ product, userId }: Props) => {
     variants,
   } = product;
 
-  const [color, setColor] = useState(variants[0].color || "");
-  const [size, setSize] = useState(variants[0].size[0] || "");
+  const [color, setColor] = useState(variants.color[0] || "");
+  const [size, setSize] = useState(variants.size[0] || "");
   const [quantity, setQuantity] = useState<number>(1);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const images = variants.map((variant) => variant.image);
-  const [singleVariant] = variants.filter((v) => v.color === color);
+  const images = variants?.imageGallery?.map((variant) => variant);
+  // const [singleVariant] = variants.filter((v) => v.color === color);
 
   useEffect(() => {
-    if (quantity > singleVariant.stock) {
-      setQuantity(singleVariant.stock);
+    if (quantity > variants.stock) {
+      setQuantity(variants.stock);
     }
-  }, [quantity, singleVariant.stock]);
+  }, [quantity, variants.stock]);
 
   const handleQuantityChange = (delta: number) => {
     setQuantity((prevQuantity) => prevQuantity + delta);
@@ -59,7 +60,7 @@ const ProductDetailsClient = ({ product, userId }: Props) => {
       size: size,
       productId: _id,
       quantity,
-      priceAtAdd: singleVariant.salePrice,
+      priceAtAdd: variants.salePrice,
     });
 
     if (!res.success) {
@@ -74,7 +75,7 @@ const ProductDetailsClient = ({ product, userId }: Props) => {
   return (
     <>
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20 mb-16">
-        <CarouselImage images={images} />
+        <CarouselImage imageGallery={images} mainImage={variants.image} />
 
         {/* Product Details */}
         <div className="space-y-6 flex flex-col">
@@ -86,14 +87,12 @@ const ProductDetailsClient = ({ product, userId }: Props) => {
                 Featured
               </Badge>
             )}
-            {singleVariant.stock > 0 ? (
+            {variants.stock > 0 ? (
               <Badge
-                className={`border-green-500 text-green-600 ${singleVariant.stock < 5 && "text-red-400 border border-red-300"}`}
+                className={`border-green-500 text-green-600 ${variants.stock < 5 && "text-red-400 border border-red-300"}`}
                 variant={"outline"}
               >
-                {singleVariant.stock > 5
-                  ? "In Stock"
-                  : `${singleVariant.stock} Left`}
+                {variants.stock > 5 ? "In Stock" : `${variants.stock} Left`}
               </Badge>
             ) : (
               <Badge
@@ -111,15 +110,10 @@ const ProductDetailsClient = ({ product, userId }: Props) => {
             </p>
             <h1 className="product-heading-text">{name}</h1>
             <div className="flex gap-3 items-center justify-start">
-              <h2 className="sale-price">৳{singleVariant.salePrice}</h2>
-              <h2 className="regular-price">৳{singleVariant.price}</h2>
+              <h2 className="sale-price">৳{variants.salePrice}</h2>
+              <h2 className="regular-price">৳{variants.price}</h2>
               <Badge variant={"secondary"}>
-                Save{" "}
-                {calculateDiscount(
-                  singleVariant.price,
-                  singleVariant.salePrice
-                )}
-                %
+                Save {calculateDiscount(variants.price, variants.salePrice)}%
               </Badge>
             </div>
           </div>
@@ -129,15 +123,15 @@ const ProductDetailsClient = ({ product, userId }: Props) => {
             <div className="space-y-1.5 ">
               <p className="text-mute">Color: {color}</p>
               <div className="flex gap-3">
-                {variants.map((item, i) => (
+                {variants.color.map((col, i) => (
                   <Button
                     key={i}
                     variant={"ghost"}
                     size={"sm"}
-                    onClick={() => setColor(item.color)}
-                    className={`border border-accent ${color === item.color && "bg-accent"} text-black/80`}
+                    onClick={() => setColor(col)}
+                    className={`border border-accent ${color === col && "bg-accent"} text-black/80`}
                   >
-                    {item.color}
+                    {col}
                   </Button>
                 ))}
               </div>
@@ -146,12 +140,12 @@ const ProductDetailsClient = ({ product, userId }: Props) => {
             <div className="space-y-1.5">
               <p className="text-mute">Size: {size}</p>
               <div className="flex gap-3">
-                {singleVariant.size.map((item, i) => (
+                {variants.size.map((item, i) => (
                   <Button
                     key={i}
                     variant={"ghost"}
                     size={"sm"}
-                    disabled={singleVariant.stock === 0}
+                    disabled={variants.stock === 0}
                     onClick={() => setSize(item)}
                     className={`border border-accent ${size === item && "bg-accent"} text-black/80`}
                   >
@@ -180,9 +174,9 @@ const ProductDetailsClient = ({ product, userId }: Props) => {
                 size="sm"
                 variant="outline"
                 className="size-5"
-                disabled={quantity >= singleVariant.stock}
+                disabled={quantity >= variants.stock}
                 onClick={() =>
-                  handleQuantityChange(singleVariant.stock > quantity ? 1 : 0)
+                  handleQuantityChange(variants.stock > quantity ? 1 : 0)
                 }
               >
                 <Plus className="h-1 w-1" />
@@ -192,22 +186,29 @@ const ProductDetailsClient = ({ product, userId }: Props) => {
 
           {/* Add to Cart */}
           <div className="mt-auto">
-            <Button
-              onClick={() => {
-                handleAddToCart();
-              }}
-              variant={`${singleVariant.stock <= 0 ? "destructive" : "default"}`}
-              disabled={singleVariant.stock <= 0 || isSubmitting}
-            >
-              {isSubmitting ? (
-                <>
-                  <Spinner />
-                  Adding
-                </>
-              ) : (
-                <>{singleVariant.stock > 0 ? "Add To Cart" : "Out Of Stock"}</>
-              )}
-            </Button>
+            <SignedIn>
+              <Button
+                onClick={() => {
+                  handleAddToCart();
+                }}
+                variant={`${variants.stock <= 0 ? "destructive" : "default"}`}
+                disabled={variants.stock <= 0 || isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Spinner />
+                    Adding
+                  </>
+                ) : (
+                  <>{variants.stock > 0 ? "Add To Cart" : "Out Of Stock"}</>
+                )}
+              </Button>
+            </SignedIn>
+            <SignedOut>
+              <Button asChild>
+                <SignInButton mode="redirect">Add To Cart</SignInButton>
+              </Button>
+            </SignedOut>
           </div>
         </div>
       </section>

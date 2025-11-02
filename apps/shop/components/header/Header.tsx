@@ -25,6 +25,20 @@ import {
 } from "../ui/dropdown-menu";
 import { Suspense } from "react";
 import { getCartLength } from "@/features/cart/db/cart";
+import { Spinner } from "../ui/spinner";
+
+const NavLink = [
+  {
+    id: 1,
+    label: "Products",
+    href: "/products",
+  },
+  {
+    id: 2,
+    label: "About",
+    href: "/about",
+  },
+];
 
 const Header = async () => {
   const { user } = await getCurrentUser({ allData: true });
@@ -41,18 +55,11 @@ const Header = async () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/products" className="nav-link">
-              Products
-            </Link>
-            <Link href="/collections" className="nav-link">
-              Collections
-            </Link>
-            <Link href="/about" className="nav-link">
-              About
-            </Link>
-            <Link href="/contact" className="nav-link">
-              Contact
-            </Link>
+            {NavLink.map((item) => (
+              <Link key={item.id} href={item.href} className="nav-link">
+                {item.label}
+              </Link>
+            ))}
           </nav>
 
           {/* Desktop Actions */}
@@ -61,7 +68,7 @@ const Header = async () => {
               <Search className="h-4 w-4" />
             </Button>
 
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Spinner />}>
               <Link href="/cart">
                 <CartItemLength userId={user?.id!} />
               </Link>
@@ -80,7 +87,7 @@ const Header = async () => {
                     <Avatar>
                       <AvatarImage
                         src={user?.picture!}
-                        alt={user?.name!}
+                        alt={user?.name}
                         width={100}
                         height={100}
                       />
@@ -100,12 +107,18 @@ const Header = async () => {
                       </Link>
                     </DropdownMenuItem>
                   )}
-                  <DropdownMenuItem asChild>
-                    <Link href="/profile/my-details" className="nav-link">
-                      Profile
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem variant="destructive">
+                  <SignedIn>
+                    <DropdownMenuItem asChild>
+                      <Link href="/profile" className="nav-link">
+                        Profile
+                      </Link>
+                    </DropdownMenuItem>
+                  </SignedIn>
+                  <DropdownMenuItem
+                    variant="destructive"
+                    asChild
+                    className="w-full"
+                  >
                     <SignOutButton />
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -127,7 +140,7 @@ const Header = async () => {
                 </SheetHeader>
                 <div className="border-t border-border/50 py-4 px-4">
                   <nav className="flex flex-col space-y-4">
-                    <Link href="/product" className="nav-link">
+                    <Link href="/products" className="nav-link">
                       Products
                     </Link>
                     <Link href="/collections" className="nav-link">

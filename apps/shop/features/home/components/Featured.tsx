@@ -5,10 +5,9 @@ import type React from "react";
 import { useState, useEffect, use } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
-import { blurUrl, imgUrl } from "@/lib/utils";
-import Image from "next/image";
+import { ChevronLeft, ChevronRight, TvIcon } from "lucide-react";
 import { TFeatured } from "@/types";
+import Image from "next/image";
 import Link from "next/link";
 
 interface Product {
@@ -22,60 +21,6 @@ interface Product {
   isSale?: boolean;
 }
 
-const products: Product[] = [
-  {
-    id: 1,
-    name: "Classic Cotton T-Shirt",
-    price: 29,
-    originalPrice: 39,
-    image: "/classic-white-cotton-t-shirt-on-hanger.jpg",
-    category: "T-Shirts",
-    isNew: true,
-    isSale: true,
-  },
-  {
-    id: 2,
-    name: "Premium Dress Shirt",
-    price: 89,
-    image: "/elegant-white-dress-shirt-folded.jpg",
-    category: "Shirts",
-    isNew: false,
-  },
-  {
-    id: 3,
-    name: "Slim Fit Chinos",
-    price: 79,
-    image: "/khaki-chino-pants-folded.jpg",
-    category: "Pants",
-    isNew: true,
-  },
-  {
-    id: 4,
-    name: "Vintage Denim Jeans",
-    price: 95,
-    originalPrice: 120,
-    image: "/dark-blue-denim-jeans-folded.jpg",
-    category: "Pants",
-    isSale: true,
-  },
-  {
-    id: 5,
-    name: "Casual Polo Shirt",
-    price: 55,
-    image: "/navy-blue-polo-shirt-on-hanger.jpg",
-    category: "Shirts",
-    isNew: true,
-  },
-  {
-    id: 6,
-    name: "Graphic Print Tee",
-    price: 35,
-    image: "/black-graphic-t-shirt-with-minimal-design.jpg",
-    category: "T-Shirts",
-    isNew: false,
-  },
-];
-
 const Featured = ({
   featuredPromise,
 }: {
@@ -85,6 +30,8 @@ const Featured = ({
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+
+  const products = use(featuredPromise);
 
   // Auto-play functionality
   useEffect(() => {
@@ -156,8 +103,6 @@ const Featured = ({
     setTimeout(() => setIsAutoPlaying(true), 3000);
   };
 
-  const res = use(featuredPromise);
-
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8 bg-background">
       <div className="max-w-7xl mx-auto">
@@ -210,7 +155,7 @@ const Featured = ({
                 transform: `translateX(-${currentIndex * (100 / visibleProducts)}%)`,
               }}
             >
-              {res.map((product) => (
+              {products.map((product) => (
                 <div
                   key={product._id}
                   className="flex-shrink-0 px-3"
@@ -221,8 +166,7 @@ const Featured = ({
                       {/* Product Image */}
                       <div className="aspect-square bg-muted/30 overflow-hidden">
                         <Image
-                          src={imgUrl(product.image.url)}
-                          blurDataURL={blurUrl(product.image.url)}
+                          src={product.image}
                           fill
                           alt={product.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -251,11 +195,13 @@ const Featured = ({
                       </h3>
                       <div className="flex items-center gap-2">
                         <span className="text-lg font-semibold text-foreground">
-                          ${product.salePrice}
+                          <span className="font-bold">৳</span>
+                          {product.salePrice}
                         </span>
                         {product.price && (
                           <span className="text-sm text-muted-foreground line-through">
-                            ${product.price}
+                            <span className="">৳</span>
+                            {product.price}
                           </span>
                         )}
                       </div>

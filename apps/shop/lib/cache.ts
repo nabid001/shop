@@ -1,21 +1,13 @@
-import { revalidateTag } from "next/cache";
-import { cacheTag } from "next/dist/server/use-cache/cache-tag";
-
 type CACHE_TAG =
   | "products"
   | "users"
-  | "heroBanner"
-  | "categorySection"
-  | "homeProducts"
-  | "carts";
+  | "carts"
+  | "category"
+  | "address"
+  | "order"
+  | "sanity";
 
-export const nameCacheTag = (type: CACHE_TAG, tag: string) => {
-  return cacheTag(`${type}:id-${tag}`);
-};
-
-export const revalidateTags = (type: CACHE_TAG, tag: string) => {
-  revalidateTag(`${type}:id-${tag}`);
-};
+export type SANITY_TAG = "heroBanner" | "categorySection" | "homeProducts";
 
 export function getGlobalTag(tag: CACHE_TAG) {
   return `global:${tag}` as const;
@@ -28,3 +20,7 @@ export function getIdTag(tag: CACHE_TAG, id: string) {
 export function getUserTag(tag: CACHE_TAG, userId: string) {
   return `user:${userId}-${tag}` as const;
 }
+
+export const getSanityTag = (tag: SANITY_TAG) => {
+  return `sanity:${tag}`;
+};
