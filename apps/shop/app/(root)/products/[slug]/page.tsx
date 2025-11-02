@@ -1,26 +1,31 @@
 import ProductCard from "@/components/card/ProductCard";
 import ProductDetailsClient from "@/features/products/components/ProductDetailsClient";
 import Image from "next/image";
-import { getCurrentUser } from "@/lib/getCurrentUser";
 import {
+  getAllProducts,
   getProductById,
+  getProducts,
   getRelatedProducts,
 } from "@/features/products/db/product";
-import { auth } from "@clerk/nextjs/server";
+import { getCurrentUser } from "@/lib/getCurrentUser";
+import { Suspense } from "react";
+
+export async function generateStaticParams() {
+  const products = await getAllProducts();
+
+  return products?.map((pro: any) => ({
+    slug: pro.slug.current,
+  }));
+}
 
 const ProductDetails = async ({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) => {
-  const { sessionClaims } = await auth();
-
+  const { user } = await getCurrentUser();
   const slug = (await params).slug;
   const product = await getProductById(slug);
-  const relatedProducts = await getRelatedProducts({
-    category: product.data?.category.slug.current!,
-    id: product.data?._id!,
-  });
 
   if (!product.success && product.error === "PRODUCT_NOT_FOUND") {
     return (
@@ -38,41 +43,62 @@ const ProductDetails = async ({
 
   return (
     <section className="product-container">
-      <ProductDetailsClient
-        product={product?.data!}
-        userId={sessionClaims?.metadata?.userId!}
-      />
+      <ProductDetailsClient product={product?.data!} userId={user?.id!} />
 
       <section className="mt-20">
         <h2 className="product-heading-text mb-7">You May Also Like</h2>
 
-        {!relatedProducts.success && relatedProducts.error ? (
-          <>
-            <p>{relatedProducts.message}</p>
-          </>
-        ) : (
-          <div className="product-card">
-            {relatedProducts.data?.map((product) => {
-              return (
-                <ProductCard
-                  key={product._id}
-                  name={product.name}
-                  slug={product.slug.current}
-                  category={product.category.name}
-                  price={product.variants.price}
-                  salePrice={product.variants.salePrice}
-                  imageUrl={product.variants.images}
-                  // isBestSeller={true}
-                  isNewArrival={product.newArrival}
-                  isFeatured={product.featured}
-                />
-              );
-            })}
-          </div>
-        )}
+        <Suspense fallback={"loading relatedProducts..."}>
+          <RelatedProducts
+            slug={product.data?.category.slug.current!}
+            productId={product.data?._id!}
+          />
+        </Suspense>
       </section>
     </section>
   );
 };
 
 export default ProductDetails;
+
+const RelatedProducts = async ({
+  slug,
+  productId,
+}: {
+  slug: string;
+  productId: string;
+}) => {
+  const relatedProducts = await getRelatedProducts({
+    category: slug,
+    id: productId,
+  });
+
+  return (
+    <>
+      {!relatedProducts.success && relatedProducts.error ? (
+        <>
+          <p>{relatedProducts.message}</p>
+        </>
+      ) : (
+        <div className="product-card">
+          {relatedProducts.data?.map((product) => {
+            return (
+              <ProductCard
+                key={product._id}
+                name={product.name}
+                slug={product.slug.current}
+                category={product.category.name}
+                price={product.variants.price}
+                salePrice={product.variants.salePrice}
+                imageUrl={product.variants.images}
+                // isBestSeller={true}
+                isNewArrival={product.newArrival}
+                isFeatured={product.featured}
+              />
+            );
+          })}
+        </div>
+      )}
+    </>
+  );
+};

@@ -3,12 +3,14 @@
 import { client } from "@repo/sanity-config/client";
 import { CATEGORY } from "./query";
 import { TGetCategory } from "@/types";
-import { unstable_cacheTag } from "next/cache";
-import { getCategoryIdTag } from "./cache/category";
+import { cacheTag } from "next/cache";
 import { cache } from "react";
+import { getSanityIdTag, sanityTag } from "@/sanity/actions/cache";
 
 export const getCategory = cache(async (): Promise<TGetCategory> => {
-  // "use cache";
+  "use cache";
+  cacheTag(sanityTag("categorySection"));
+
   try {
     const res = await client.fetch<TGetCategory>(CATEGORY);
 
@@ -16,7 +18,9 @@ export const getCategory = cache(async (): Promise<TGetCategory> => {
       throw new Error("Category not found");
     }
 
-    // res.map((item) => unstable_cacheTag(getCategoryIdTag(item._id)));
+    res.map((item) => {
+      cacheTag(getSanityIdTag(item._id));
+    });
 
     return res;
   } catch (error) {

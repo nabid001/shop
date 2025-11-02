@@ -8,6 +8,7 @@ export async function revalidate(payload: WebhookPayload) {
     switch (_type) {
       case "product":
         revalidateSanityCache("homeProducts", _id);
+        revalidateSanityCache("products", _id);
         break;
 
       case "category":

@@ -10,6 +10,6 @@ export const getCategoryIdTag = (id: string) => {
 };
 
 export const revalidateCategoryCache = (id: string) => {
-  revalidateTag(getCategoryGlobalTag());
-  revalidateTag(getCategoryIdTag(id));
+  revalidateTag(getCategoryGlobalTag(), "max");
+  revalidateTag(getCategoryIdTag(id), "max");
 };
