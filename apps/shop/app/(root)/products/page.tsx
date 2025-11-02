@@ -15,13 +15,7 @@ type Props = {
 };
 
 const Products = async ({ searchParams }: Props) => {
-  const { category, search, sorting } = await searchParams;
   const categoryPromise = getCategory();
-  const res = await getProducts({
-    search,
-    category,
-    sorting,
-  });
 
   return (
     <>
@@ -47,26 +41,9 @@ const Products = async ({ searchParams }: Props) => {
 
           {/* Products */}
           <div className="flex-1">
-            {!res.success && res.error === "PRODUCT_NOT_FOUND" ? (
-              <p className="mt-11 text-center text-muted-foreground">
-                No products found matching your criteria
-              </p>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {res.data?.map((product) => (
-                  <ProductCard
-                    key={product._id}
-                    name={product.name}
-                    slug={product.slug.current}
-                    price={product.price}
-                    salePrice={product.salePrice}
-                    category={product.category.name}
-                    imageUrl={product.image}
-                    isBestSeller={true}
-                  />
-                ))}
-              </div>
-            )}
+            <Suspense fallback={"Product Grid..."}>
+              <ProductGrid searchParams={searchParams} />
+            </Suspense>
           </div>
         </section>
       </section>
@@ -75,3 +52,37 @@ const Products = async ({ searchParams }: Props) => {
 };
 
 export default Products;
+
+const ProductGrid = async ({ searchParams }: Props) => {
+  const { search, category, sorting } = await searchParams;
+  const res = await getProducts({
+    search,
+    category,
+    sorting,
+  });
+
+  return (
+    <>
+      {!res.success && res.error === "PRODUCT_NOT_FOUND" ? (
+        <p className="mt-11 text-center text-muted-foreground">
+          No products found matching your criteria
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {res.data?.map((product) => (
+            <ProductCard
+              key={product._id}
+              name={product.name}
+              slug={product.slug.current}
+              price={product.price}
+              salePrice={product.salePrice}
+              category={product.category.name}
+              imageUrl={product.image}
+              isBestSeller={true}
+            />
+          ))}
+        </div>
+      )}
+    </>
+  );
+};

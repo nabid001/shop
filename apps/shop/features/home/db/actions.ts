@@ -26,7 +26,7 @@ export const getHeroBanner = cache(async (): Promise<THeroBanner> => {
   try {
     const res: THeroBanner = await client.fetch(HERO_BANNER);
     res.map((val) => {
-      getSanityIdTag(val._id);
+      cacheTag(getSanityIdTag(val._id));
     });
     return res;
   } catch (error) {
@@ -42,7 +42,7 @@ export const getCategory = cache(async (): Promise<TCategory> => {
   try {
     const res: TCategory = await client.fetch(CATEGORY);
     res.map((val) => {
-      getSanityIdTag(val._id);
+      cacheTag(getSanityIdTag(val._id));
     });
     return res;
   } catch (error) {
@@ -58,7 +58,7 @@ export const getNewArrival = cache(async (): Promise<TNewArrival> => {
   try {
     const res: TNewArrival = await client.fetch(NEW_ARRIVAL);
     res.map((val) => {
-      getSanityIdTag(val._id);
+      cacheTag(getSanityIdTag(val._id));
     });
     return res;
   } catch (error) {
@@ -74,7 +74,7 @@ export const getFeatured = cache(async (): Promise<TFeatured> => {
   try {
     const res: TFeatured = await client.fetch(FEATURED);
     res.map((val) => {
-      getSanityIdTag(val._id);
+      cacheTag(getSanityIdTag(val._id));
     });
     return res;
   } catch (error) {
@@ -90,7 +90,7 @@ export const getBestseller = cache(async (): Promise<TBestseller> => {
   try {
     const res: TBestseller = await client.fetch(BESTSELLER);
     res.map((val) => {
-      getSanityIdTag(val._id);
+      cacheTag(getSanityIdTag(val._id));
     });
     return res;
   } catch (error) {

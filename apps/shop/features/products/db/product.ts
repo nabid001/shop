@@ -18,11 +18,27 @@ import {
 import { client } from "@repo/sanity-config/client";
 import { cache } from "react";
 import { GetProductsSchema } from "../validation";
+import { cacheTag } from "next/cache";
+import { getSanityIdTag, sanityTag } from "@/sanity/actions/cache";
+
+export const getAllProducts = cache(async () => {
+  try {
+    const res = await client.fetch(`*[_type == "product" && status == "public"]{
+      slug
+      }`);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 export const getProductById = cache(
   async (
     slug: string
   ): Promise<Response<VerifiedProductByIdError, TProductById>> => {
+    "use cache";
+
     if (!slug)
       return {
         success: false,
@@ -39,6 +55,7 @@ export const getProductById = cache(
         error: "PRODUCT_NOT_FOUND",
       };
 
+    cacheTag(getSanityIdTag(product._id));
     return { success: true, message: "Ok", data: product };
   }
 );
@@ -82,8 +99,8 @@ export const getProducts = cache(
   async (
     values: TProducts
   ): Promise<Response<VerifiedProductError, TProductsResult>> => {
-    // "use cache";
-    // getProductGlobalTag();
+    "use cache";
+    cacheTag(sanityTag("products"));
 
     const { error, data } = GetProductsSchema.safeParse(values);
 

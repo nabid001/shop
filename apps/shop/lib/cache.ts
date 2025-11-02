@@ -7,7 +7,11 @@ type CACHE_TAG =
   | "order"
   | "sanity";
 
-export type SANITY_TAG = "heroBanner" | "categorySection" | "homeProducts";
+export type SANITY_TAG =
+  | "heroBanner"
+  | "categorySection"
+  | "homeProducts"
+  | "products";
 
 export function getGlobalTag(tag: CACHE_TAG) {
   return `global:${tag}` as const;

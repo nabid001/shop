@@ -9,7 +9,7 @@ export const getProductIdTag = (id: string) => {
   return getIdTag("products", id);
 };
 
-export const revalidateProductCache = (id?: string) => {
-  revalidateTag(getProductGlobalTag());
-  //   revalidateTag(getProductIdTag(id));
+export const revalidateProductCache = (id: string) => {
+  revalidateTag(getProductGlobalTag(), "max");
+  revalidateTag(getProductIdTag(id), "max");
 };

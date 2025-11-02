@@ -14,6 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import { PortableText } from "@portabletext/react";
 import { PortableTextComponent } from "./PortableComponent";
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+import { getProductById } from "../db/product";
 
 type Props = {
   product: Awaited<TProductById>;
