@@ -1,7 +1,5 @@
 import { WebhookPayload } from "@/app/api/webhook/sanity/route";
-import { revalidateTags } from "../../lib/cache";
-import { revalidateCategoryCache } from "@/features/products/db/cache/category";
-import { revalidateProductCache } from "@/features/products/db/cache/product";
+import { revalidateSanityCache } from "./cache";
 
 export async function revalidate(payload: WebhookPayload) {
   const { _type, slug, _id } = payload;
@@ -9,16 +7,15 @@ export async function revalidate(payload: WebhookPayload) {
   try {
     switch (_type) {
       case "product":
-        // revalidateTags("homeProducts", _id);
-        // revalidateProductCache();
+        revalidateSanityCache("homeProducts", _id);
         break;
 
       case "category":
-        // revalidateTags("categorySection", _id);
-        // revalidateCategoryCache(_id);
+        revalidateSanityCache("categorySection", _id);
         break;
+
       case "banner":
-        // revalidateTags("heroBanner", _id);
+        revalidateSanityCache("heroBanner", _id);
         break;
     }
   } catch (error) {
