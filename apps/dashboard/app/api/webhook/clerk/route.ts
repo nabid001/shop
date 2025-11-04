@@ -2,9 +2,6 @@ import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { clerkClient, WebhookEvent } from "@clerk/nextjs/server";
 import { createUser, deleteUser, updateUser } from "@/features/users/db/user";
-import { insertUser, syncClerkUserMetadata } from "@/lib/getCurrentUser";
-import { email } from "zod";
-import { redirect } from "next/navigation";
 
 const client = await clerkClient();
 
@@ -59,25 +56,20 @@ export async function POST(req: Request) {
     const { id, username, first_name, last_name, image_url, email_addresses } =
       evt.data;
 
-    const email = email_addresses[0].email_address;
-    const name = `${first_name} ${last_name}`;
-    if (email == null) return new Response("No email", { status: 400 });
-    if (name === "") return new Response("No name", { status: 400 });
-
     const user = await createUser({
       clerkId: id,
-      email,
-      name,
-      picture: image_url,
       username: username!,
+      name: `${first_name} ${last_name}`,
+      picture: image_url,
+      email: email_addresses[0].email_address,
       role: "user",
     });
 
     if (user) {
       await client.users.updateUserMetadata(id, {
         publicMetadata: {
-          userId: user.id,
-          role: user.role,
+          role: user?.role,
+          userId: user?.id,
         },
       });
     }

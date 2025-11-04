@@ -207,7 +207,7 @@ const ProductDetailsClient = ({ product, userId }: Props) => {
             </SignedIn>
             <SignedOut>
               <Button asChild>
-                <SignInButton mode="redirect">Add To Cart</SignInButton>
+                <SignInButton>Add To Cart</SignInButton>
               </Button>
             </SignedOut>
           </div>

@@ -16,6 +16,7 @@ import {
   SignedOut,
   SignInButton,
   SignOutButton,
+  UserButton,
 } from "@clerk/nextjs";
 import {
   DropdownMenu,
@@ -26,6 +27,7 @@ import {
 import { Suspense } from "react";
 import { getCartLength } from "@/features/cart/db/cart";
 import { Spinner } from "../ui/spinner";
+import { getOrCreate } from "@/services/clerk";
 
 const NavLink = [
   {
@@ -41,8 +43,7 @@ const NavLink = [
 ];
 
 const Header = async () => {
-  const { user } = await getCurrentUser({ allData: true });
-  const isAdmin: boolean = user?.role === "admin" && user?.role === "admin";
+  const user = await getOrCreate();
 
   return (
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
@@ -96,7 +97,7 @@ const Header = async () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  {isAdmin && (
+                  {/* {isAdmin && (
                     <DropdownMenuItem asChild>
                       <Link
                         href="/admin/dashboard"
@@ -106,14 +107,12 @@ const Header = async () => {
                         Dashboard
                       </Link>
                     </DropdownMenuItem>
-                  )}
-                  <SignedIn>
-                    <DropdownMenuItem asChild>
-                      <Link href="/profile" className="nav-link">
-                        Profile
-                      </Link>
-                    </DropdownMenuItem>
-                  </SignedIn>
+                  )} */}
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile" className="nav-link">
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem
                     variant="destructive"
                     asChild

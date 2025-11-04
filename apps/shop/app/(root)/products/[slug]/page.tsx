@@ -10,20 +10,20 @@ import {
 import { getCurrentUser } from "@/lib/getCurrentUser";
 import { Suspense } from "react";
 
-export async function generateStaticParams() {
-  const products = await getAllProducts();
+// export async function generateStaticParams() {
+//   const products = await getAllProducts();
 
-  return products?.map((pro: any) => ({
-    slug: pro.slug.current,
-  }));
-}
+//   return products?.map((pro: any) => ({
+//     slug: pro.slug.current,
+//   }));
+// }
 
 const ProductDetails = async ({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) => {
-  const { user } = await getCurrentUser();
+  const { user } = await getCurrentUser({ allData: true });
   const slug = (await params).slug;
   const product = await getProductById(slug);
 

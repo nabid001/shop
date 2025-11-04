@@ -18,14 +18,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const ClerkRapper = ({ children }: { children: React.ReactNode }) => {
+const ClerkRapper = async ({ children }: { children: React.ReactNode }) => {
   return (
-    <ClerkProvider
-      dynamic
-      afterSignOutUrl={"/sign-in"}
-      signInFallbackRedirectUrl={"/sign-in"}
-      signUpFallbackRedirectUrl={"/sign-in"}
-    >
+    <ClerkProvider dynamic afterSignOutUrl={"/"}>
       {children}
     </ClerkProvider>
   );
@@ -42,7 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Suspense fallback={"loading..."}>
+    <Suspense fallback="Clerk Loading...">
       <ClerkRapper>
         <html lang="en">
           <body

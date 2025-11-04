@@ -255,3 +255,11 @@ export type AddressType = {
   createdAt: Date | null;
   updatedAt: Date | null;
 };
+
+export type GetOrCreateType = {
+  clerkId: string;
+  fullName: string;
+  username: string;
+  email: string;
+  picture: string;
+};

@@ -14,7 +14,7 @@
     "db:studio": "pnpm drizzle-kit studio"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.33.1",
+    "@clerk/nextjs": "^6.34.1",
     "@hookform/resolvers": "^5.2.2",
     "@neondatabase/serverless": "^1.0.2",
     "@portabletext/react": "^4.0.3",

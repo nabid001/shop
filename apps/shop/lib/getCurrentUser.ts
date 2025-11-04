@@ -1,72 +1,31 @@
-import { getUserIdTag } from "@/features/users/db/cache";
 import { UserTable } from "@repo/drizzle-config/schemas/user";
 import { eq } from "drizzle-orm";
 import { db } from "@repo/drizzle-config";
-import { cacheTag } from "next/cache";
-import { cache } from "react";
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-// export async function getCurrentUser({ allData = false } = {}) {
-//   const authData = await auth();
-//   return getCurrentUserCached(authData, allData);
-// }
+const client = await clerkClient();
 
-// const getCurrentUserCached = async (
-//   authData: Awaited<ReturnType<typeof auth>>,
-//   allData: boolean = false
-// ) => {
-//   const { userId, sessionClaims, redirectToSignIn } = authData;
-
-//   if (userId != null && sessionClaims.metadata == null) {
-//     redirect("/sign-in");
-//   }
-
-//   return {
-//     clerkUserId: userId,
-//     userId: sessionClaims?.metadata.userId,
-//     role: sessionClaims?.metadata.role,
-//     user:
-//       allData && sessionClaims?.metadata?.userId != null
-//         ? await getUser(sessionClaims.metadata.userId)
-//         : undefined,
-//     redirectToSignIn,
-//   };
-// };
-
-// const getUser = cache(async (id: string) => {
-//   "use cache";
-//   cacheTag(getUserIdTag(id));
-//   console.log(`Called from user:${id}`);
-
-//   return db.query.UserTable.findFirst({
-//     where: eq(UserTable.id, id),
-//     columns: { id: true, email: true, role: true, name: true, picture: true },
-//   });
-// });
-
-export const getCurrentUser = cache(async ({ allData = false } = {}) => {
+export const getCurrentUser = async ({ allData = false } = {}) => {
   const { userId, sessionClaims, redirectToSignIn } = await auth();
 
-  if (userId != null && sessionClaims.metadata.userId == null) {
-    redirectToSignIn();
+  if (userId != null && sessionClaims?.userId === null) {
+    return null;
   }
 
   return {
     clerkUserId: userId,
-    userId: sessionClaims?.metadata?.userId,
-    role: sessionClaims?.metadata?.role,
+    userId: sessionClaims?.userId,
+    role: sessionClaims?.role,
     user:
-      allData && sessionClaims?.metadata.userId != null
-        ? await getUser(sessionClaims.metadata.userId!)
+      allData && sessionClaims?.userId != null
+        ? await getUser(sessionClaims.userId!)
         : undefined,
     redirectToSignIn,
   };
-});
+};
 
 const getUser = async (id: string) => {
-  "use cache";
-  cacheTag(getUserIdTag(id));
-
   return db.query.UserTable.findFirst({
     where: eq(UserTable.id, id),
     columns: {
@@ -78,3 +37,32 @@ const getUser = async (id: string) => {
     },
   });
 };
+
+export function syncClerkUserMetadata(user: {
+  id: string;
+  clerkId: string;
+  role: "user" | "admin";
+}) {
+  return client.users.updateUserMetadata(user.clerkId, {
+    publicMetadata: {
+      dbId: user.id,
+      role: user.role,
+    },
+  });
+}
+
+export async function insertUser(data: typeof UserTable.$inferInsert) {
+  const [newUser] = await db
+    .insert(UserTable)
+    .values(data)
+    .returning()
+    .onConflictDoUpdate({
+      target: [UserTable.clerkId],
+      set: data,
+    });
+
+  if (newUser == null) throw new Error("Failed to create user");
+  // revalidateUserCache(newUser.id)
+
+  return newUser;
+}

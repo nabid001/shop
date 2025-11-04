@@ -1,5 +1,5 @@
 {
-  "id": "b35d7f4b-1e0a-4c64-80ab-43a3acbc9d91",
+  "id": "fd8709cb-edfc-42f1-9467-a00bde9047c6",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -108,56 +108,62 @@
           "primaryKey": false,
           "notNull": true
         },
-        "fullName": {
-          "name": "fullName",
+        "First Name": {
+          "name": "First Name",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "lastName": {
-          "name": "lastName",
+        "Last Name": {
+          "name": "Last Name",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "phone": {
-          "name": "phone",
+        "Phone Number": {
+          "name": "Phone Number",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "region": {
-          "name": "region",
+        "Region": {
+          "name": "Region",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "city": {
-          "name": "city",
+        "City": {
+          "name": "City",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "zone": {
-          "name": "zone",
+        "Zone": {
+          "name": "Zone",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "address": {
-          "name": "address",
+        "Address": {
+          "name": "Address",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "landmark": {
-          "name": "landmark",
+        "Landmark": {
+          "name": "Landmark",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "addressType": {
-          "name": "addressType",
+        "Email": {
+          "name": "Email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Address Type": {
+          "name": "Address Type",
           "type": "addressType",
           "typeSchema": "public",
           "primaryKey": false,
@@ -248,13 +254,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "paymentMethod": {
-          "name": "paymentMethod",
-          "type": "paymentMethod",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
         "orderEmail": {
           "name": "orderEmail",
           "type": "text",
@@ -329,9 +328,72 @@
           "primaryKey": false,
           "notNull": true
         },
-        "shippingAddress": {
-          "name": "shippingAddress",
-          "type": "uuid",
+        "First Name": {
+          "name": "First Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Last Name": {
+          "name": "Last Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Phone Number": {
+          "name": "Phone Number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Region": {
+          "name": "Region",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "City": {
+          "name": "City",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Zone": {
+          "name": "Zone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Address": {
+          "name": "Address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Landmark": {
+          "name": "Landmark",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Email": {
+          "name": "Email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Address Type": {
+          "name": "Address Type",
+          "type": "addressType",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'home'"
+        },
+        "paymentMethod": {
+          "name": "paymentMethod",
+          "type": "paymentMethod",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -363,19 +425,6 @@
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "orders_shippingAddress_addresses_id_fk": {
-          "name": "orders_shippingAddress_addresses_id_fk",
-          "tableFrom": "orders",
-          "tableTo": "addresses",
-          "columnsFrom": [
-            "shippingAddress"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },

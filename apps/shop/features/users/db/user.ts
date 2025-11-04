@@ -3,8 +3,7 @@
 import { db } from "@repo/drizzle-config";
 import { UserTable } from "@repo/drizzle-config/schemas/user";
 import { eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
-import { revalidateUserCache } from "./cache";
+// import { revalidateUserCache } from "./cache";
 
 export const createUser = async ({
   clerkId,
@@ -14,6 +13,18 @@ export const createUser = async ({
   email,
 }: typeof UserTable.$inferInsert) => {
   try {
+    const existingUser = await db.query.UserTable.findFirst({
+      where: eq(UserTable.clerkId, clerkId),
+      columns: {
+        id: true,
+        role: true,
+      },
+    });
+
+    if (existingUser) {
+      return existingUser;
+    }
+
     const [newUser] = await db
       .insert(UserTable)
       .values({
@@ -23,14 +34,17 @@ export const createUser = async ({
         username,
         picture,
       })
-      .returning({ id: UserTable.id, role: UserTable.role });
+      .returning({
+        id: UserTable.id,
+        role: UserTable.role,
+      })
+      .onConflictDoNothing();
 
     if (newUser === null) {
       console.log("Failed to create user");
       throw new Error("Failed to create user");
     }
 
-    revalidateUserCache(newUser.id);
     return newUser;
   } catch (error) {
     console.log(error);
@@ -52,7 +66,7 @@ export const updateUser = async ({
 
     if (updatedUser === null) throw new Error("Failed to update user");
 
-    revalidateUserCache(updatedUser.id);
+    // revalidateUserCache(updatedUser.id);
     return updatedUser;
   } catch (error) {
     console.log(error);
@@ -68,7 +82,7 @@ export const deleteUser = async (clerkId: string) => {
 
     if (deletedUser === null) throw new Error("Failed to update user");
 
-    revalidateUserCache(deletedUser.id);
+    // revalidateUserCache(deletedUser.id);
     return deletedUser;
   } catch (error) {
     console.log(error);

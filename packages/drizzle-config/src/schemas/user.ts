@@ -4,7 +4,9 @@ import { relations } from "drizzle-orm";
 import { AddressTable } from "./address";
 import { CartTable } from "./cart";
 
-export const roleEnum = pgEnum("role", ["user", "admin"]);
+export const userRoles = ["user", "admin"] as const;
+export type UserRole = (typeof userRoles)[number];
+export const roleEnum = pgEnum("role", userRoles);
 
 export const UserTable = pgTable("users", {
   id,

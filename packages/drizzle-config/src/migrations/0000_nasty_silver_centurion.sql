@@ -20,15 +20,16 @@ CREATE TABLE "users" (
 CREATE TABLE "addresses" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"userId" uuid NOT NULL,
-	"fullName" text NOT NULL,
-	"lastName" text,
-	"phone" text NOT NULL,
-	"region" text NOT NULL,
-	"city" text NOT NULL,
-	"zone" text NOT NULL,
-	"address" text NOT NULL,
-	"landmark" text,
-	"addressType" "addressType" DEFAULT 'home',
+	"First Name" text NOT NULL,
+	"Last Name" text,
+	"Phone Number" text NOT NULL,
+	"Region" text NOT NULL,
+	"City" text NOT NULL,
+	"Zone" text NOT NULL,
+	"Address" text NOT NULL,
+	"Landmark" text,
+	"Email" text NOT NULL,
+	"Address Type" "addressType" DEFAULT 'home',
 	"createdAt" timestamp DEFAULT now(),
 	"updatedAt" timestamp DEFAULT now()
 );
@@ -41,7 +42,6 @@ CREATE TABLE "orderItems" (
 	"price" double precision NOT NULL,
 	"color" text NOT NULL,
 	"size" text NOT NULL,
-	"paymentMethod" "paymentMethod" NOT NULL,
 	"orderEmail" text NOT NULL,
 	"createdAt" timestamp DEFAULT now(),
 	"updatedAt" timestamp DEFAULT now()
@@ -52,7 +52,17 @@ CREATE TABLE "orders" (
 	"userId" uuid NOT NULL,
 	"orderStatus" "status" DEFAULT 'pending' NOT NULL,
 	"totalAmount" double precision NOT NULL,
-	"shippingAddress" uuid NOT NULL,
+	"First Name" text NOT NULL,
+	"Last Name" text,
+	"Phone Number" text NOT NULL,
+	"Region" text NOT NULL,
+	"City" text NOT NULL,
+	"Zone" text NOT NULL,
+	"Address" text NOT NULL,
+	"Landmark" text,
+	"Email" text NOT NULL,
+	"Address Type" "addressType" DEFAULT 'home',
+	"paymentMethod" "paymentMethod" NOT NULL,
 	"createdAt" timestamp DEFAULT now(),
 	"updatedAt" timestamp DEFAULT now()
 );
@@ -73,5 +83,4 @@ CREATE TABLE "carts" (
 ALTER TABLE "addresses" ADD CONSTRAINT "addresses_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "orderItems" ADD CONSTRAINT "orderItems_orderId_orders_id_fk" FOREIGN KEY ("orderId") REFERENCES "public"."orders"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "orders" ADD CONSTRAINT "orders_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "orders" ADD CONSTRAINT "orders_shippingAddress_addresses_id_fk" FOREIGN KEY ("shippingAddress") REFERENCES "public"."addresses"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "carts" ADD CONSTRAINT "carts_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;

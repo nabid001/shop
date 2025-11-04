@@ -5,57 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1761396387449,
-      "tag": "0000_lush_firedrake",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1761396439322,
-      "tag": "0001_far_bloodstrike",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1761396615151,
-      "tag": "0002_fixed_thena",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1761396858606,
-      "tag": "0003_aberrant_hairball",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1761820455402,
-      "tag": "0004_eminent_ultron",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1761821059697,
-      "tag": "0005_last_lethal_legion",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1761821194568,
-      "tag": "0006_illegal_turbo",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1762074596485,
-      "tag": "0007_military_jocasta",
+      "when": 1762099775613,
+      "tag": "0000_nasty_silver_centurion",
       "breakpoints": true
     }
   ]

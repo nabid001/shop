@@ -1,7 +1,6 @@
-import { Toaster } from "@/components/ui/sonner";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const ConsumerLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
@@ -9,7 +8,6 @@ const ConsumerLayout = async ({ children }: { children: React.ReactNode }) => {
       <Header />
       <main className="flex-1">
         <NuqsAdapter>{children}</NuqsAdapter>
-        <Toaster />
       </main>
       <Footer />
     </main>
