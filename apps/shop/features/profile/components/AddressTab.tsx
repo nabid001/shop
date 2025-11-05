@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { TabsContent } from "@/components/ui/tabs";
-import { Edit2, Plus, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { use, useState } from "react";
 import { deleteAddress } from "../db/address";
 import { Spinner } from "@/components/ui/spinner";

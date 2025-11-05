@@ -9,7 +9,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { getCurrentUser } from "@/lib/getCurrentUser";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
   SignedIn,
@@ -27,7 +26,7 @@ import {
 import { Suspense } from "react";
 import { getCartLength } from "@/features/cart/db/cart";
 import { Spinner } from "../ui/spinner";
-import { getOrCreate } from "@/services/clerk";
+import { getCurrentUser } from "@/services/clerk";
 
 const NavLink = [
   {
@@ -43,7 +42,8 @@ const NavLink = [
 ];
 
 const Header = async () => {
-  const user = await getOrCreate();
+  const { user, role } = await getCurrentUser({ allData: true });
+  const isAdmin = role === "admin" && user?.role === "admin";
 
   return (
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
@@ -97,7 +97,7 @@ const Header = async () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  {/* {isAdmin && (
+                  {isAdmin && (
                     <DropdownMenuItem asChild>
                       <Link
                         href="/admin/dashboard"
@@ -107,7 +107,7 @@ const Header = async () => {
                         Dashboard
                       </Link>
                     </DropdownMenuItem>
-                  )} */}
+                  )}
                   <DropdownMenuItem asChild>
                     <Link href="/profile" className="nav-link">
                       Profile

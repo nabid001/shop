@@ -1,6 +1,6 @@
 import CheckoutClient from "@/features/checkout/components/CheckoutClient";
 import { getAddress } from "@/features/checkout/db/address";
-import { getCurrentUser } from "@/lib/getCurrentUser";
+import { getCurrentUser } from "@/services/clerk";
 import { RedirectToSignIn } from "@clerk/nextjs";
 
 const Checkout = async () => {

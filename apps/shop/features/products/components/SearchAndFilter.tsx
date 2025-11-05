@@ -104,7 +104,7 @@ const SearchAndFilter = ({ categoryPromise }: Props) => {
 
           <div className="border-t border-border/50 py-4 px-4">
             <Label className="text-md text-foreground">Categories</Label>
-            {categories.map((item, i) => (
+            {categories.map((item) => (
               <div key={item._id} className="flex items-center gap-1 mt-3">
                 <Checkbox
                   checked={category.includes(item.slug.current)}

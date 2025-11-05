@@ -1,43 +1,15 @@
-import { ProfileContent } from "@/features/profile/components/ProfileContent";
-import { getCurrentUser } from "@/lib/getCurrentUser";
-import { ClerkDegraded, SignOutButton, UserProfile } from "@clerk/nextjs";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, MapPin, ShoppingBag, Edit2, Plus, Trash2 } from "lucide-react";
+import { User, MapPin, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { getAddress } from "@/features/profile/db/address";
 import AddressTab from "@/features/profile/components/AddressTab";
 import { getOrders } from "@/features/profile/db/order";
-
-const mockOrders = [
-  {
-    id: "ORD-001",
-    date: "Dec 15, 2024",
-    items: 3,
-    total: "$245.99",
-    status: "Delivered",
-    statusColor: "text-green-600",
-  },
-  {
-    id: "ORD-002",
-    date: "Dec 8, 2024",
-    items: 2,
-    total: "$189.50",
-    status: "Delivered",
-    statusColor: "text-green-600",
-  },
-  {
-    id: "ORD-003",
-    date: "Nov 30, 2024",
-    items: 1,
-    total: "$89.99",
-    status: "In Transit",
-    statusColor: "text-blue-600",
-  },
-];
+import { getCurrentUser } from "@/services/clerk";
+import { SignOutButton, UserProfile } from "@clerk/nextjs";
 
 const Profile = async () => {
   const { user, userId } = await getCurrentUser({ allData: true });

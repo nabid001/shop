@@ -9,7 +9,6 @@ import {
   TAddToCart,
   VeriFiedError as VerifiedAddToCartError,
 } from "@/types";
-import { updateTag } from "next/cache";
 import { revalidateCartCache } from "@/features/cart/db/cache";
 
 export const addToCart = async (

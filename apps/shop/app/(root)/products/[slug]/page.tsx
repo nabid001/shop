@@ -7,8 +7,8 @@ import {
   getProducts,
   getRelatedProducts,
 } from "@/features/products/db/product";
-import { getCurrentUser } from "@/lib/getCurrentUser";
 import { Suspense } from "react";
+import { getCurrentUser } from "@/services/clerk";
 
 // export async function generateStaticParams() {
 //   const products = await getAllProducts();
