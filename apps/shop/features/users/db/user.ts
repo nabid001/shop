@@ -3,7 +3,6 @@
 import { db } from "@repo/drizzle-config";
 import { UserTable } from "@repo/drizzle-config/schemas/user";
 import { eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
 import { revalidateUserCache } from "./cache";
 
 export const createUser = async ({
@@ -14,6 +13,15 @@ export const createUser = async ({
   email,
 }: typeof UserTable.$inferInsert) => {
   try {
+    const existingUser = await db.query.UserTable.findFirst({
+      where: eq(UserTable.clerkId, clerkId),
+      columns: { id: true, role: true },
+    });
+
+    if (existingUser) {
+      return existingUser;
+    }
+
     const [newUser] = await db
       .insert(UserTable)
       .values({
@@ -23,7 +31,8 @@ export const createUser = async ({
         username,
         picture,
       })
-      .returning({ id: UserTable.id, role: UserTable.role });
+      .returning({ id: UserTable.id, role: UserTable.role })
+      .onConflictDoNothing();
 
     if (newUser === null) {
       console.log("Failed to create user");

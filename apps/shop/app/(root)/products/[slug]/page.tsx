@@ -23,7 +23,7 @@ const ProductDetails = async ({
 }: {
   params: Promise<{ slug: string }>;
 }) => {
-  const { user } = await getCurrentUser();
+  const { user } = await getCurrentUser({ allData: true });
   const slug = (await params).slug;
   const product = await getProductById(slug);
 

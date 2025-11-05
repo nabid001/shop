@@ -4,10 +4,8 @@ export {};
 
 declare global {
   interface CustomJwtSessionClaims {
-    metadata: {
-      role?: UserRole;
-      userId?: string;
-    };
+    role?: UserRole;
+    userId?: string;
   }
 
   interface UserPublicMetadata {
