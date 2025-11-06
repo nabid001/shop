@@ -7,7 +7,7 @@ import {
   getProducts,
   getRelatedProducts,
 } from "@/features/products/db/product";
-import { getCurrentUser } from "@/lib/getCurrentUser";
+import { getCurrentUser } from "@/services/getCurrentUser";
 import { Suspense } from "react";
 
 export async function generateStaticParams() {
@@ -23,7 +23,7 @@ const ProductDetails = async ({
 }: {
   params: Promise<{ slug: string }>;
 }) => {
-  const { user } = await getCurrentUser();
+  const { user } = await getCurrentUser({ allData: true });
   const slug = (await params).slug;
   const product = await getProductById(slug);
 

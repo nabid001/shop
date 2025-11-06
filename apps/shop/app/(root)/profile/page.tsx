@@ -1,5 +1,5 @@
 import { ProfileContent } from "@/features/profile/components/ProfileContent";
-import { getCurrentUser } from "@/lib/getCurrentUser";
+import { getCurrentUser } from "@/services/getCurrentUser";
 import { ClerkDegraded, SignOutButton, UserProfile } from "@clerk/nextjs";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

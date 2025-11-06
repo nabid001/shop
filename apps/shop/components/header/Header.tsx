@@ -9,7 +9,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { getCurrentUser } from "@/lib/getCurrentUser";
+import { getCurrentUser } from "@/services/getCurrentUser";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
   SignedIn,
