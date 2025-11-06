@@ -22,7 +22,7 @@ const ClerkRapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <ClerkProvider
       dynamic
-      afterSignOutUrl={"/sign-in"}
+      afterSignOutUrl={"/"}
       signInFallbackRedirectUrl={"/sign-in"}
       signUpFallbackRedirectUrl={"/sign-in"}
     >

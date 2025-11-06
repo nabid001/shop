@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useUrlStore } from "@/lib/setPathname";
 import { useUser } from "@clerk/nextjs";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -11,6 +12,7 @@ export default function AuthSync() {
   const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
+  const { currentUrlPath } = useUrlStore();
 
   // ✅ Prevent multiple executions with ref
   const hasRun = useRef(false);
@@ -29,7 +31,7 @@ export default function AuthSync() {
         if (!user) {
           setError("Session not found. Please sign in again.");
         }
-      }, 2000);
+      }, 500);
       return () => clearTimeout(timer);
     }
 
@@ -58,12 +60,9 @@ export default function AuthSync() {
         // ✅ Reload user to get updated metadata
         await user.reload();
 
-        // ✅ Wait for session to propagate
-        await new Promise((resolve) => setTimeout(resolve, 500));
-
         // ✅ Use window.location for hard redirect
-        const redirectTo = searchParams.get("redirectTo") || "/";
-        window.location.href = redirectTo;
+        // const redirectTo = searchParams.get("redirectTo") || "/";
+        window.location.href = currentUrlPath ? currentUrlPath : "/";
       } catch (err) {
         console.error("Sync error:", err);
         setError(

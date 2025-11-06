@@ -18,20 +18,25 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useUrlStore } from "@/lib/setPathname";
 import { TGetCategory } from "@/types";
 import { Menu, Search, X } from "lucide-react";
+import { usePathname } from "next/navigation";
 import {
   useQueryState,
   parseAsString,
   debounce,
   parseAsNativeArrayOf,
 } from "nuqs";
-import { use } from "react";
+import { use, useEffect } from "react";
 
 type Props = {
   categoryPromise: Promise<TGetCategory>;
 };
 const SearchAndFilter = ({ categoryPromise }: Props) => {
+  const pathname = usePathname();
+  const { addCurrentUrlPath, clearCurrentUrlPath, currentUrlPath } =
+    useUrlStore();
   const [search, setSearch] = useQueryState(
     "search",
     parseAsString.withDefault("").withOptions({ shallow: false })
@@ -53,6 +58,12 @@ const SearchAndFilter = ({ categoryPromise }: Props) => {
   };
 
   const categories = use(categoryPromise);
+
+  // storing the current url pathname inside localStorage
+  useEffect(() => {
+    clearCurrentUrlPath();
+    addCurrentUrlPath(pathname);
+  }, [currentUrlPath]);
 
   return (
     <div className="flex flex-col sm:flex-row gap-4 mb-6">

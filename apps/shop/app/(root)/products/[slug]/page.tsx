@@ -4,7 +4,6 @@ import Image from "next/image";
 import {
   getAllProducts,
   getProductById,
-  getProducts,
   getRelatedProducts,
 } from "@/features/products/db/product";
 import { getCurrentUser } from "@/services/getCurrentUser";

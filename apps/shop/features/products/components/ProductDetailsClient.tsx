@@ -15,6 +15,8 @@ import { PortableText } from "@portabletext/react";
 import { PortableTextComponent } from "./PortableComponent";
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { getProductById } from "../db/product";
+import { useUrlStore } from "@/lib/setPathname";
+import { usePathname } from "next/navigation";
 
 type Props = {
   product: Awaited<TProductById>;
@@ -38,15 +40,24 @@ const ProductDetailsClient = ({ product, userId }: Props) => {
   const [size, setSize] = useState(variants.size[0] || "");
   const [quantity, setQuantity] = useState<number>(1);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const pathname = usePathname();
 
   const images = variants?.imageGallery?.map((variant) => variant);
   // const [singleVariant] = variants.filter((v) => v.color === color);
+  const { addCurrentUrlPath, clearCurrentUrlPath, currentUrlPath } =
+    useUrlStore();
 
   useEffect(() => {
     if (quantity > variants.stock) {
       setQuantity(variants.stock);
     }
   }, [quantity, variants.stock]);
+
+  // storing the current url pathname inside localStorage
+  useEffect(() => {
+    clearCurrentUrlPath();
+    addCurrentUrlPath(pathname);
+  }, [currentUrlPath]);
 
   const handleQuantityChange = (delta: number) => {
     setQuantity((prevQuantity) => prevQuantity + delta);
