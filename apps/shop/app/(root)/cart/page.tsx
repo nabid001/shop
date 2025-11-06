@@ -1,6 +1,6 @@
 import Link from "next/link";
 import NotLoggedIn from "@/features/cart/components/NotLoggedIn";
-import { getCurrentUser } from "@/lib/getCurrentUser";
+import { getCurrentUser } from "@/services/getCurrentUser";
 import { CartClient } from "@/features/cart/components/CartClient";
 import { getCartProducts } from "@/features/cart/db/cart";
 import { ArrowRight, LogIn, ShoppingBag } from "lucide-react";

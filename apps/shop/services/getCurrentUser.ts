@@ -27,13 +27,14 @@ export const getCurrentUser = cache(async ({ allData = false } = {}) => {
 });
 
 const getUser = async (id: string) => {
-  // "use cache";
-  // cacheTag(getUserIdTag(id));
+  "use cache";
+  cacheTag(getUserIdTag(id));
 
   return db.query.UserTable.findFirst({
     where: eq(UserTable.id, id),
     columns: {
       id: true,
+      clerkId: true,
       email: true,
       role: true,
       name: true,

@@ -7,7 +7,7 @@ import {
   getProducts,
   getRelatedProducts,
 } from "@/features/products/db/product";
-import { getCurrentUser } from "@/lib/getCurrentUser";
+import { getCurrentUser } from "@/services/getCurrentUser";
 import { Suspense } from "react";
 
 export async function generateStaticParams() {

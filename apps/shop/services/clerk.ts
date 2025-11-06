@@ -1,3 +1,4 @@
+import { revalidateUserCache } from "@/features/users/db/cache";
 import { clerkClient, currentUser } from "@clerk/nextjs/server";
 import { db } from "@repo/drizzle-config";
 import { UserTable } from "@repo/drizzle-config/schemas/user";
@@ -32,12 +33,16 @@ export const syncUser = async () => {
 
   if (!user) throw new Error("Failed to create user");
 
+  // Update clerk public metadata
   await client.users.updateUserMetadata(clerkUser.id, {
     publicMetadata: {
       userId: user.id,
       role: user.role,
     },
   });
+
+  // Revalidate cache
+  revalidateUserCache(user.id);
 
   return user;
 };
