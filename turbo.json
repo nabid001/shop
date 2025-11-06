@@ -18,7 +18,8 @@
         "CLERK_SECRET_KEY",
         "SIGNING_SECRET",
         "DATABASE_URL",
-        "SANITY_STUDIO_WEBHOOK_SECRET"
+        "SANITY_STUDIO_WEBHOOK_SECRET",
+        "SANITY_ACCESS_TOKEN"
       ]
     },
     "lint": {
