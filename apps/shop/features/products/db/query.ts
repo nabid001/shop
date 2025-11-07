@@ -73,6 +73,8 @@ export const PRODUCTS = ({ search, category, sorting }: TProducts) => {
       case "price-high":
         orderQuery = "variants.salePrice desc";
         break;
+      case "best-seller":
+        orderQuery = "totalSold desc";
     }
   }
 

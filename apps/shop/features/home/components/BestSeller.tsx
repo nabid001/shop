@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { getBestseller } from "@/features/home/db/actions";
 import { Suspense } from "react";
 import ProductCard from "@/components/card/ProductCard";
+import Link from "next/link";
 
 export function BestSeller() {
   return (
@@ -28,7 +29,9 @@ export function BestSeller() {
             variant="outline"
             className="border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200 bg-transparent"
           >
-            View All Best Sellers
+            <Link href={`/products?sorting=best-seller`}>
+              View All Best Sellers
+            </Link>
           </Button>
         </div>
       </div>

@@ -31,7 +31,7 @@ const NewArrival = () => {
             className="border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200 bg-transparent"
             asChild
           >
-            <Link href={"#"}>View All New Arrivals</Link>
+            <Link href={`/products?sorting=newest`}>View All New Arrivals</Link>
           </Button>
         </div>
       </div>

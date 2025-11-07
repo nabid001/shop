@@ -33,6 +33,7 @@ import { use, useEffect } from "react";
 type Props = {
   categoryPromise: Promise<TGetCategory>;
 };
+
 const SearchAndFilter = ({ categoryPromise }: Props) => {
   const pathname = usePathname();
   const { addCurrentUrlPath, clearCurrentUrlPath, currentUrlPath } =
@@ -97,6 +98,7 @@ const SearchAndFilter = ({ categoryPromise }: Props) => {
             <SelectItem value="newest">Newest</SelectItem>
             <SelectItem value="price-low">Price: Low to High</SelectItem>
             <SelectItem value="price-high">Price: High to Low</SelectItem>
+            <SelectItem value="best-seller">Best Seller</SelectItem>
           </SelectContent>
         </Select>
       </>

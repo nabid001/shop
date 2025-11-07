@@ -18,6 +18,7 @@ import {
   parseAsArrayOf,
   parseAsNativeArrayOf,
 } from "nuqs";
+import { Separator } from "@/components/ui/separator";
 
 const SPECIAL = [
   {
@@ -72,6 +73,29 @@ const Filter = ({ getCategoryPromise }: Props) => {
               </Label>
             </div>
           ))}
+
+          {/* <Separator className="my-5" />
+
+          {SPECIAL.map((item, i) => (
+            <div key={i} className="flex items-center gap-1 mt-3">
+              <Checkbox
+                checked={category.includes(item.value)}
+                onCheckedChange={(e) => {
+                  if (e === false) {
+                    setCategory((prevVal) =>
+                      prevVal.filter((val) => val !== item.value)
+                    );
+                  } else if (e === true) {
+                    setCategory((prevVal) => [...prevVal, item.value]);
+                  }
+                }}
+                id={item.value}
+              />
+              <Label htmlFor={item.value} className="cursor-pointer">
+                {item.name}
+              </Label>
+            </div>
+          ))} */}
         </CardContent>
         <CardFooter>
           <Button className="w-full" onClick={() => handleClear()}>

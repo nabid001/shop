@@ -236,7 +236,7 @@ const Featured = ({
             variant="outline"
             className="border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200 bg-transparent"
           >
-            View All Products
+            <Link href={"/products?sorting=featured"}>View All Products</Link>
           </Button>
         </div>
       </div>
