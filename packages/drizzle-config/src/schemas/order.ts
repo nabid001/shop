@@ -65,7 +65,6 @@ export const OrderItemTable = pgTable("orderItems", {
   price: doublePrecision("price").notNull(),
   color: text("color").notNull(),
   size: text("size").notNull(),
-  orderEmail: text("orderEmail").notNull(),
   createdAt,
   updatedAt,
 });

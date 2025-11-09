@@ -9,6 +9,7 @@ const View = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
 
   const res = await getOrderById({ id });
+  console.log(res);
 
   // Todo: getOrderById fetch function need more queries-: imgUrl from sanity and etc
 

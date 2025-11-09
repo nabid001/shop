@@ -208,6 +208,9 @@ importers:
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
+      '@repo/sanity-config':
+        specifier: workspace:*
+        version: link:../../packages/sanity-config
       '@tailwindcss/postcss':
         specifier: ^4
         version: 4.1.13
