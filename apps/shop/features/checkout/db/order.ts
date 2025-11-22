@@ -23,7 +23,6 @@ export type TCreateOrder = {
   shippingAddress?: string;
   addressValue: typeof AddressTable.$inferInsert;
   paymentMethod: PaymentMethod;
-  orderEmail: string;
 };
 
 export type VerifiedCreateOrderError =
@@ -39,7 +38,6 @@ export const createOrder = async ({
   shippingAddress,
   addressValue,
   paymentMethod,
-  orderEmail,
 }: TCreateOrder): Promise<
   Response<VerifiedCreateOrderError, { id: string }>
 > => {
@@ -92,12 +90,11 @@ export const createOrder = async ({
         .insert(OrderItemTable)
         .values({
           orderId: orderTable.id,
-          productId: item.id,
+          productId: item._id,
           quantity: item.quantity,
           price: item.price,
           color: item.color,
           size: item.size,
-          orderEmail,
         })
         .returning({
           id: OrderItemTable.id,
@@ -122,7 +119,7 @@ export const createOrder = async ({
     .where(
       and(
         inArray(
-          CartTable.id,
+          CartTable.productId,
           orderItems.map((item) => item.productId)
         ),
         eq(CartTable.userId, userId)

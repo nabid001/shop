@@ -1,10 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { SuccessContent } from "@/features/checkout-success/components/test";
 import { useCheckoutSuccessStore } from "@/features/checkout-success/store";
 import { CheckCircle2 } from "lucide-react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 const CheckoutSuccess = () => {

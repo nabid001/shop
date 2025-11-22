@@ -65,13 +65,16 @@ export const OrderItemTable = pgTable("orderItems", {
   price: doublePrecision("price").notNull(),
   color: text("color").notNull(),
   size: text("size").notNull(),
-  orderEmail: text("orderEmail").notNull(),
   createdAt,
   updatedAt,
 });
 
-export const orderRelations = relations(OrdersTable, ({ many }) => ({
+export const orderRelations = relations(OrdersTable, ({ many, one }) => ({
   items: many(OrderItemTable),
+  user: one(UserTable, {
+    fields: [OrdersTable.userId],
+    references: [UserTable.id],
+  }),
 }));
 
 export const orderItemRelations = relations(OrderItemTable, ({ one }) => ({

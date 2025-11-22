@@ -35,8 +35,6 @@ import { useCheckoutSuccessStore } from "@/features/checkout-success/store";
 import { Spinner } from "@/components/ui/spinner";
 import z from "zod";
 import Image from "next/image";
-import { Card } from "@/components/ui/card";
-import { ClerkDegraded } from "@clerk/nextjs";
 
 type Props = {
   userId: string;
@@ -47,6 +45,7 @@ const CheckoutClient = ({ userId, addressPromise }: Props) => {
   const router = useRouter();
   const address = use(addressPromise);
   const { product } = useCheckoutStore();
+  console.log(product);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [selectedAddress, setSelectedAddress] = useState<string | undefined>(
     undefined
@@ -116,7 +115,6 @@ const CheckoutClient = ({ userId, addressPromise }: Props) => {
         userId: userId!,
         shippingAddress: selectedAddress,
         paymentMethod: safeValue.paymentMethod,
-        orderEmail: safeValue.email,
         addressValue: {
           userId: userId!,
           firstName: safeValue.firstName,

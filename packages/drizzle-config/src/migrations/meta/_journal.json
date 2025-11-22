@@ -57,6 +57,20 @@
       "when": 1762074596485,
       "tag": "0007_military_jocasta",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1762669880266,
+      "tag": "0008_burly_stepford_cuckoos",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1762669893500,
+      "tag": "0009_majestic_hitman",
+      "breakpoints": true
     }
   ]
 }

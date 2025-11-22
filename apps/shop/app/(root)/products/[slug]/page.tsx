@@ -9,6 +9,10 @@ import {
 import { getCurrentUser } from "@/services/getCurrentUser";
 import { Suspense } from "react";
 
+type Props = {
+  params: Promise<{ slug: string }>;
+};
+
 export async function generateStaticParams() {
   const products = await getAllProducts();
 
@@ -17,11 +21,63 @@ export async function generateStaticParams() {
   }));
 }
 
-const ProductDetails = async ({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) => {
+export async function generateMetadata({ params }: Props) {
+  const slug = (await params).slug;
+  const product = await getProductById(slug);
+
+  // Handle 404 product not found metadata
+  if (!product.success) {
+    return {
+      title: "Product Not Found — Luxe Store",
+      description: "The product you are looking for does not exist.",
+      robots: { index: false, follow: false },
+    };
+  }
+
+  const p = product.data;
+
+  return {
+    title: `${p?.name} — Luxe Store`,
+    description:
+      p?.shortDescription ||
+      `Buy ${p?.name} from Luxe Store. Premium quality products available for fast delivery.`,
+
+    alternates: {
+      canonical: `/products/${p?.slug.current}`,
+    },
+
+    openGraph: {
+      title: `${p?.name} — Luxe Store`,
+      description:
+        p?.shortDescription ||
+        `Premium ${p?.name} now available at Luxe Store.`,
+      type: "website",
+      url: `/products/${p?.slug.current}`,
+      images: [
+        {
+          url: p?.variants.image,
+          width: 1200,
+          height: 630,
+          alt: p?.name,
+        },
+      ],
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      title: `${p?.name} — Luxe Store`,
+      description: p?.shortDescription || `Check out ${p?.name} on Luxe Store.`,
+      images: [p?.variants.image],
+    },
+
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
+
+const ProductDetails = async ({ params }: Props) => {
   const { user } = await getCurrentUser({ allData: true });
   const slug = (await params).slug;
   const product = await getProductById(slug);

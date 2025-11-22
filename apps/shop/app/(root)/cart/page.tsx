@@ -3,9 +3,17 @@ import NotLoggedIn from "@/features/cart/components/NotLoggedIn";
 import { getCurrentUser } from "@/services/getCurrentUser";
 import { CartClient } from "@/features/cart/components/CartClient";
 import { getCartProducts } from "@/features/cart/db/cart";
-import { ArrowRight, LogIn, ShoppingBag } from "lucide-react";
+import { ArrowRight, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SignInButton } from "@clerk/nextjs";
+
+export const metadata = {
+  title: "Your Cart — Luxe Store",
+  description: "View and manage the products in your shopping cart.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 const Cart = async () => {
   const { userId } = await getCurrentUser();
