@@ -4,6 +4,55 @@ import ProductCard from "@/components/card/ProductCard";
 import { getCategory } from "@/features/products/db/category";
 import { Suspense } from "react";
 import { getProducts } from "@/features/products/db/product";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "All Products — Luxe Store",
+  description:
+    "Browse our full collection of premium clothing, accessories, and lifestyle items. Filter by category, sort by trends, and discover your next favorite product.",
+  keywords: [
+    "all products",
+    "shop products",
+    "premium fashion",
+    "clothing",
+    "accessories",
+    "luxe store collection",
+  ],
+
+  alternates: {
+    canonical: "/products",
+  },
+
+  openGraph: {
+    title: "All Products — Luxe Store",
+    description:
+      "Explore Luxe Store's full collection of premium fashion and lifestyle products. Filter and sort to find exactly what you need.",
+    url: "/products",
+    images: [
+      {
+        url: "/og/products.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Luxe Store Product Collection",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "All Products — Luxe Store",
+    description:
+      "Shop Luxe Store's full premium collection. Discover clothing, accessories, and lifestyle essentials.",
+    images: ["/og/products.jpg"],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
+
+  category: "ecommerce",
+};
 
 type Props = {
   searchParams: Promise<{

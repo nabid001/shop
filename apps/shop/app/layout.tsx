@@ -32,8 +32,25 @@ const ClerkRapper = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const metadata: Metadata = {
-  title: "Consumer Area",
-  description: "Consumer area of the e-commerce platform",
+  title: {
+    default: "Luxe Store",
+    template: "%s | Luxe Store",
+  },
+  description: "Best online store to find your favorite clothes.",
+  keywords: ["ecommerce", "fashion", "clothing", "store", "shopping"],
+  openGraph: {
+    title: "Luxe Store",
+    description: "Best online store to find your favorite clothes.",
+    url: "https://your-domain.com",
+    siteName: "Luxe Store",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Luxe Store",
+    description: "Best online store to find your favorite clothes.",
+  },
 };
 
 export default function RootLayout({
