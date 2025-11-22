@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     url: "/products",
     images: [
       {
-        url: "/og/products.jpg",
+        url: "/og/home.png",
         width: 1200,
         height: 630,
         alt: "Luxe Store Product Collection",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     title: "All Products — Luxe Store",
     description:
       "Shop Luxe Store's full premium collection. Discover clothing, accessories, and lifestyle essentials.",
-    images: ["/og/products.jpg"],
+    images: ["/og/home.png"],
   },
 
   robots: {

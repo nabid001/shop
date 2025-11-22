@@ -36,6 +36,28 @@ export async function generateMetadata({ params }: Props) {
 
   const p = product.data;
 
+  const ogImage = p?.variants.image;
+
+  const ldJson = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    name: p?.name,
+    image: [ogImage],
+    description: p?.shortDescription || p?.longDescription || "",
+    sku: p?._id,
+    brand: { "@type": "Brand", name: "Luxe Store" },
+    offers: {
+      "@type": "Offer",
+      url: `https://your-domain.com/products/${p?.slug.current}`,
+      priceCurrency: "BDT", // replace with your currency if different
+      price: p?.variants.salePrice || p?.variants.price,
+      availability: "https://schema.org/InStock",
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+    },
+  };
+
   return {
     title: `${p?.name} — Luxe Store`,
     description:
@@ -73,6 +95,9 @@ export async function generateMetadata({ params }: Props) {
     robots: {
       index: true,
       follow: true,
+    },
+    other: {
+      "application/ld+json": JSON.stringify(ldJson),
     },
   };
 }
