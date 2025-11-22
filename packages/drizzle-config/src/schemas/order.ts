@@ -69,8 +69,12 @@ export const OrderItemTable = pgTable("orderItems", {
   updatedAt,
 });
 
-export const orderRelations = relations(OrdersTable, ({ many }) => ({
+export const orderRelations = relations(OrdersTable, ({ many, one }) => ({
   items: many(OrderItemTable),
+  user: one(UserTable, {
+    fields: [OrdersTable.userId],
+    references: [UserTable.id],
+  }),
 }));
 
 export const orderItemRelations = relations(OrderItemTable, ({ one }) => ({

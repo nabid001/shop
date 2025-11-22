@@ -1,8 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Spinner } from "@/components/ui/spinner";
 import Image from "next/image";
-import React from "react";
+import { Separator } from "@/components/ui/separator";
 
 const product = [
   {

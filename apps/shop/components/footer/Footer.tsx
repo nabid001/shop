@@ -1,5 +1,5 @@
-import React from "react";
 import Link from "next/link";
+import { customerService, info, shopLinks } from "./constant";
 
 const Footer = () => {
   return (
@@ -50,46 +50,19 @@ const Footer = () => {
         <div>
           <h3 className="font-semibold text-foreground mb-2">Shop</h3>
           <ul className="space-y-2 text-muted-foreground">
-            <li>
-              <Link
-                href="/products"
-                className="hover:text-accent transition-colors"
-              >
-                All Products
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/categories/tshirts"
-                className="hover:text-accent transition-colors"
-              >
-                T-Shirts
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/categories/shirts"
-                className="hover:text-accent transition-colors"
-              >
-                Shirts
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/categories/pants"
-                className="hover:text-accent transition-colors"
-              >
-                Pants
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/categories/accessories"
-                className="hover:text-accent transition-colors"
-              >
-                Accessories
-              </Link>
-            </li>
+            {shopLinks.map((item) => {
+              return (
+                <li key={item.id}>
+                  <Link
+                    className="hover:text-accent transition-colors"
+                    prefetch={false}
+                    href={item.url}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
         {/* Customer Service */}
@@ -98,81 +71,38 @@ const Footer = () => {
             Customer Service
           </h3>
           <ul className="space-y-2 text-muted-foreground">
-            <li>
-              <Link
-                href="/size-guide"
-                className="hover:text-accent transition-colors"
-              >
-                Size Guide
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/returns"
-                className="hover:text-accent transition-colors"
-              >
-                Returns & Exchanges
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/shipping"
-                className="hover:text-accent transition-colors"
-              >
-                Shipping Info
-              </Link>
-            </li>
-            <li>
-              <Link href="/faq" className="hover:text-accent transition-colors">
-                FAQ
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/support"
-                className="hover:text-accent transition-colors"
-              >
-                Contact Support
-              </Link>
-            </li>
+            {customerService.map((item) => {
+              return (
+                <li key={item.id}>
+                  <Link
+                    className="hover:text-accent transition-colors"
+                    prefetch={false}
+                    href={item.url}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
         {/* Legal & Info */}
         <div>
           <h3 className="font-semibold text-foreground mb-2">Info</h3>
           <ul className="space-y-2 text-muted-foreground">
-            <li>
-              <Link
-                href="/about"
-                className="hover:text-accent transition-colors"
-              >
-                About Us
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/privacy"
-                className="hover:text-accent transition-colors"
-              >
-                Privacy Policy
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/terms"
-                className="hover:text-accent transition-colors"
-              >
-                Terms & Conditions
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/contact"
-                className="hover:text-accent transition-colors"
-              >
-                Contact
-              </Link>
-            </li>
+            {info.map((item) => {
+              return (
+                <li key={item.id}>
+                  <Link
+                    className="hover:text-accent transition-colors"
+                    prefetch={false}
+                    href={item.url}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>
