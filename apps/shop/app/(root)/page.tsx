@@ -8,7 +8,7 @@ import { Suspense } from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://luxestore.com"),
+  // metadataBase: new URL("https://luxestore.com"),
 
   title: "Luxe Store — Premium Fashion, Accessories & Lifestyle",
   description:

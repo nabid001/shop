@@ -6,15 +6,6 @@ import { useCheckoutSuccessStore } from "@/features/checkout-success/store";
 import { CheckCircle2 } from "lucide-react";
 import { notFound } from "next/navigation";
 
-export const metadata = {
-  title: "Successfully Checkout — Luxe Store",
-  description: "Complete your purchase securely.",
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
-
 const CheckoutSuccess = () => {
   const { checkoutId } = useCheckoutSuccessStore();
 
