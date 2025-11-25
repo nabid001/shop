@@ -33,22 +33,22 @@ const ClerkRapper = ({ children }: { children: React.ReactNode }) => {
 
 export const metadata: Metadata = {
   title: {
-    default: "Luxe Store",
-    template: "%s | Luxe Store",
+    default: "Foxivo Fashion",
+    template: "%s | Foxivo Store",
   },
   description: "Best online store to find your favorite clothes.",
   keywords: ["ecommerce", "fashion", "clothing", "store", "shopping"],
   openGraph: {
-    title: "Luxe Store",
+    title: "Foxivo Store",
     description: "Best online store to find your favorite clothes.",
     url: "https://your-domain.com",
-    siteName: "Luxe Store",
+    siteName: "Foxivo Store",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Luxe Store",
+    title: "Foxivo Store",
     description: "Best online store to find your favorite clothes.",
   },
 };

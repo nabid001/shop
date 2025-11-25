@@ -3,8 +3,12 @@ import { SidebarInset } from "@/components/ui/sidebar";
 import { columns } from "@/features/orders/components/columns";
 import { DataTable } from "@/features/orders/components/data-table";
 import { getOrders } from "@/features/orders/db/order";
+import { Metadata } from "next";
 import { Suspense } from "react";
-import OrdersSkeleton from "./loading";
+
+export const metadata: Metadata = {
+  title: "Orders - Foxivo",
+};
 
 const Orders = () => {
   return (

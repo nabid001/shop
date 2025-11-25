@@ -4,7 +4,7 @@ import { getCurrentUser } from "@/services/getCurrentUser";
 import { RedirectToSignIn } from "@clerk/nextjs";
 
 export const metadata = {
-  title: "Checkout — Luxe Store",
+  title: "Checkout — Foxivo Store",
   description: "Complete your purchase securely.",
   robots: {
     index: false,

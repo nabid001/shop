@@ -8,14 +8,14 @@ import { Suspense } from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  // metadataBase: new URL("https://luxestore.com"),
+  // metadataBase: new URL("https://Foxivostore.com"),
 
-  title: "Luxe Store — Premium Fashion, Accessories & Lifestyle",
+  title: "Foxivo Fashion - Premium Lifestyle",
   description:
-    "Shop the latest fashion trends, premium accessories, and lifestyle essentials at Luxe Store. Explore best sellers, new arrivals, and exclusive collections.",
+    "Shop the latest fashion trends, premium accessories, and lifestyle essentials at Foxivo Store. Explore best sellers, new arrivals, and exclusive collections.",
 
   keywords: [
-    "Luxe Store",
+    "Foxivo Store",
     "online store",
     "fashion",
     "ecommerce",
@@ -30,17 +30,17 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Luxe Store — Premium Fashion, Accessories & Lifestyle",
+    title: "Foxivo Store — Premium Fashion, Accessories & Lifestyle",
     description:
-      "Discover premium fashion, accessories, and lifestyle products. Shop best sellers, new arrivals, and exclusive collections at Luxe Store.",
-    url: "https://luxestore.com",
-    siteName: "Luxe Store",
+      "Discover premium fashion, accessories, and lifestyle products. Shop best sellers, new arrivals, and exclusive collections at Foxivo Store.",
+    url: "https://Foxivostore.com",
+    siteName: "Foxivo Store",
     images: [
       {
         url: "/og/home.png",
         width: 1200,
         height: 630,
-        alt: "Luxe Store Homepage",
+        alt: "Foxivo Store Homepage",
       },
     ],
     locale: "en_US",
@@ -49,9 +49,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Luxe Store — Premium Fashion & Lifestyle",
+    title: "Foxivo Store — Premium Fashion & Lifestyle",
     description:
-      "Explore trending fashion, accessories, and lifestyle products at Luxe Store.",
+      "Explore trending fashion, accessories, and lifestyle products at Foxivo Store.",
     images: ["/og/home.png"],
   },
 
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
 
-  applicationName: "Luxe Store",
+  applicationName: "Foxivo Store",
   category: "ecommerce",
 };
 

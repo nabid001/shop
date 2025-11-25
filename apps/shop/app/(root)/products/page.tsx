@@ -7,7 +7,7 @@ import { getProducts } from "@/features/products/db/product";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "All Products — Luxe Store",
+  title: "All Products — Foxivo Store",
   description:
     "Browse our full collection of premium clothing, accessories, and lifestyle items. Filter by category, sort by trends, and discover your next favorite product.",
   keywords: [
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     "premium fashion",
     "clothing",
     "accessories",
-    "luxe store collection",
+    "Foxivo store collection",
   ],
 
   alternates: {
@@ -24,25 +24,25 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "All Products — Luxe Store",
+    title: "All Products — Foxivo Store",
     description:
-      "Explore Luxe Store's full collection of premium fashion and lifestyle products. Filter and sort to find exactly what you need.",
+      "Explore Foxivo Store's full collection of premium fashion and lifestyle products. Filter and sort to find exactly what you need.",
     url: "/products",
     images: [
       {
         url: "/og/home.png",
         width: 1200,
         height: 630,
-        alt: "Luxe Store Product Collection",
+        alt: "Foxivo Store Product Collection",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "All Products — Luxe Store",
+    title: "All Products — Foxivo Store",
     description:
-      "Shop Luxe Store's full premium collection. Discover clothing, accessories, and lifestyle essentials.",
+      "Shop Foxivo Store's full premium collection. Discover clothing, accessories, and lifestyle essentials.",
     images: ["/og/home.png"],
   },
 

@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props) {
   // Handle 404 product not found metadata
   if (!product.success) {
     return {
-      title: "Product Not Found — Luxe Store",
+      title: "Product Not Found — Foxivo Store",
       description: "The product you are looking for does not exist.",
       robots: { index: false, follow: false },
     };
@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: Props) {
     image: [ogImage],
     description: p?.shortDescription || p?.longDescription || "",
     sku: p?._id,
-    brand: { "@type": "Brand", name: "Luxe Store" },
+    brand: { "@type": "Brand", name: "Foxivo Store" },
     offers: {
       "@type": "Offer",
       url: `https://your-domain.com/products/${p?.slug.current}`,
@@ -59,20 +59,20 @@ export async function generateMetadata({ params }: Props) {
   };
 
   return {
-    title: `${p?.name} — Luxe Store`,
+    title: `${p?.name} — Foxivo Store`,
     description:
       p?.shortDescription ||
-      `Buy ${p?.name} from Luxe Store. Premium quality products available for fast delivery.`,
+      `Buy ${p?.name} from Foxivo Store. Premium quality products available for fast delivery.`,
 
     alternates: {
       canonical: `/products/${p?.slug.current}`,
     },
 
     openGraph: {
-      title: `${p?.name} — Luxe Store`,
+      title: `${p?.name} — Foxivo Store`,
       description:
         p?.shortDescription ||
-        `Premium ${p?.name} now available at Luxe Store.`,
+        `Premium ${p?.name} now available at Foxivo Store.`,
       type: "website",
       url: `/products/${p?.slug.current}`,
       images: [
@@ -87,8 +87,9 @@ export async function generateMetadata({ params }: Props) {
 
     twitter: {
       card: "summary_large_image",
-      title: `${p?.name} — Luxe Store`,
-      description: p?.shortDescription || `Check out ${p?.name} on Luxe Store.`,
+      title: `${p?.name} — Foxivo Store`,
+      description:
+        p?.shortDescription || `Check out ${p?.name} on Foxivo Store.`,
       images: [p?.variants.image],
     },
 

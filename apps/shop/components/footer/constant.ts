@@ -38,18 +38,18 @@ export const info = [
   {
     id: 21,
     label: "About Us",
-    url: "/about-us",
+    url: "/about",
   },
   {
     id: 134,
     label: "Privacy Policy",
     url: "/privacy-policy",
   },
-  {
-    id: 122,
-    label: "Terms & Conditions",
-    url: "/terms-conditions",
-  },
+  // {
+  //   id: 122,
+  //   label: "Terms & Conditions",
+  //   url: "/terms-conditions",
+  // },
   {
     id: 142,
     label: "Contact",

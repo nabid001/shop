@@ -12,7 +12,7 @@ import { SignOutButton, UserProfile } from "@clerk/nextjs";
 import { getCurrentUser } from "@/services/getCurrentUser";
 
 export const metadata = {
-  title: "Your Account — Luxe Store",
+  title: "Your Account — Foxivo Store",
   description: "Manage your account details, orders, and preferences.",
   robots: {
     index: false,

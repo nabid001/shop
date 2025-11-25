@@ -129,7 +129,7 @@
     @apply text-foreground hover:text-accent transition-colors;
   }
   .nav-logo {
-    @apply text-xl font-light text-foreground tracking-wide shrink-0;
+    @apply text-xl font-semibold text-foreground/90 tracking-wide shrink-0;
   }
   .component-padding {
     @apply py-16 px-4 sm:px-6 lg:px-8;

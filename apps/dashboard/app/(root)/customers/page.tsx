@@ -1,7 +1,10 @@
-import { SectionCards } from "@/components/sidebar/section-cards";
 import { SiteHeader } from "@/components/sidebar/site-header";
 import { SidebarInset } from "@/components/ui/sidebar";
-import React from "react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Customers - Foxivo",
+};
 
 const Customers = () => {
   return (

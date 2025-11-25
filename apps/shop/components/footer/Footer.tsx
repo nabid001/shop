@@ -1,20 +1,23 @@
 import Link from "next/link";
 import { customerService, info, shopLinks } from "./constant";
 
+//Todo: Need to add social links
+
 const Footer = () => {
   return (
     <footer className="bg-muted/30 py-12 px-4 sm:px-6 lg:px-8 mt-16">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-left">
         {/* Brand & Description */}
         <div>
-          <h2 className="text-2xl font-bold text-foreground mb-2">
-            FASHION FORWARD
+          <h2 className="text-2xl font-semibold text-foreground mb-2">
+            FOXIVO FASHION
           </h2>
           <p className="text-muted-foreground mb-4">
             Premium clothing for modern lifestyle. Discover the latest trends
             and timeless classics.
           </p>
-          <div className="flex space-x-4 mt-2">
+
+          {/* <div className="flex space-x-4 mt-2">
             <Link
               href="#"
               aria-label="Facebook"
@@ -44,7 +47,7 @@ const Footer = () => {
                 <path d="M20 3.8c-.7.3-1.4.6-2.1.7.8-.5 1.3-1.2 1.6-2.1-.7.4-1.5.8-2.3 1-1.3-1.4-3.5-1.2-4.7.4-1.1 1.3-1.1 3.1-.1 4.4-3.2-.2-6.1-1.7-8-4.1-.3.6-.5 1.3-.5 2 0 1.4.7 2.7 1.8 3.4-.6 0-1.2-.2-1.7-.5v.1c0 2 1.4 3.7 3.3 4.1-.3.1-.7.2-1 .2-.2 0-.5 0-.7-.1.5 1.6 2 2.7 3.7 2.7-1.4 1.1-3.2 1.7-5.1 1.7-.3 0-.6 0-.9-.1 1.8 1.2 3.9 1.9 6.2 1.9 7.4 0 11.5-6.1 11.5-11.5v-.5c.8-.6 1.4-1.2 1.9-2z" />
               </svg>
             </Link>
-          </div>
+          </div> */}
         </div>
         {/* Shop Links */}
         <div>
@@ -66,7 +69,7 @@ const Footer = () => {
           </ul>
         </div>
         {/* Customer Service */}
-        <div>
+        {/* <div>
           <h3 className="font-semibold text-foreground mb-2">
             Customer Service
           </h3>
@@ -85,7 +88,7 @@ const Footer = () => {
               );
             })}
           </ul>
-        </div>
+        </div> */}
         {/* Legal & Info */}
         <div>
           <h3 className="font-semibold text-foreground mb-2">Info</h3>
@@ -107,7 +110,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="max-w-7xl mx-auto mt-8 text-center text-xs text-muted-foreground">
-        &copy; 2025 Fashion Forward. All rights reserved.
+        &copy; 2025 FOXIVO. All rights reserved.
       </div>
     </footer>
   );

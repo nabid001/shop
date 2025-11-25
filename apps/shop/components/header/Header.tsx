@@ -1,6 +1,6 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Menu, Search, ShoppingBag } from "lucide-react";
-import Link from "next/link";
 
 import {
   Sheet,
@@ -33,11 +33,6 @@ const NavLink = [
     label: "Products",
     href: "/products",
   },
-  {
-    id: 2,
-    label: "About",
-    href: "/about",
-  },
 ];
 
 const Header = async () => {
@@ -46,11 +41,11 @@ const Header = async () => {
 
   return (
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href={"/"} className="nav-logo">
-            LUXE STORE
+            FOXIVO
           </Link>
 
           {/* Desktop Navigation */}
@@ -96,17 +91,6 @@ const Header = async () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  {isAdmin && (
-                    <DropdownMenuItem asChild>
-                      <Link
-                        href="/admin/dashboard"
-                        target="_blank"
-                        className="nav-link"
-                      >
-                        Dashboard
-                      </Link>
-                    </DropdownMenuItem>
-                  )}
                   <SignedIn>
                     <DropdownMenuItem asChild>
                       <Link href="/profile" className="nav-link">
@@ -121,12 +105,23 @@ const Header = async () => {
                   >
                     <SignOutButton />
                   </DropdownMenuItem>
+                  {isAdmin && (
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href={process.env.ADMINE_DASHBOARD_URL!}
+                        target="_blank"
+                        className="nav-link"
+                      >
+                        Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             </SignedIn>
 
             {/* Mobile Menu Button */}
-            <Sheet>
+            <Sheet modal>
               <SheetTrigger asChild className="md:hidden">
                 <Button variant="ghost" size="icon">
                   <Menu className="h-4 w-4" />
@@ -135,30 +130,23 @@ const Header = async () => {
               <SheetContent className="">
                 <SheetHeader>
                   <SheetTitle className="text-lg font-light">
-                    LUXE STORE
+                    FOXIVO STORE
                   </SheetTitle>
                 </SheetHeader>
                 <div className="border-t border-border/50 py-4 px-4">
                   <nav className="flex flex-col space-y-4">
-                    <Link href="/products" className="nav-link">
-                      Products
-                    </Link>
-                    <Link href="/collections" className="nav-link">
-                      Collections
-                    </Link>
-                    <Link href="/about" className="nav-link">
-                      About
-                    </Link>
-                    <Link href="/contact" className="nav-link">
-                      Contact
-                    </Link>
+                    {NavLink.map((item) => (
+                      <Link key={item.id} href={item.href} className="nav-link">
+                        {item.label}
+                      </Link>
+                    ))}
                   </nav>
                 </div>
               </SheetContent>
             </Sheet>
           </div>
         </div>
-      </div>
+      </nav>
     </header>
   );
 };

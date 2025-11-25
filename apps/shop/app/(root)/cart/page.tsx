@@ -7,7 +7,7 @@ import { ArrowRight, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const metadata = {
-  title: "Your Cart — Luxe Store",
+  title: "Your Cart — Foxivo Store",
   description: "View and manage the products in your shopping cart.",
   robots: {
     index: false,
