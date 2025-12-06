@@ -45,7 +45,7 @@ const CheckoutClient = ({ userId, addressPromise }: Props) => {
   const router = useRouter();
   const address = use(addressPromise);
   const { product } = useCheckoutStore();
-  console.log(product);
+
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [selectedAddress, setSelectedAddress] = useState<string | undefined>(
     undefined
@@ -92,7 +92,7 @@ const CheckoutClient = ({ userId, addressPromise }: Props) => {
     }
   }, [product]);
 
-  const shipping = 50;
+  const shipping = 150;
   const amount = product.reduce((acc, item) => acc + item.totalPrice, 0);
   const total = amount + shipping;
 
@@ -115,6 +115,7 @@ const CheckoutClient = ({ userId, addressPromise }: Props) => {
         userId: userId!,
         shippingAddress: selectedAddress,
         paymentMethod: safeValue.paymentMethod,
+        orderedBy: userId,
         addressValue: {
           userId: userId!,
           firstName: safeValue.firstName,

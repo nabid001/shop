@@ -13,6 +13,7 @@ export type CheckoutProduct = {
   quantity: number;
   price: number;
   totalPrice: number;
+  orderedBy: string;
 };
 
 export type CheckoutAddress = {
