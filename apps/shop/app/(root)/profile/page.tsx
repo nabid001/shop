@@ -578,6 +578,7 @@ const Profile = async () => {
                             </div>
                           </DialogContent>
                         </Dialog>
+                        //Todo: Have to implement "Cancel Order"
                         {order.orderStatus === "pending" && (
                           <Button
                             variant={"destructive"}
