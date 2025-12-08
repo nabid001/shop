@@ -24,7 +24,7 @@ const product = [
   },
 ];
 
-const shipping = 50;
+const shipping = 150;
 const amount = product.reduce((acc, item) => acc + item.totalPrice, 0);
 const total = amount + shipping;
 

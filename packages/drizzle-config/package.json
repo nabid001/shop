@@ -11,15 +11,15 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
-    "drizzle-orm": "^0.44.5",
+    "drizzle-orm": "^0.45.0",
     "ws": "^8.18.3"
   },
   "devDependencies": {
     "@repo/env-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/ws": "^8.18.1",
-    "drizzle-kit": "^0.31.5",
-    "tsx": "^4.20.6"
+    "drizzle-kit": "^0.31.8",
+    "tsx": "^4.21.0"
   },
   "exports": {
     ".": "./src/db.ts",

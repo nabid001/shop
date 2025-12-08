@@ -108,6 +108,7 @@ export function CartClient({ cartItem, userId }: Props) {
         quantity: qty,
         price,
         totalPrice: qty * price,
+        orderedBy: userId,
       });
     });
 

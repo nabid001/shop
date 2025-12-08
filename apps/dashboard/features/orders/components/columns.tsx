@@ -2,28 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { SelectContent, SelectTrigger } from "@radix-ui/react-select";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowDown, ArrowUpDown, Check, MoreHorizontal } from "lucide-react";
-import ProductInfo from "./product-info";
-import UserInfo from "./user-info";
-import { getOrderById } from "../db/order";
-import { useEffect } from "react";
+import { ArrowUpDown } from "lucide-react";
 import Link from "next/link";
 
 // This type is used to define the shape of our data.
@@ -33,13 +13,7 @@ export type Payment = {
   email: string;
   totalAmount: number;
   paymentMethod: "cod" | "bkash" | "sslcommerz";
-  orderStatus:
-    | "pending"
-    | "shipped"
-    | "delivered"
-    | "cancelled"
-    | "refunded"
-    | "paid";
+  orderStatus: "pending" | "shipped" | "delivered" | "cancelled" | "processing";
   address: string;
   userId: string;
 };

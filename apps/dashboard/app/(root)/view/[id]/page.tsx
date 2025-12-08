@@ -18,7 +18,7 @@ const View = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
   const res = await getOrderById({ id });
 
-  const shipping = 50;
+  const shipping = 150;
   const amount = res.items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0

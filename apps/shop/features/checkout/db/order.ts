@@ -23,6 +23,7 @@ export type TCreateOrder = {
   shippingAddress?: string;
   addressValue: typeof AddressTable.$inferInsert;
   paymentMethod: PaymentMethod;
+  orderedBy: string;
 };
 
 export type VerifiedCreateOrderError =
@@ -91,6 +92,7 @@ export const createOrder = async ({
         .values({
           orderId: orderTable.id,
           productId: item._id,
+          orderedBy: item.orderedBy,
           quantity: item.quantity,
           price: item.price,
           color: item.color,
@@ -120,7 +122,7 @@ export const createOrder = async ({
       and(
         inArray(
           CartTable.productId,
-          orderItems.map((item) => item.productId)
+          orderItems.map((item: any) => item.productId)
         ),
         eq(CartTable.userId, userId)
       )
