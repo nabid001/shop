@@ -1,22 +1,11 @@
 "use server";
 
 import { db } from "@repo/drizzle-config";
-import { OrdersTable } from "@repo/drizzle-config/schemas/order";
-import { desc, eq } from "drizzle-orm";
+import { CancelReason, OrdersTable } from "@repo/drizzle-config/schemas/order";
+import { and, desc, eq, isNull } from "drizzle-orm";
 import { cacheTag } from "next/cache";
-import { getOrderUserTag } from "./cache/order-cache";
+import { getOrderUserTag, revalidateOrderCache } from "./cache/order-cache";
 import { client } from "@repo/sanity-config/client";
-
-export const getOrderDetails = async ({
-  id,
-  userId,
-}: {
-  id: string;
-  userId: string;
-}) => {
-  "use cache";
-  cacheTag(getOrderUserTag(userId));
-};
 
 export const getOrders = async (userId: string) => {
   "use cache";
@@ -24,7 +13,11 @@ export const getOrders = async (userId: string) => {
 
   try {
     const res = await db.query.OrdersTable.findMany({
-      where: eq(OrdersTable.userId, userId),
+      where: and(
+        eq(OrdersTable.userId, userId),
+        // eq(OrdersTable.isCanceled, false)
+        isNull(OrdersTable.isCanceled)
+      ),
       with: {
         items: true,
       },
@@ -83,6 +76,37 @@ export const getOrders = async (userId: string) => {
     }));
 
     return ordersWithProducts;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const cancelOrder = async ({
+  orderId,
+  cancelReason,
+  userId,
+}: {
+  orderId: string;
+  cancelReason: CancelReason;
+  userId: string;
+}) => {
+  if (!orderId) throw new Error("OrderId is required");
+  if (!cancelReason) throw new Error("Cancel reason is required");
+
+  try {
+    const res = await db
+      .update(OrdersTable)
+      .set({
+        isCanceled: true,
+        cancelReason,
+      })
+      .where(eq(OrdersTable.id, orderId))
+      .returning({ id: OrdersTable.id });
+
+    if (!res) throw new Error("Failed to cancel order!");
+
+    revalidateOrderCache(userId);
+    return res;
   } catch (error) {
     console.log(error);
   }

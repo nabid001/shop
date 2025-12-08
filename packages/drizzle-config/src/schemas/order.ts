@@ -1,4 +1,5 @@
 import {
+  boolean,
   doublePrecision,
   integer,
   pgEnum,
@@ -9,29 +10,23 @@ import {
 import { createdAt, id, updatedAt } from "../schemaHelpers";
 import { UserTable } from "./user";
 import { relations } from "drizzle-orm";
-import { AddressTable, userAddressTypeEnum } from "./address";
+import { userAddressTypeEnum } from "./address";
 
 export const statusEnums = pgEnum("status", [
   "pending",
   "shipped",
   "delivered",
   "cancelled",
-  "refunded",
-  "paid",
+  "processing",
 ]);
-export const oE = [
-  "pending",
-  "shipped",
-  "delivered",
-  "cancelled",
-  "refunded",
-  "paid",
-] as const;
-export const orderEnums = pgEnum("orderType", oE);
 
 export const pE = ["cod", "bkash", "sslcommerz"] as const;
 export type PaymentMethod = (typeof pE)[number];
 export const paymentMethodEnum = pgEnum("paymentMethod", pE);
+
+export const cancelReason = ["Change of mind", "Price is too hight"] as const;
+export type CancelReason = (typeof cancelReason)[number];
+export const cancelReasonEnum = pgEnum("cancelReason", cancelReason);
 
 export const OrdersTable = pgTable("orders", {
   id,
@@ -51,6 +46,8 @@ export const OrdersTable = pgTable("orders", {
   email: text("Email").notNull(),
   addressType: userAddressTypeEnum("Address Type").default("home"),
   paymentMethod: paymentMethodEnum("paymentMethod").notNull(),
+  isCanceled: boolean("isCanceled"),
+  cancelReason: cancelReasonEnum(),
   createdAt,
   updatedAt,
 });

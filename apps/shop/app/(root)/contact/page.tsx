@@ -21,8 +21,8 @@ const Contact = () => {
             the latest drops and style inspiration:
           </h5>
           <ul className="list-disc ml-7">
-            <li>Facebook: @[yourhandle]</li>
-            <li>Instagram: @[yourhandle]</li>
+            <li>Facebook: @[foxivofashion]</li>
+            <li>Instagram: @[foxivofashion]</li>
           </ul>
         </div>
       </div>

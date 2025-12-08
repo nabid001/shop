@@ -30,16 +30,19 @@ const CheckoutSuccess = () => {
         <p className="text-lg text-muted-foreground mb-2">
           Thank you for your purchase
         </p>
-        <p className="text-sm text-muted-foreground">
+        {/* <p className="text-sm text-muted-foreground">
           A confirmation email has been sent to your email address
-        </p>
+        </p> */}
         <p className="text-sm text-muted-foreground">
           Order Number: {checkoutId}
         </p>
 
-        <div className="mt-6">
+        <div className="mt-6 flex items-center justify-center gap-3">
           <Button asChild>
             <Link href="/products">Continue Shopping</Link>
+          </Button>
+          <Button asChild variant={"outline"}>
+            <Link href="/profile">View Order</Link>
           </Button>
         </div>
       </div>

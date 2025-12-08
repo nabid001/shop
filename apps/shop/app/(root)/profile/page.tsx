@@ -28,13 +28,15 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import OrderCancel from "@/features/profile/components/CancelOrder";
 
 export const metadata = {
-  title: "Your Account — Foxivo Store",
+  title: "My Account — Foxivo Store",
   description: "Manage your account details, orders, and preferences.",
   robots: {
     index: false,
@@ -111,7 +113,7 @@ const Profile = async () => {
   return (
     <main>
       {/* Header */}
-      <div className="bg-gradient-to-r from-foreground/5 to-foreground/10 border-b border-border/50">
+      {/* <div className="bg-gradient-to-r from-foreground/5 to-foreground/10 border-b border-border/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
             <Avatar className="h-24 w-24 border-2 border-border">
@@ -129,7 +131,7 @@ const Profile = async () => {
             </Button>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs defaultValue="account" className="w-full">
@@ -294,11 +296,9 @@ const Profile = async () => {
                                   const isCompleted =
                                     stepStatus === "delivered" ||
                                     (stepStatus === "shipped" && index <= 2) ||
-                                    (stepStatus === "paid" && index <= 1) ||
                                     (stepStatus === "pending" && index === 0);
                                   const isActive =
                                     (stepStatus === "pending" && index === 0) ||
-                                    (stepStatus === "paid" && index === 1) ||
                                     (stepStatus === "shipped" && index === 2) ||
                                     (stepStatus === "delivered" && index === 3);
                                   const Icon = step.icon;
@@ -578,15 +578,8 @@ const Profile = async () => {
                             </div>
                           </DialogContent>
                         </Dialog>
-                        //Todo: Have to implement "Cancel Order"
                         {order.orderStatus === "pending" && (
-                          <Button
-                            variant={"destructive"}
-                            size={"sm"}
-                            className="cursor-pointer bg-destructive/80"
-                          >
-                            Cancel
-                          </Button>
+                          <OrderCancel orderId={order.id} userId={userId!} />
                         )}
                       </div>
                     </div>
