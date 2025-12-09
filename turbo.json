@@ -19,7 +19,8 @@
         "SIGNING_SECRET",
         "DATABASE_URL",
         "SANITY_STUDIO_WEBHOOK_SECRET",
-        "SANITY_ACCESS_TOKEN"
+        "SANITY_ACCESS_TOKEN",
+        "SHOP_ORIGIN"
       ]
     },
     "lint": {
