@@ -2,7 +2,7 @@
 
 import { db } from "@repo/drizzle-config";
 import { CancelReason, OrdersTable } from "@repo/drizzle-config/schemas/order";
-import { and, desc, eq, isNull } from "drizzle-orm";
+import { and, desc, eq, isNull, ne } from "drizzle-orm";
 import { cacheTag } from "next/cache";
 import { getOrderUserTag, revalidateOrderCache } from "./cache/order-cache";
 import { client } from "@repo/sanity-config/client";
@@ -15,8 +15,8 @@ export const getOrders = async (userId: string) => {
     const res = await db.query.OrdersTable.findMany({
       where: and(
         eq(OrdersTable.userId, userId),
-        // eq(OrdersTable.isCanceled, false)
-        isNull(OrdersTable.isCanceled)
+        isNull(OrdersTable.isCanceled),
+        ne(OrdersTable.orderStatus, "cancelled")
       ),
       with: {
         items: true,
@@ -99,6 +99,7 @@ export const cancelOrder = async ({
       .set({
         isCanceled: true,
         cancelReason,
+        orderStatus: "cancelled",
       })
       .where(eq(OrdersTable.id, orderId))
       .returning({ id: OrdersTable.id });
@@ -106,6 +107,7 @@ export const cancelOrder = async ({
     if (!res) throw new Error("Failed to cancel order!");
 
     revalidateOrderCache(userId);
+
     return res;
   } catch (error) {
     console.log(error);

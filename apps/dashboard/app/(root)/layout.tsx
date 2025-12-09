@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 
+export const metadata: Metadata = {
+  title: "Dashboard - Foxivo",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{

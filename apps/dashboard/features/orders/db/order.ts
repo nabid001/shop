@@ -2,9 +2,10 @@
 
 import { cache } from "react";
 import { db } from "@repo/drizzle-config";
-import { OrdersTable } from "@repo/drizzle-config/schemas/order";
+import { OrdersTable, statusEnums } from "@repo/drizzle-config/schemas/order";
 import { desc, eq } from "drizzle-orm";
 import { client } from "@repo/sanity-config/client";
+import { revalidatePath, updateTag } from "next/cache";
 
 export const getOrders = cache(async () => {
   try {
@@ -72,3 +73,50 @@ export const getOrderById = cache(async ({ id }: { id: string }) => {
     throw error;
   }
 });
+
+type OrderStatus = (typeof statusEnums.enumValues)[number];
+
+const revalidateOrderCache = (userId: string) => {
+  updateTag("global:order");
+  updateTag(`user:${userId}-order`);
+};
+
+const SHOP_ORIGIN = process.env.SHOP_ORIGIN ?? "http://localhost:3000";
+
+export const updateOrderStatus = async (
+  orderId: string,
+  status: OrderStatus
+) => {
+  if (!orderId) throw new Error("OrderId is required");
+  if (!statusEnums.enumValues.includes(status)) {
+    throw new Error("Invalid order status");
+  }
+
+  const [updatedOrder] = await db
+    .update(OrdersTable)
+    .set({ orderStatus: status })
+    .where(eq(OrdersTable.id, orderId))
+    .returning({
+      id: OrdersTable.id,
+      userId: OrdersTable.userId,
+      orderStatus: OrdersTable.orderStatus,
+    });
+
+  if (!updatedOrder) throw new Error("Failed to update order status");
+
+  revalidatePath("/orders");
+  revalidatePath(`/view/${orderId}`);
+
+  // kick shop app caches so customer views stay fresh
+  try {
+    await fetch(`${SHOP_ORIGIN}/api/revalidate/order`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: updatedOrder.userId }),
+    });
+  } catch (error) {
+    console.error("Failed to revalidate shop order cache", error);
+  }
+
+  return updatedOrder;
+};

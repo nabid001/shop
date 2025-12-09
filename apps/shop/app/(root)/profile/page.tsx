@@ -27,8 +27,6 @@ import Image from "next/image";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -50,7 +48,8 @@ type OrderStatus =
   | "shipped"
   | "delivered"
   | "cancelled"
-  | "refunded";
+  | "refunded"
+  | "processing";
 
 const getOrderStatusConfig = (status: OrderStatus) => {
   const configs = {
@@ -87,6 +86,12 @@ const getOrderStatusConfig = (status: OrderStatus) => {
       className: "bg-red-100 text-red-800 border-red-200 hover:bg-red-100",
       iconClassName: "text-red-600",
     },
+    processing: {
+      icon: Package,
+      label: "Processing",
+      className: "bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-100",
+      iconClassName: "text-blue-600",
+    },
     refunded: {
       icon: RotateCcw,
       label: "Refunded",
@@ -104,11 +109,29 @@ const Profile = async () => {
   const orders = await getOrders(userId!);
 
   const steps = [
-    { key: "pending", label: "Placed", icon: Clock },
-    { key: "paid", label: "Processing", icon: Package },
-    { key: "shipped", label: "Shipped", icon: Truck },
-    { key: "delivered", label: "Delivered", icon: CheckCircle },
+    { key: "pending" as const, label: "Placed", icon: Clock },
+    { key: "processing" as const, label: "Processing", icon: Package },
+    { key: "shipped" as const, label: "Shipped", icon: Truck },
+    { key: "delivered" as const, label: "Delivered", icon: CheckCircle },
   ];
+
+  const statusStepOrder = steps.map((s) => s.key);
+
+  const normalizeStatusForStep = (
+    status: OrderStatus
+  ): (typeof statusStepOrder)[number] => {
+    switch (status) {
+      case "paid":
+      case "processing":
+        return "processing";
+      case "shipped":
+        return "shipped";
+      case "delivered":
+        return "delivered";
+      default:
+        return "pending";
+    }
+  };
 
   return (
     <main>
@@ -292,15 +315,16 @@ const Profile = async () => {
                               {/* Progress Tracker */}
                               <div className="flex items-center justify-between relative">
                                 {steps.map((step, index) => {
-                                  const stepStatus = order.orderStatus;
+                                  const normalizedStatus =
+                                    normalizeStatusForStep(
+                                      order.orderStatus as OrderStatus
+                                    );
+                                  const currentIndex =
+                                    statusStepOrder.indexOf(normalizedStatus);
                                   const isCompleted =
-                                    stepStatus === "delivered" ||
-                                    (stepStatus === "shipped" && index <= 2) ||
-                                    (stepStatus === "pending" && index === 0);
-                                  const isActive =
-                                    (stepStatus === "pending" && index === 0) ||
-                                    (stepStatus === "shipped" && index === 2) ||
-                                    (stepStatus === "delivered" && index === 3);
+                                    currentIndex !== -1 &&
+                                    index <= currentIndex;
+                                  const isActive = currentIndex === index;
                                   const Icon = step.icon;
 
                                   return (

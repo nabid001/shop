@@ -7,12 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { getOrderById } from "@/features/orders/db/order";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { OrderActions } from "@/features/orders/components/order-actions";
+import { XCircle } from "lucide-react";
 
 const View = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
@@ -29,24 +25,21 @@ const View = async ({ params }: { params: Promise<{ id: string }> }) => {
       <SiteHeader siteName="View" />
 
       <div className="sm:max-w-5xl w-full mx-auto mt-5 py-16 px-4 sm:px-6 lg:px-8">
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between gap-4">
           <h1 className="text-lg">Order Details</h1>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant={"outline"} className="capitalize">
-                Action
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>Confirm Order</DropdownMenuItem>
-              <DropdownMenuItem>Cancel Order</DropdownMenuItem>
-              <DropdownMenuItem variant="destructive">
-                Delete Order
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <OrderActions orderId={res.id} orderStatus={res.orderStatus as any} />
         </div>
+        {res.orderStatus === "cancelled" && (
+          <div className="mt-4 flex items-start gap-3 rounded-md border border-destructive/40 bg-destructive/5 px-4 py-3 text-destructive">
+            <XCircle className="h-5 w-5 mt-0.5" />
+            <div className="space-y-1">
+              <p className="font-medium">Order cancelled</p>
+              <p className="text-sm text-destructive/90">
+                {res.cancelReason || "This order was cancelled by the admin."}
+              </p>
+            </div>
+          </div>
+        )}
         <div className="space-y-10 mt-5">
           {/* User Info */}
           <div className="space-y-3">
