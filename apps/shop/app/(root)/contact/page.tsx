@@ -1,4 +1,6 @@
-const Contact = () => {
+"use cache";
+
+const Contact = async () => {
   return (
     <div className="component-container component-padding">
       <h1 className="text-3xl mb-7">Contact Info</h1>
